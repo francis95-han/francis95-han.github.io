@@ -1,70 +1,1112 @@
-{% extends '_layout.swig' %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
 
-  {% block title %}{#
-  #}{% set page_title_suffix = ' | ' + config.title %}{#
 
-  #}{% if page.type === "categories" and not page.title %}{#
-    #}{{ __('title.category') + page_title_suffix }}{#
-  #}{% elif page.type === "tags" and not page.title %}{#
-    #}{{ __('title.tag') + page_title_suffix }}{#
-  #}{% else %}{#
-    #}{{ page.title + page_title_suffix }}{#
-  #}{% endif %}{#
-#}{% endblock %}
 
-{% block page_class %}page-post-detail{% endblock %}
+  
 
-{% block content %}
 
-  <div id="posts" class="posts-expand">
-    {##################}
-    {### PAGE BLOCK ###}
-    {##################}
-    <div class="post-block page">
-      {% include '_partials/page-header.swig' %}
-      {#################}
-      {### PAGE BODY ###}
-      {#################}
-      <div class="post-body{% if theme.han %} han-init-context{% endif %}{% if page.direction && page.direction.toLowerCase() === 'rtl' %} rtl{% endif %}">
-        {# tagcloud page support #}
-        {% if page.type === "tags" %}
-          <div class="tag-cloud">
-            <div class="tag-cloud-title">
-                {{ _p('counter.tag_cloud', site.tags.length) }}
-            </div>
-            <div class="tag-cloud-tags">
-              {{ tagcloud({min_font: 12, max_font: 30, amount: 300, color: true, start_color: '#ccc', end_color: '#111'}) }}
-            </div>
-          </div>
-        {% elif page.type === 'categories' %}
-          <div class="category-all-page">
-            <div class="category-all-title">
-                {{ _p('counter.categories', site.categories.length) }}
-            </div>
-            <div class="category-all">
-              {{ list_categories() }}
-            </div>
-          </div>
-        {% else %}
-          {{ page.content }}
-        {% endif %}
-      </div>
-      {#####################}
-      {### END PAGE BODY ###}
-      {#####################}
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+<!--<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 3px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style> -->
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/favicon.png?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="zhangbohan, icecap, icecap95,blog ,Bohan ,张博涵 ,zhangbohan.dell@gmail.com " />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="联系方式 手机：13620750488 Email：mir2285@outlook.com&#x2F;zhangbohan.dell@gmail.com 微信号：13620750488  个人信息 张博涵&#x2F;男&#x2F;1995  本科&#x2F;东北电力大学环境工程 （2013.9-2017.6） 工作年限：3年 技术博客：http:&#x2F;&#x2F;www.zhangbohan.xyz Github：http:&#x2F;&#x2F;github.com&#x2F;">
+<meta property="og:type" content="website">
+<meta property="og:title" content="关于我">
+<meta property="og:url" content="http://132.232.42.89/about/index.html">
+<meta property="og:site_name" content="Francis">
+<meta property="og:description" content="联系方式 手机：13620750488 Email：mir2285@outlook.com&#x2F;zhangbohan.dell@gmail.com 微信号：13620750488  个人信息 张博涵&#x2F;男&#x2F;1995  本科&#x2F;东北电力大学环境工程 （2013.9-2017.6） 工作年限：3年 技术博客：http:&#x2F;&#x2F;www.zhangbohan.xyz Github：http:&#x2F;&#x2F;github.com&#x2F;">
+<meta property="og:locale">
+<meta property="article:published_time" content="2018-08-18T09:05:33.000Z">
+<meta property="article:modified_time" content="2023-02-26T09:45:06.095Z">
+<meta property="article:author" content="Bohan Zhang">
+<meta property="article:tag" content="张博涵,francis">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://132.232.42.89/about/"/>
+
+
+
+
+
+  <title>关于我 | Francis</title>
+  
+
+
+
+
+
+
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Francis</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
     </div>
-    {######################}
-    {### END PAGE BLOCK ###}
-    {######################}
+      
+        <p class="site-subtitle">张博涵的个人博客</p>
+      
   </div>
 
-{% endblock %}
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
 
-{% block sidebar %}
-  {{ sidebar_template.render(false) }}
-{% endblock %}
+<nav class="site-nav">
+  
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+    
+    
+    <div class="post-block page">
+      <header class="post-header">
+
+	<h1 class="post-title" itemprop="name headline">关于我</h1>
+
+
+
+</header>
+
+      
+      
+      
+      <div class="post-body">
+        
+        
+          <h1 id="联系方式"><a href="#联系方式" class="headerlink" title="联系方式"></a>联系方式</h1><ul>
+<li>手机：13620750488</li>
+<li>Email：mir2285@outlook.com/zhangbohan.dell@gmail.com</li>
+<li>微信号：13620750488</li>
+</ul>
+<h1 id="个人信息"><a href="#个人信息" class="headerlink" title="个人信息"></a>个人信息</h1><ul>
+<li>张博涵/男/1995 </li>
+<li>本科/东北电力大学环境工程 （2013.9-2017.6）</li>
+<li>工作年限：3年</li>
+<li>技术博客：<a target="_blank" rel="noopener" href="http://www.zhangbohan.xyz">http://www.zhangbohan.xyz</a></li>
+<li>Github：<a target="_blank" rel="noopener" href="http://github.com/francis95-han">http://github.com/francis95-han</a></li>
+</ul>
+<h1 id="工作经历"><a href="#工作经历" class="headerlink" title="工作经历"></a>工作经历</h1><h2 id="华为技术有限公司-amp-amp-北京外企德科人力资源服务上海有限公司（2020-5-至今）"><a href="#华为技术有限公司-amp-amp-北京外企德科人力资源服务上海有限公司（2020-5-至今）" class="headerlink" title="华为技术有限公司 &amp;&amp; 北京外企德科人力资源服务上海有限公司（2020.5~至今）"></a>华为技术有限公司 &amp;&amp; 北京外企德科人力资源服务上海有限公司（2020.5~至今）</h2><ul>
+<li>职位：JAVA开发工程师</li>
+<li>部门：数字通信网络性能部</li>
+<li>工作内容：微服务开发</li>
+</ul>
+<h2 id="北京藜麦信息技术有限责任公司-（-2018-7-2020-5-）"><a href="#北京藜麦信息技术有限责任公司-（-2018-7-2020-5-）" class="headerlink" title="北京藜麦信息技术有限责任公司 （ 2018.7 ~ 2020.5 ）"></a>北京藜麦信息技术有限责任公司 （ 2018.7 ~ 2020.5 ）</h2><h3 id="泰生活项目组-自更新平台项目-（2018-7-2019-5）"><a href="#泰生活项目组-自更新平台项目-（2018-7-2019-5）" class="headerlink" title="泰生活项目组-自更新平台项目 （2018.7-2019.5）"></a>泰生活项目组-自更新平台项目 （2018.7-2019.5）</h3><ul>
+<li>该项目是主要为了泰康集团内部app泰生活（原泰康APP，现泰康APP，日活2w）提供版本检测以及软件/插件/小应用升级服务使用，也有其他内部的一些app调用；</li>
+<li>主要负责维护原先系统，新增小应用支持服务，优化原有的下载方式，优化运行内存参数。</li>
+<li>项目使用技术/工具：springboot、redis、mysql、jpa</li>
+</ul>
+<h3 id="PM工作台项目-2019-6-至今"><a href="#PM工作台项目-2019-6-至今" class="headerlink" title="PM工作台项目 (2019.6~至今)"></a>PM工作台项目 (2019.6~至今)</h3><ul>
+<li>PM工作台主要负责收集APP使用过程通过埋点以及无埋点方式产生的日志，通过接口收集到本地并进一步解析到大数据集群，然后进一步计算分析APP的统计数据以及用户的使用情况，为APP的下一步发展提供数据上的支持；目前主要为泰康APP（原泰生活APP）服务。</li>
+<li>主要在项目中负责项目框架搭建（前期）、后端接口开发、不定时根据产品、业务需求从数据中计算抽取数据为报表提供使用</li>
+<li>项目使用技术/工具：spring cloud、mybatis、mysql、redis、kafka、hbase、hive、kettle</li>
+</ul>
+<h2 id="山东路桥建设有限公司-（-2017-7-2017-12月-）"><a href="#山东路桥建设有限公司-（-2017-7-2017-12月-）" class="headerlink" title="山东路桥建设有限公司 （ 2017.7 ~ 2017.12月 ）"></a>山东路桥建设有限公司 （ 2017.7 ~ 2017.12月 ）</h2><h1 id="开源项目"><a href="#开源项目" class="headerlink" title="开源项目"></a>开源项目</h1><ul>
+<li>[ncmdump的QT5图形化界面]<a target="_blank" rel="noopener" href="https://github.com/francis95-han/ncmdump">https://github.com/francis95-han/ncmdump</a></li>
+</ul>
+<h1 id="技能清单"><a href="#技能清单" class="headerlink" title="技能清单"></a>技能清单</h1><p>以下均为我熟练使用的技能</p>
+<ul>
+<li>语言：java(主要工作语言)/python(一般性使用，主要用来写自己使用的qt5和爬虫)</li>
+<li>框架：spring cloud/springboot/mybatis/</li>
+<li>数据库相关：MySQL/hive/redis</li>
+<li>版本管理、文档和自动化部署工具：Git</li>
+<li>中间件：nginx/kafka</li>
+</ul>
+<h1 id="业余爱好"><a href="#业余爱好" class="headerlink" title="业余爱好"></a>业余爱好</h1><p>&emsp;&emsp;摄影（爱好者、初学者）</p>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><p>&emsp;&emsp;单身狗…</p>
+<hr>
+<h1 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h1><p>感谢您花时间阅读我的简历，期待能有机会和您共事。</p>
+
+        
+      </div>
+      
+      
+      
+    </div>
+    
+    
+    
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">54</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/ice1995" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:zhangbohan.dell@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://plus.google.com/103824187384990356542" target="_blank" title="Google">
+                      
+                        <i class="fa fa-fw fa-google"></i>Google</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com/zhangbohan.dell" target="_blank" title="FB Page">
+                      
+                        <i class="fa fa-fw fa-facebook"></i>FB Page</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com/users/9255436/icecap" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://atbulbs.github.io/" title="atbulbs" target="_blank">atbulbs</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://nepno.com/" title="nep大佬" target="_blank">nep大佬</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://cuiqingcai.com/" title="崔庆才大佬" target="_blank">崔庆才大佬</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://crossoverjie.top/" title="crossoverjie大佬" target="_blank">crossoverjie大佬</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%81%94%E7%B3%BB%E6%96%B9%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">联系方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF"><span class="nav-number">2.</span> <span class="nav-text">个人信息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E7%BB%8F%E5%8E%86"><span class="nav-number">3.</span> <span class="nav-text">工作经历</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%8E%E4%B8%BA%E6%8A%80%E6%9C%AF%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8-amp-amp-%E5%8C%97%E4%BA%AC%E5%A4%96%E4%BC%81%E5%BE%B7%E7%A7%91%E4%BA%BA%E5%8A%9B%E8%B5%84%E6%BA%90%E6%9C%8D%E5%8A%A1%E4%B8%8A%E6%B5%B7%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%EF%BC%882020-5-%E8%87%B3%E4%BB%8A%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">华为技术有限公司 &amp;&amp; 北京外企德科人力资源服务上海有限公司（2020.5~至今）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%97%E4%BA%AC%E8%97%9C%E9%BA%A6%E4%BF%A1%E6%81%AF%E6%8A%80%E6%9C%AF%E6%9C%89%E9%99%90%E8%B4%A3%E4%BB%BB%E5%85%AC%E5%8F%B8-%EF%BC%88-2018-7-2020-5-%EF%BC%89"><span class="nav-number">3.2.</span> <span class="nav-text">北京藜麦信息技术有限责任公司 （ 2018.7 ~ 2020.5 ）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%B0%E7%94%9F%E6%B4%BB%E9%A1%B9%E7%9B%AE%E7%BB%84-%E8%87%AA%E6%9B%B4%E6%96%B0%E5%B9%B3%E5%8F%B0%E9%A1%B9%E7%9B%AE-%EF%BC%882018-7-2019-5%EF%BC%89"><span class="nav-number">3.2.1.</span> <span class="nav-text">泰生活项目组-自更新平台项目 （2018.7-2019.5）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PM%E5%B7%A5%E4%BD%9C%E5%8F%B0%E9%A1%B9%E7%9B%AE-2019-6-%E8%87%B3%E4%BB%8A"><span class="nav-number">3.2.2.</span> <span class="nav-text">PM工作台项目 (2019.6~至今)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%B1%E4%B8%9C%E8%B7%AF%E6%A1%A5%E5%BB%BA%E8%AE%BE%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8-%EF%BC%88-2017-7-2017-12%E6%9C%88-%EF%BC%89"><span class="nav-number">3.3.</span> <span class="nav-text">山东路桥建设有限公司 （ 2017.7 ~ 2017.12月 ）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE"><span class="nav-number">4.</span> <span class="nav-text">开源项目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8A%80%E8%83%BD%E6%B8%85%E5%8D%95"><span class="nav-number">5.</span> <span class="nav-text">技能清单</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%9A%E4%BD%99%E7%88%B1%E5%A5%BD"><span class="nav-number">6.</span> <span class="nav-text">业余爱好</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">7.</span> <span class="nav-text">其他</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%87%B4%E8%B0%A2"><span class="nav-number">8.</span> <span class="nav-text">致谢</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+
+&copy; 2018 &mdash; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhangbohan.dell@gmail.com</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+ 
+
+
+  <div class="theme-info">主题 &mdash; <a target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+ 
+
+
+
+<div class="footer-custom">
+	<a target="_blank" href="http://beian.miit.gov.cn">鲁ICP备18038198号-1</a>&nbsp;&nbsp;	<a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37072402371021" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;text-decoration:none"><img src="https://zhangbohan.xyz/images/beian.png" style="float:left;"/>鲁公网安备 37072402371021号</a>
+</div>
+
+ 
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
