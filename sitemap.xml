@@ -56,6 +56,15 @@
   </url>
   
   <url>
+    <loc>http://132.232.42.89/2018/09/19/using/python/basic/python-thread/</loc>
+    
+    <lastmod>2023-02-26</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://132.232.42.89/2018/09/11/using/python/framework/pyqt-1/</loc>
     
     <lastmod>2023-02-26</lastmod>
@@ -74,15 +83,6 @@
   </url>
   
   <url>
-    <loc>http://132.232.42.89/2018/09/19/using/python/basic/python-thread/</loc>
-    
-    <lastmod>2023-02-26</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://132.232.42.89/2018/08/30/using/linux/linux-command/</loc>
     
     <lastmod>2023-02-26</lastmod>
@@ -92,7 +92,7 @@
   </url>
   
   <url>
-    <loc>http://132.232.42.89/2018/12/04/using/middleware/elk-1/</loc>
+    <loc>http://132.232.42.89/2018/09/28/using/middleware/docker-using/</loc>
     
     <lastmod>2023-02-26</lastmod>
     
@@ -101,7 +101,7 @@
   </url>
   
   <url>
-    <loc>http://132.232.42.89/2018/09/28/using/middleware/docker-using/</loc>
+    <loc>http://132.232.42.89/2018/12/04/using/middleware/elk-1/</loc>
     
     <lastmod>2023-02-26</lastmod>
     
@@ -155,15 +155,6 @@
   </url>
   
   <url>
-    <loc>http://132.232.42.89/2018/08/28/using/java/tools/lombok/</loc>
-    
-    <lastmod>2023-02-26</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://132.232.42.89/2018/10/12/using/java/framework/springcloud-3/</loc>
     
     <lastmod>2023-02-26</lastmod>
@@ -200,7 +191,7 @@
   </url>
   
   <url>
-    <loc>http://132.232.42.89/2018/11/24/using/java/framework/shiro/</loc>
+    <loc>http://132.232.42.89/2018/08/28/using/java/tools/lombok/</loc>
     
     <lastmod>2023-02-26</lastmod>
     
@@ -219,6 +210,15 @@
   
   <url>
     <loc>http://132.232.42.89/2018/11/17/using/java/framework/springboot-myabtis/</loc>
+    
+    <lastmod>2023-02-26</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/2018/11/24/using/java/framework/shiro/</loc>
     
     <lastmod>2023-02-26</lastmod>
     
@@ -254,7 +254,7 @@
   </url>
   
   <url>
-    <loc>http://132.232.42.89/2018/08/25/using/Git/</loc>
+    <loc>http://132.232.42.89/2018/08/25/theory/regex/</loc>
     
     <lastmod>2023-02-26</lastmod>
     
@@ -263,7 +263,7 @@
   </url>
   
   <url>
-    <loc>http://132.232.42.89/2018/08/25/theory/regex/</loc>
+    <loc>http://132.232.42.89/2018/08/25/using/Git/</loc>
     
     <lastmod>2023-02-26</lastmod>
     
@@ -282,15 +282,6 @@
   
   <url>
     <loc>http://132.232.42.89/2018/09/29/using/db/nosql/mariadb-using/</loc>
-    
-    <lastmod>2023-02-26</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/2018/08/28/theory/ccna/ccna-4/</loc>
     
     <lastmod>2023-02-26</lastmod>
     
@@ -326,6 +317,15 @@
   </url>
   
   <url>
+    <loc>http://132.232.42.89/2018/08/28/theory/ccna/ccna-4/</loc>
+    
+    <lastmod>2023-02-26</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://132.232.42.89/2018/09/28/theory/linux/linux-cgroup-interface/</loc>
     
     <lastmod>2023-02-26</lastmod>
@@ -344,25 +344,7 @@
   </url>
   
   <url>
-    <loc>http://132.232.42.89/2018/08/27/theory/ccna/ccna-1/</loc>
-    
-    <lastmod>2023-02-26</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/2018/08/28/theory/ccna/ccna-3/</loc>
-    
-    <lastmod>2023-02-26</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/2018/08/27/theory/ccna/ccna-2/</loc>
+    <loc>http://132.232.42.89/2018/09/27/theory/algorithm/three-door/</loc>
     
     <lastmod>2023-02-26</lastmod>
     
@@ -380,7 +362,7 @@
   </url>
   
   <url>
-    <loc>http://132.232.42.89/2018/09/27/theory/algorithm/three-door/</loc>
+    <loc>http://132.232.42.89/2018/08/27/theory/ccna/ccna-1/</loc>
     
     <lastmod>2023-02-26</lastmod>
     
@@ -389,7 +371,16 @@
   </url>
   
   <url>
-    <loc>http://132.232.42.89/2018/10/19/theory/algorithm/machinelearning/sklearn/sklearn-1/</loc>
+    <loc>http://132.232.42.89/2018/08/27/theory/ccna/ccna-2/</loc>
+    
+    <lastmod>2023-02-26</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/2018/08/28/theory/ccna/ccna-3/</loc>
     
     <lastmod>2023-02-26</lastmod>
     
@@ -399,6 +390,15 @@
   
   <url>
     <loc>http://132.232.42.89/2018/10/15/theory/algorithm/machinelearning/machinelearning-2/</loc>
+    
+    <lastmod>2023-02-26</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/2018/10/19/theory/algorithm/machinelearning/sklearn/sklearn-1/</loc>
     
     <lastmod>2023-02-26</lastmod>
     
@@ -461,7 +461,7 @@
   </url>
   
   <url>
-    <loc>http://132.232.42.89/2019/02/21/machine%20learning/clawler/crawler-1/</loc>
+    <loc>http://132.232.42.89/2019/02/21/machine%20learning/clawler/crawler-2/</loc>
     
     <lastmod>2023-02-26</lastmod>
     
@@ -470,7 +470,7 @@
   </url>
   
   <url>
-    <loc>http://132.232.42.89/2019/02/21/machine%20learning/clawler/crawler-2/</loc>
+    <loc>http://132.232.42.89/2019/02/21/machine%20learning/clawler/crawler-1/</loc>
     
     <lastmod>2023-02-26</lastmod>
     
@@ -488,7 +488,7 @@
   </url>
   
   <url>
-    <loc>http://132.232.42.89/2019/12/28/jenkins-1/</loc>
+    <loc>http://132.232.42.89/2020/03/29/git-using/</loc>
     
     <lastmod>2023-02-26</lastmod>
     
@@ -497,7 +497,7 @@
   </url>
   
   <url>
-    <loc>http://132.232.42.89/2020/03/29/git-using/</loc>
+    <loc>http://132.232.42.89/2019/12/28/jenkins-1/</loc>
     
     <lastmod>2023-02-26</lastmod>
     
@@ -533,7 +533,14 @@
 
   
   <url>
-    <loc>http://132.232.42.89/tags/algorithm/</loc>
+    <loc>http://132.232.42.89/tags/git/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/tags/CI-CD/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -554,13 +561,6 @@
   </url>
   
   <url>
-    <loc>http://132.232.42.89/tags/CI-CD/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>http://132.232.42.89/tags/jenkins/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
@@ -568,7 +568,7 @@
   </url>
   
   <url>
-    <loc>http://132.232.42.89/tags/git/</loc>
+    <loc>http://132.232.42.89/tags/algorithm/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -610,6 +610,20 @@
   </url>
   
   <url>
+    <loc>http://132.232.42.89/tags/code/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/tags/regex/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>http://132.232.42.89/tags/tools/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
@@ -624,41 +638,6 @@
   </url>
   
   <url>
-    <loc>http://132.232.42.89/tags/regex/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/tags/code/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/tags/linux/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/tags/bigdata/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/tags/environment-construct/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>http://132.232.42.89/tags/web-crawler/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
@@ -667,83 +646,6 @@
   
   <url>
     <loc>http://132.232.42.89/tags/data-mining/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/tags/CentOS7/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/tags/command/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/tags/ccna/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/tags/net/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/tags/elk/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/tags/midedleware/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/tags/log/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/tags/docker/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/tags/mycat/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/tags/db/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/tags/nginx/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -771,6 +673,27 @@
   </url>
   
   <url>
+    <loc>http://132.232.42.89/tags/ccna/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/tags/net/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/tags/linux/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>http://132.232.42.89/tags/cgroup/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
@@ -792,112 +715,77 @@
   </url>
   
   <url>
-    <loc>http://132.232.42.89/tags/datebase/</loc>
+    <loc>http://132.232.42.89/tags/bigdata/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://132.232.42.89/tags/mysql/</loc>
+    <loc>http://132.232.42.89/tags/environment-construct/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://132.232.42.89/tags/mariadb/</loc>
+    <loc>http://132.232.42.89/tags/CentOS7/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://132.232.42.89/tags/reconsitution/</loc>
+    <loc>http://132.232.42.89/tags/command/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://132.232.42.89/tags/PyQt/</loc>
+    <loc>http://132.232.42.89/tags/docker/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://132.232.42.89/tags/GUI/</loc>
+    <loc>http://132.232.42.89/tags/elk/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://132.232.42.89/tags/PyQT/</loc>
+    <loc>http://132.232.42.89/tags/midedleware/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://132.232.42.89/tags/shiro/</loc>
+    <loc>http://132.232.42.89/tags/log/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://132.232.42.89/tags/springboot/</loc>
+    <loc>http://132.232.42.89/tags/mycat/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://132.232.42.89/tags/email/</loc>
+    <loc>http://132.232.42.89/tags/db/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://132.232.42.89/tags/Thread/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/tags/orm/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/tags/myabtis/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/tags/bug/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/tags/Spring-Cloud/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/tags/Microservice/</loc>
+    <loc>http://132.232.42.89/tags/nginx/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -939,6 +827,118 @@
   </url>
   
   <url>
+    <loc>http://132.232.42.89/tags/datebase/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/tags/mysql/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/tags/mariadb/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/tags/springboot/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/tags/email/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/tags/orm/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/tags/myabtis/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/tags/shiro/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/tags/bug/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/tags/Spring-Cloud/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/tags/Microservice/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/tags/reconsitution/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/tags/Thread/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/tags/PyQt/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/tags/GUI/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/tags/PyQT/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>http://132.232.42.89/tags/sklearn/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
@@ -948,7 +948,7 @@
 
   
   <url>
-    <loc>http://132.232.42.89/categories/algorithm/</loc>
+    <loc>http://132.232.42.89/categories/git/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -969,7 +969,7 @@
   </url>
   
   <url>
-    <loc>http://132.232.42.89/categories/git/</loc>
+    <loc>http://132.232.42.89/categories/algorithm/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -997,49 +997,7 @@
   </url>
   
   <url>
-    <loc>http://132.232.42.89/categories/bigdata/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>http://132.232.42.89/categories/crawler/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/categories/CentOS7/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/categories/linux/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/categories/net/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/categories/elk/</loc>
-    <lastmod>2023-02-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://132.232.42.89/categories/docker/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1053,42 +1011,42 @@
   </url>
   
   <url>
-    <loc>http://132.232.42.89/categories/datebase/</loc>
+    <loc>http://132.232.42.89/categories/net/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://132.232.42.89/categories/java/</loc>
+    <loc>http://132.232.42.89/categories/linux/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://132.232.42.89/categories/PyQt/</loc>
+    <loc>http://132.232.42.89/categories/bigdata/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://132.232.42.89/categories/PyQT/</loc>
+    <loc>http://132.232.42.89/categories/CentOS7/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://132.232.42.89/categories/springboot/</loc>
+    <loc>http://132.232.42.89/categories/docker/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://132.232.42.89/categories/python/</loc>
+    <loc>http://132.232.42.89/categories/elk/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1103,6 +1061,48 @@
   
   <url>
     <loc>http://132.232.42.89/categories/Machine-Learning/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/categories/datebase/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/categories/springboot/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/categories/java/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/categories/python/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/categories/PyQt/</loc>
+    <lastmod>2023-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://132.232.42.89/categories/PyQT/</loc>
     <lastmod>2023-02-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
