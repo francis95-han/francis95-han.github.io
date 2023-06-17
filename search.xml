@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>python通过boost.python使用c/c++</title>
-    <url>/2020/01/15/pythonwithc-1/</url>
-    <content><![CDATA[<h3 id="安装boost环境"><a href="#安装boost环境" class="headerlink" title="安装boost环境"></a>安装boost环境</h3><p><a href="https://www.boost.org/">https://www.boost.org/</a>下载，解压设置环境变量即可在c/c++中日常使用<br>但是对于boost.python来说需要对boost进行编译  </p>
-<p>编写user-config.jam文件，设置python目录、链接文件目录、头文件目录，位于c:/users/用户/user-config.jam  </p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import toolset : using ;</span><br><span class="line">using python</span><br><span class="line">: 3.7</span><br><span class="line">: D:/Applications/python/python37/python.exe  </span><br><span class="line">: D:/Applications/python/python37/include</span><br><span class="line">: D:/Applications/python/python37/libs</span><br><span class="line">: &lt;toolset&gt;gcc</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">bootstrap.bat gcc  #生成b2.exe等文件</span><br><span class="line">b2 --with-python --toolset=gcc architecture=x86 address-model=<span class="number">64</span> link=shared #在stage/lib下生成boost.python的对应Python版本的dll和dll.a文件</span><br></pre></td></tr></table></figure>
-<h3 id="编写并编译c-程序"><a href="#编写并编译c-程序" class="headerlink" title="编写并编译c++程序"></a>编写并编译c++程序</h3><p>使用boost.python导出需要使用的c++模块，使用说明见<a href="https://wiki.python.org/moin/boost.python/module">https://wiki.python.org/moin/boost.python/module</a><br>需要注意的是，BOOST_PYTHON_MODULE(my_module)中的my_module必须和文件名相同<br>编译c++程序生成dll文件</p>
-<h3 id="python使用c-编译后的dll文件"><a href="#python使用c-编译后的dll文件" class="headerlink" title="python使用c++编译后的dll文件"></a>python使用c++编译后的dll文件</h3><p>将使用boost.python的dll文件改名为pyd（python的链接库文件）<br>在Python中添加路径（可以使用sys.path.append或者复制到python执行目录下） ，需要注意，除了添加.pyd文件之外，还需要添加 boost.python的对应Python版本的dll文件  </p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> my_module</span><br></pre></td></tr></table></figure>
+    <title>git本地仓库搭建</title>
+    <url>/2020/03/29/git-using/</url>
+    <content><![CDATA[<h3 id="在centos下搭建本地git"><a href="#在centos下搭建本地git" class="headerlink" title="在centos下搭建本地git"></a>在centos下搭建本地git</h3><ol>
+<li>安装git<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install git</span><br></pre></td></tr></table></figure></li>
+<li>初始化仓库 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git init --bare cloud-eureka.git</span><br></pre></td></tr></table></figure>
+ 在当前目录下创建cloud-eureka.git文件夹</li>
+<li>创建git用户用于git连接<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#添加用户组git</span></span><br><span class="line">groupadd git</span><br><span class="line"><span class="comment">#添加用户git</span></span><br><span class="line">useradd git -g git -p password</span><br></pre></td></tr></table></figure></li>
+<li>配置公钥 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/.ssh</span><br><span class="line"><span class="comment">#如果没有xxx.ras或者xxx.pub文件，生成一下：</span></span><br><span class="line">ssh-keygen -t rsa</span><br><span class="line">su git</span><br><span class="line"><span class="built_in">cd</span> /home/git  </span><br><span class="line"><span class="built_in">ls</span> -a  </span><br><span class="line"><span class="comment">#首先确认是否有ssh密钥：若有.ssh文件夹，进入查看是否有authorized_keys文件，如果都没有</span></span><br><span class="line"><span class="comment">#创建.ssh文件夹</span></span><br><span class="line"><span class="built_in">mkdir</span> .ssh</span><br><span class="line"><span class="comment">#创建authorized_keys文件：</span></span><br><span class="line"><span class="built_in">touch</span> authorized_keys</span><br><span class="line"><span class="comment">#将登录电脑的公钥填写到authorized_keys，即可免密</span></span><br></pre></td></tr></table></figure></li>
+<li>禁用git的普通shell<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"> <span class="comment">#禁用普通的bash</span></span><br><span class="line">vim /etc/passwd</span><br></pre></td></tr></table></figure>
+<figure class="highlight vim"><table><tr><td class="code"><pre><span class="line">#修改</span><br><span class="line"> gi<span class="variable">t:x</span>:<span class="number">1001</span>:<span class="number">1001</span>::/home/git:/bin/bash</span><br><span class="line">#为</span><br><span class="line"> gi<span class="variable">t:x</span>:<span class="number">1001</span>:<span class="number">1001</span>::/home/git:/usr/bin/git-<span class="keyword">shell</span></span><br></pre></td></tr></table></figure></li>
+<li>修改远程访问权限<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#在git项目目录下</span></span><br><span class="line"><span class="built_in">chown</span> -R git:git cloud-eureka.git</span><br></pre></td></tr></table></figure></li>
+<li>访问项目<br> git@192.168.226.130:/opt/project/cloud-eureka.git </li>
+</ol>
 ]]></content>
       <categories>
-        <category>c/c++</category>
+        <category>git</category>
       </categories>
       <tags>
-        <tag>python</tag>
-        <tag>c/c++</tag>
-        <tag>boost</tag>
+        <tag>git</tag>
+        <tag>CI/CD</tag>
       </tags>
   </entry>
   <entry>
@@ -27,7 +30,7 @@
 <li>安装环境<br> centos 8.0.1905<br> user-&gt;jenkins  ; group -&gt; jenkins</li>
 <li>安装过程<br> a. 从官网<a href="https://jenkins.io/zh/download/">https://jenkins.io/zh/download/</a>下载安装包<br> b. 安装   <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo yum install -y jenkins-2.204.5-1.1.noarch.rpm</span><br><span class="line">```  </span><br><span class="line">c. 运行jenkins  </span><br><span class="line">```bash</span><br><span class="line">systemctl start jenkins</span><br></pre></td></tr></table></figure></li>
 <li><p>配置<br> a. 添加一个用户<br> <a href="https://jenkins.io/zh/doc/book/installing/">https://jenkins.io/zh/doc/book/installing/</a><br> b. 修改插件更新位置<br> <a href="http://192.168.226.131:8080/pluginManager/advanced">http://192.168.226.131:8080/pluginManager/advanced</a><br> 修改为国内地址，这里使用的是清华大学的开源软件地址<br> <a href="https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json">https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json</a><br> <center>
- <img src="http://zhangbohan.xyz/images/jenkins/jenkins%20install.png" src="修改插件地址为国内源" />
+ <img src="http://zhangbohan.com.cn/images/jenkins/jenkins%20install.png" src="修改插件地址为国内源" />
  </center><br> c. 安装需要的插件  </p>
 <ul>
 <li>locale</li>
@@ -39,13 +42,13 @@
 </ol>
 <h3 id="jenkins的使用"><a href="#jenkins的使用" class="headerlink" title="jenkins的使用"></a>jenkins的使用</h3><ol>
 <li>创建一个新的maven项目<center>
-     <img src="http://zhangbohan.xyz/images/jenkins/jenkins%20create%20new%20item.png" src="修改插件地址为国内源" />
+     <img src="http://zhangbohan.com.cn/images/jenkins/jenkins%20create%20new%20item.png" src="修改插件地址为国内源" />
 </center></li>
 <li>项目配置<center>
-     <img src="http://zhangbohan.xyz/images/jenkins/jenkins%20create%20new%20item1.png" src="修改插件地址为国内源" />
+     <img src="http://zhangbohan.com.cn/images/jenkins/jenkins%20create%20new%20item1.png" src="修改插件地址为国内源" />
 </center></li>
 <li>查看项目构建情况 <center>
-     <img src="http://zhangbohan.xyz/images/jenkins/jenkins%20create%20new%20item2.png" src="修改插件地址为国内源" />
+     <img src="http://zhangbohan.com.cn/images/jenkins/jenkins%20create%20new%20item2.png" src="修改插件地址为国内源" />
 </center></li>
 </ol>
 ]]></content>
@@ -108,26 +111,23 @@
       </tags>
   </entry>
   <entry>
-    <title>git本地仓库搭建</title>
-    <url>/2020/03/29/git-using/</url>
-    <content><![CDATA[<h3 id="在centos下搭建本地git"><a href="#在centos下搭建本地git" class="headerlink" title="在centos下搭建本地git"></a>在centos下搭建本地git</h3><ol>
-<li>安装git<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install git</span><br></pre></td></tr></table></figure></li>
-<li>初始化仓库 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git init --bare cloud-eureka.git</span><br></pre></td></tr></table></figure>
- 在当前目录下创建cloud-eureka.git文件夹</li>
-<li>创建git用户用于git连接<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#添加用户组git</span></span><br><span class="line">groupadd git</span><br><span class="line"><span class="comment">#添加用户git</span></span><br><span class="line">useradd git -g git -p password</span><br></pre></td></tr></table></figure></li>
-<li>配置公钥 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/.ssh</span><br><span class="line"><span class="comment">#如果没有xxx.ras或者xxx.pub文件，生成一下：</span></span><br><span class="line">ssh-keygen -t rsa</span><br><span class="line">su git</span><br><span class="line"><span class="built_in">cd</span> /home/git  </span><br><span class="line"><span class="built_in">ls</span> -a  </span><br><span class="line"><span class="comment">#首先确认是否有ssh密钥：若有.ssh文件夹，进入查看是否有authorized_keys文件，如果都没有</span></span><br><span class="line"><span class="comment">#创建.ssh文件夹</span></span><br><span class="line"><span class="built_in">mkdir</span> .ssh</span><br><span class="line"><span class="comment">#创建authorized_keys文件：</span></span><br><span class="line"><span class="built_in">touch</span> authorized_keys</span><br><span class="line"><span class="comment">#将登录电脑的公钥填写到authorized_keys，即可免密</span></span><br></pre></td></tr></table></figure></li>
-<li>禁用git的普通shell<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"> <span class="comment">#禁用普通的bash</span></span><br><span class="line">vim /etc/passwd</span><br></pre></td></tr></table></figure>
-<figure class="highlight vim"><table><tr><td class="code"><pre><span class="line">#修改</span><br><span class="line"> gi<span class="variable">t:x</span>:<span class="number">1001</span>:<span class="number">1001</span>::/home/git:/bin/bash</span><br><span class="line">#为</span><br><span class="line"> gi<span class="variable">t:x</span>:<span class="number">1001</span>:<span class="number">1001</span>::/home/git:/usr/bin/git-<span class="keyword">shell</span></span><br></pre></td></tr></table></figure></li>
-<li>修改远程访问权限<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#在git项目目录下</span></span><br><span class="line"><span class="built_in">chown</span> -R git:git cloud-eureka.git</span><br></pre></td></tr></table></figure></li>
-<li>访问项目<br> git@192.168.226.130:/opt/project/cloud-eureka.git </li>
-</ol>
+    <title>python通过boost.python使用c/c++</title>
+    <url>/2020/01/15/pythonwithc-1/</url>
+    <content><![CDATA[<h3 id="安装boost环境"><a href="#安装boost环境" class="headerlink" title="安装boost环境"></a>安装boost环境</h3><p><a href="https://www.boost.org/">https://www.boost.org/</a>下载，解压设置环境变量即可在c/c++中日常使用<br>但是对于boost.python来说需要对boost进行编译  </p>
+<p>编写user-config.jam文件，设置python目录、链接文件目录、头文件目录，位于c:/users/用户/user-config.jam  </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import toolset : using ;</span><br><span class="line">using python</span><br><span class="line">: 3.7</span><br><span class="line">: D:/Applications/python/python37/python.exe  </span><br><span class="line">: D:/Applications/python/python37/include</span><br><span class="line">: D:/Applications/python/python37/libs</span><br><span class="line">: &lt;toolset&gt;gcc</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">bootstrap.bat gcc  #生成b2.exe等文件</span><br><span class="line">b2 --with-python --toolset=gcc architecture=x86 address-model=<span class="number">64</span> link=shared #在stage/lib下生成boost.python的对应Python版本的dll和dll.a文件</span><br></pre></td></tr></table></figure>
+<h3 id="编写并编译c-程序"><a href="#编写并编译c-程序" class="headerlink" title="编写并编译c++程序"></a>编写并编译c++程序</h3><p>使用boost.python导出需要使用的c++模块，使用说明见<a href="https://wiki.python.org/moin/boost.python/module">https://wiki.python.org/moin/boost.python/module</a><br>需要注意的是，BOOST_PYTHON_MODULE(my_module)中的my_module必须和文件名相同<br>编译c++程序生成dll文件</p>
+<h3 id="python使用c-编译后的dll文件"><a href="#python使用c-编译后的dll文件" class="headerlink" title="python使用c++编译后的dll文件"></a>python使用c++编译后的dll文件</h3><p>将使用boost.python的dll文件改名为pyd（python的链接库文件）<br>在Python中添加路径（可以使用sys.path.append或者复制到python执行目录下） ，需要注意，除了添加.pyd文件之外，还需要添加 boost.python的对应Python版本的dll文件  </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> my_module</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>git</category>
+        <category>c/c++</category>
       </categories>
       <tags>
-        <tag>CI/CD</tag>
-        <tag>git</tag>
+        <tag>python</tag>
+        <tag>c/c++</tag>
+        <tag>boost</tag>
       </tags>
   </entry>
   <entry>
@@ -186,7 +186,7 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">   // EnableAutoConfiguration</span><br><span class="line">   @AutoConfigurationPackage</span><br><span class="line">   @Import(AutoConfigurationImportSelector.class)</span><br><span class="line">   // AutoConfigurationPackage</span><br><span class="line">   @Import(AutoConfigurationPackages.Registrar.class)</span><br><span class="line">   // AutoConfigurationPackages.Registrar</span><br><span class="line">   	static class Registrar implements ImportBeanDefinitionRegistrar, DeterminableImports &#123;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public void registerBeanDefinitions(AnnotationMetadata metadata,</span><br><span class="line">			BeanDefinitionRegistry registry) &#123;</span><br><span class="line">		register(registry, new PackageImport(metadata).getPackageName());</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public Set&lt;Object&gt; determineImports(AnnotationMetadata metadata) &#123;</span><br><span class="line">		return Collections.singleton(new PackageImport(metadata));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>  可以看到这个静态中获取主启动类的包,也就是<code>必须在主启动类的统计或者子级目录下编写代码</code>的原因</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">   // AutoConfigurationImportSelector</span><br><span class="line">   @Override</span><br><span class="line">public String[] selectImports(AnnotationMetadata annotationMetadata) &#123;</span><br><span class="line">	if (!isEnabled(annotationMetadata)) &#123;</span><br><span class="line">		return NO_IMPORTS;</span><br><span class="line">	&#125;</span><br><span class="line">	AutoConfigurationMetadata autoConfigurationMetadata = AutoConfigurationMetadataLoader</span><br><span class="line">			.loadMetadata(this.beanClassLoader);</span><br><span class="line">	AutoConfigurationEntry autoConfigurationEntry = getAutoConfigurationEntry(</span><br><span class="line">			autoConfigurationMetadata, annotationMetadata);</span><br><span class="line">	return StringUtils.toStringArray(autoConfigurationEntry.getConfigurations());</span><br><span class="line">&#125;</span><br><span class="line">   // getAutoConfigurationEntry() 获取自动配置的实体</span><br><span class="line">   protected AutoConfigurationEntry getAutoConfigurationEntry(</span><br><span class="line">		AutoConfigurationMetadata autoConfigurationMetadata,</span><br><span class="line">		AnnotationMetadata annotationMetadata) &#123;</span><br><span class="line">	if (!isEnabled(annotationMetadata)) &#123;</span><br><span class="line">		return EMPTY_ENTRY;</span><br><span class="line">	&#125;</span><br><span class="line">	AnnotationAttributes attributes = getAttributes(annotationMetadata);</span><br><span class="line">	List&lt;String&gt; configurations = getCandidateConfigurations(annotationMetadata,</span><br><span class="line">			attributes);</span><br><span class="line">	configurations = removeDuplicates(configurations);</span><br><span class="line">	Set&lt;String&gt; exclusions = getExclusions(annotationMetadata, attributes);</span><br><span class="line">	checkExcludedClasses(configurations, exclusions);</span><br><span class="line">	configurations.removeAll(exclusions);</span><br><span class="line">	configurations = filter(configurations, autoConfigurationMetadata);</span><br><span class="line">	fireAutoConfigurationImportEvents(configurations, exclusions);</span><br><span class="line">	return new AutoConfigurationEntry(configurations, exclusions);</span><br><span class="line">&#125;</span><br><span class="line">   // getCandidateConfigurations() 获取候选的配置</span><br><span class="line">   protected List&lt;String&gt; getCandidateConfigurations(AnnotationMetadata metadata,</span><br><span class="line">		AnnotationAttributes attributes) &#123;</span><br><span class="line">	List&lt;String&gt; configurations = SpringFactoriesLoader.loadFactoryNames(</span><br><span class="line">			getSpringFactoriesLoaderFactoryClass(), getBeanClassLoader());</span><br><span class="line">	Assert.notEmpty(configurations,</span><br><span class="line">			&quot;No auto configuration classes found in META-INF/spring.factories. If you &quot;</span><br><span class="line">					+ &quot;are using a custom packaging, make sure that file is correct.&quot;);</span><br><span class="line">	return configurations;</span><br><span class="line">&#125;</span><br><span class="line">   // loadFactoryNames()</span><br><span class="line">   public static List&lt;String&gt; loadFactoryNames(Class&lt;?&gt; factoryClass, @Nullable ClassLoader classLoader) &#123;</span><br><span class="line">	String factoryClassName = factoryClass.getName();</span><br><span class="line">	return loadSpringFactories(classLoader).getOrDefault(factoryClassName, Collections.emptyList());</span><br><span class="line">&#125;</span><br><span class="line">   // loadSpringFactories()</span><br><span class="line">   public static final String FACTORIES_RESOURCE_LOCATION = &quot;META-INF/spring.factories&quot;;</span><br><span class="line">   </span><br><span class="line">   private static Map&lt;String, List&lt;String&gt;&gt; loadSpringFactories(@Nullable ClassLoader classLoader) &#123;</span><br><span class="line">	MultiValueMap&lt;String, String&gt; result = cache.get(classLoader);</span><br><span class="line">	if (result != null) &#123;</span><br><span class="line">		return result;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	try &#123;</span><br><span class="line">		Enumeration&lt;URL&gt; urls = (classLoader != null ?</span><br><span class="line">				classLoader.getResources(FACTORIES_RESOURCE_LOCATION) :</span><br><span class="line">				ClassLoader.getSystemResources(FACTORIES_RESOURCE_LOCATION));</span><br><span class="line">		result = new LinkedMultiValueMap&lt;&gt;();</span><br><span class="line">		while (urls.hasMoreElements()) &#123;</span><br><span class="line">			URL url = urls.nextElement();</span><br><span class="line">			UrlResource resource = new UrlResource(url);</span><br><span class="line">			Properties properties = PropertiesLoaderUtils.loadProperties(resource);</span><br><span class="line">			for (Map.Entry&lt;?, ?&gt; entry : properties.entrySet()) &#123;</span><br><span class="line">				String factoryClassName = ((String) entry.getKey()).trim();</span><br><span class="line">				for (String factoryName : StringUtils.commaDelimitedListToStringArray((String) entry.getValue())) &#123;</span><br><span class="line">					result.add(factoryClassName, factoryName.trim());</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		cache.put(classLoader, result);</span><br><span class="line">		return result;</span><br><span class="line">	&#125;</span><br><span class="line">	catch (IOException ex) &#123;</span><br><span class="line">		throw new IllegalArgumentException(&quot;Unable to load factories from location [&quot; +</span><br><span class="line">				FACTORIES_RESOURCE_LOCATION + &quot;]&quot;, ex);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  通过层层深入，我们发现了 META-INF/spring.factories ；我们找到改文件<br><a href="https://www.zhangbohan.xyz/2020/08/02/theory/design/using/java/framework/springboot-src-1/spring_factories.png"><img src="https://www.zhangbohan.xyz/images/spring_factories.png" alt="img"></a></p>
+<p>  通过层层深入，我们发现了 META-INF/spring.factories ；我们找到改文件<br><a href="https://www.zhangbohan.com.cn/2020/08/02/theory/design/using/java/framework/springboot-src-1/spring_factories.png"><img src="https://www.zhangbohan.com.cn/images/spring_factories.png" alt="img"></a></p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># Initializers </span><br><span class="line">org.springframework.context.ApplicationContextInitializer=\</span><br><span class="line">org.springframework.boot.autoconfigure.SharedMetadataReaderFactoryContextInitializer,\</span><br><span class="line">org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener</span><br><span class="line"></span><br><span class="line"># Application Listeners </span><br><span class="line">org.springframework.context.ApplicationListener=\</span><br><span class="line">org.springframework.boot.autoconfigure.BackgroundPreinitializer</span><br><span class="line"></span><br><span class="line"># Auto Configuration Import Listeners</span><br><span class="line">org.springframework.boot.autoconfigure.AutoConfigurationImportListener=\</span><br><span class="line">org.springframework.boot.autoconfigure.condition.ConditionEvaluationReportAutoConfigurationImportListener</span><br><span class="line"></span><br><span class="line"># Auto Configuration Import Filters</span><br><span class="line">org.springframework.boot.autoconfigure.AutoConfigurationImportFilter=\</span><br><span class="line">org.springframework.boot.autoconfigure.condition.OnBeanCondition,\</span><br><span class="line">org.springframework.boot.autoconfigure.condition.OnClassCondition,\</span><br><span class="line">org.springframework.boot.autoconfigure.condition.OnWebApplicationCondition</span><br><span class="line"></span><br><span class="line"># Auto Configure</span><br><span class="line">org.springframework.boot.autoconfigure.EnableAutoConfiguration=\</span><br><span class="line">org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.aop.AopAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration,\</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 <p>随便打开一个自动配置类</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// AopAutoConfiguration</span><br><span class="line">@Configuration</span><br><span class="line">@ConditionalOnClass(&#123; EnableAspectJAutoProxy.class, Aspect.class, Advice.class,</span><br><span class="line">        AnnotatedElement.class &#125;)</span><br><span class="line">@ConditionalOnProperty(prefix = &quot;spring.aop&quot;, name = &quot;auto&quot;, havingValue = &quot;true&quot;, matchIfMissing = true)</span><br><span class="line">public class AopAutoConfiguration &#123;</span><br><span class="line"></span><br><span class="line">    @Configuration</span><br><span class="line">    @EnableAspectJAutoProxy(proxyTargetClass = false)</span><br><span class="line">    @ConditionalOnProperty(prefix = &quot;spring.aop&quot;, name = &quot;proxy-target-class&quot;, havingValue = &quot;false&quot;, matchIfMissing = false)</span><br><span class="line">    public static class JdkDynamicAutoProxyConfiguration &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Configuration</span><br><span class="line">    @EnableAspectJAutoProxy(proxyTargetClass = true)</span><br><span class="line">    @ConditionalOnProperty(prefix = &quot;spring.aop&quot;, name = &quot;proxy-target-class&quot;, havingValue = &quot;true&quot;, matchIfMissing = true)</span><br><span class="line">    public static class CglibAutoProxyConfiguration &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">// RabbitAutoConfiguration</span><br><span class="line">@Configuration</span><br><span class="line">@ConditionalOnClass(&#123; RabbitTemplate.class, Channel.class &#125;)</span><br><span class="line">@EnableConfigurationProperties(RabbitProperties.class)</span><br><span class="line">@Import(RabbitAnnotationDrivenConfiguration.class)</span><br><span class="line">public class RabbitAutoConfiguration &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line">// RabbitProperties</span><br><span class="line">@ConfigurationProperties(prefix = &quot;spring.rabbitmq&quot;)</span><br><span class="line">public class RabbitProperties &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -194,7 +194,7 @@
 <li><p>ConditionalOnXXX 条件判断注释</p>
 </li>
 <li><p>EnableConfigurationProperties — ConfigurationProperties 自动绑定依赖</p>
-<h3 id="整理"><a href="#整理" class="headerlink" title="整理"></a>整理</h3><p><img src="https://www.zhangbohan.xyz/images/springboot源码阅读.svg" alt="img"></p>
+<h3 id="整理"><a href="#整理" class="headerlink" title="整理"></a>整理</h3><p><img src="https://www.zhangbohan.com.cn/images/springboot源码阅读.svg" alt="img"></p>
 </li>
 </ul>
 </li>
@@ -203,6 +203,24 @@
       <categories>
         <category>java</category>
       </categories>
+  </entry>
+  <entry>
+    <title>下馆子记录</title>
+    <url>/2023/06/17/%E4%B8%8B%E9%A6%86%E5%AD%90%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<ol>
+<li>公司附近，不做评价了，有的吃就不错了：<br>大包间：龙船人鱼头泡饼·江湖菜(温泉店)、潇湘府(环保店)、潇湘楼(温泉店)<br>三结义烧鸽子·烧烤融合菜(温泉路店)<br>城都成串串香(创客小镇店)</li>
+<li>稍远一点：<br>小吊梨汤(融科店)：<br>环境真的好，在科资讯大厦，环境也非常棒，同楼层还有一家书店，有个音乐喷泉，设计都非常棒，排队等位置的时候可以看看书，环境如图 <center>
+     <img src="http://zhangbohan.com.cn/images/下馆子记录/融科书店.jpg" src="融科书店" />
+</center></li>
+<li>进城啦：<br> 丰泽园饭庄(王府商厦店)：<br>   味道很棒，不点太过分的菜品（葱烧海参之类的）的话价格也能接受的，和一般吃一顿价格高不了多少<br> 北平楼(牡丹园店)：<br> 味道不如丰泽园，烤鸭不错</li>
+</ol>
+]]></content>
+      <categories>
+        <category>吃喝玩乐</category>
+      </categories>
+      <tags>
+        <tag>吃喝玩乐</tag>
+      </tags>
   </entry>
   <entry>
     <title>web攻击方式相关知识简介以及Burpsuite工具的使用</title>
@@ -221,7 +239,7 @@
 <li><p>0day <a href="https://zhuanlan.zhihu.com/p/30044629">https://zhuanlan.zhihu.com/p/30044629</a><br>0day在网络安全界通常是指没有补丁的漏洞利用程序.提供该利用程序的人通常是该漏洞的首发者或是第一个公开该漏洞利用细节的人。</p>
 </li>
 </ol>
-<h2 id="一些简单的攻击方式相关知识简介"><a href="#一些简单的攻击方式相关知识简介" class="headerlink" title="一些简单的攻击方式相关知识简介"></a>一些简单的攻击方式相关知识简介</h2><p><a href="http://image.zhangbohan.xyz/pic/md/学习方向.jpg"><img src="https://www.zhangbohan.com.cn/images/%E5%AD%A6%E4%B9%A0%E6%96%B9%E5%90%91.jpg" alt="学习方向"></a></p>
+<h2 id="一些简单的攻击方式相关知识简介"><a href="#一些简单的攻击方式相关知识简介" class="headerlink" title="一些简单的攻击方式相关知识简介"></a>一些简单的攻击方式相关知识简介</h2><p><a href="http://image.zhangbohan.com.cn/pic/md/学习方向.jpg"><img src="https://www.zhangbohan.com.cn/images/%E5%AD%A6%E4%B9%A0%E6%96%B9%E5%90%91.jpg" alt="学习方向"></a></p>
 <p>这里介绍几种最基础的web攻击方式</p>
 <h4 id="XSS注入"><a href="#XSS注入" class="headerlink" title="XSS注入"></a>XSS注入</h4><p><a href="https://www.freebuf.com/vuls/334263.html">https://www.freebuf.com/vuls/334263.html</a></p>
 <h4 id="拒接服务攻击"><a href="#拒接服务攻击" class="headerlink" title="拒接服务攻击"></a>拒接服务攻击</h4><p>可以这么理解，凡是能导致合法用户不能够访问正常网络服务的行为都算是拒绝服务攻击。 也就是说拒绝服务攻击的目的非常明确，就是要阻止合法用户对正常网络资源的访问，从而 达成攻击者不可告人的目的。 虽然同样是拒绝服务攻击， 但是 DDOS 和 DOS 还是有所不同， DDOS 的攻击策略侧重于通过很多“僵尸主机”（被攻击者入侵过或可间接利用的主机）向 受害主机发送大量看似合法的网络包，从而造成网络阻塞或服务器资源耗尽而导致拒绝服 务，分布式拒绝服务攻击一旦被实施，攻击网络包就会犹如洪水般涌向受害主机，从而把合 法用户的网络包淹没，导致合法用户无法正常访问服务器的网络资源，因此，拒绝服务攻击 又被称之为 “洪水式攻击”</p>
@@ -848,6 +866,202 @@
       </tags>
   </entry>
   <entry>
+    <title>数据挖掘--爬虫--准备工作</title>
+    <url>/2019/02/21/machine%20learning/clawler/crawler-1/</url>
+    <content><![CDATA[<h3 id="python环境的准备工作"><a href="#python环境的准备工作" class="headerlink" title="python环境的准备工作"></a>python环境的准备工作</h3><p>&emsp;&emsp;博主在这使用windows作为系统环境，安装anaconda3作为python运行与库管理环境。<br>&emsp;&emsp;anaconda<a href="https://www.anaconda.com/">官方网站</a><br>&emsp;&emsp;如果下载速度过慢，可以选择使用<a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/">清华大学镜像</a>，<a href="https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/">使用说明</a></p>
+<h3 id="请求库的安装"><a href="#请求库的安装" class="headerlink" title="请求库的安装"></a>请求库的安装</h3><h4 id="requests库"><a href="#requests库" class="headerlink" title="requests库"></a>requests库</h4><pre><code>&amp;emsp;&amp;emsp;阻塞式http请求库
+</code></pre><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install requests</span><br></pre></td></tr></table></figure>
+<h4 id="selenuim库"><a href="#selenuim库" class="headerlink" title="selenuim库"></a>selenuim库</h4><p>   &emsp;&emsp;selenuim是一个自动化测试工具，可以使用它驱动浏览器执行特定的动作。如点击，下拉等等</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install selenuim</span><br></pre></td></tr></table></figure>
+<h4 id="Google-Chrome-以及其驱动-ChromeDriver"><a href="#Google-Chrome-以及其驱动-ChromeDriver" class="headerlink" title="Google Chrome 以及其驱动 ChromeDriver"></a>Google Chrome 以及其驱动 ChromeDriver</h4><pre><code>&amp;emsp;&amp;emsp;Google Chrome[下载](https://chrome.en.softonic.com/)&amp;emsp;&amp;emsp; ChromeDriver[下载](https://chromedriver.storage.googleapis.com/index.html)  
+&lt;font color=&quot;red&quot;&gt;注意：安装的chromedriver版本要和google chrome版本相匹配&lt;/font&gt;  
+&amp;emsp;&amp;emsp;将下载下来的chromedriver添加到环境变量，在命令行中进行测试是否成功
+</code></pre><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">chromedriver</span><br></pre></td></tr></table></figure>
+<pre><code>显示以下类似内容说明成功
+</code></pre><figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Starting ChromeDriver 72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38) on port 9515</span><br><span class="line">Only local connections are allowed.</span><br><span class="line">Please protect ports used by ChromeDriver and related test frameworks to prevent access by malicious code</span><br></pre></td></tr></table></figure>
+<pre><code>在python中进行测试
+</code></pre><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver  </span><br><span class="line">brower = webdriver.Chrome()</span><br></pre></td></tr></table></figure>
+<pre><code>运行打开一个新的chrome窗口
+</code></pre><h4 id="Firefox以及其驱动-GeckoDriver"><a href="#Firefox以及其驱动-GeckoDriver" class="headerlink" title="Firefox以及其驱动 GeckoDriver"></a>Firefox以及其驱动 GeckoDriver</h4><pre><code>FireFox[下载](http://www.firefox.com.cn/)&amp;emsp;&amp;emsp;GeckoDriver[下载](https://github.com/mozilla/geckodriver/releases)  
+&lt;font color=&quot;red&quot;&gt;注意：安装的geckodriver版本要和firefox版本相匹配,geckodriver下载界面有版本要求说明，如果geckodriver未起作用，请尝试重装firefox最新版本并重启电脑&lt;/font&gt;  
+&amp;emsp;&amp;emsp;将下载下来的geckodriver添加到环境变量，在命令行中进行测试是否成功
+</code></pre><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">geckodriver</span><br></pre></td></tr></table></figure>
+<pre><code>在python中进行测试
+</code></pre><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line">brower = webdriver.Firefox()</span><br></pre></td></tr></table></figure>
+<pre><code>运行打开一个新的firefox窗口
+</code></pre><h4 id="PhantomJS"><a href="#PhantomJS" class="headerlink" title="PhantomJS"></a>PhantomJS</h4><p>   &emsp;&emsp;PhantomJS是一个无界面的、可脚本编程的webkit浏览器引擎，<a href="http://phantomjs.org/download.html">下载</a><br>   &emsp;&emsp;将下载下来的bin文件夹下的phantomjs.exe添加到环境变量，在命令行中进行测试是否成功</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">phantomjs</span><br></pre></td></tr></table></figure>
+<pre><code>出现以下内容说明可用
+</code></pre><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">phantomjs&gt;</span><br></pre></td></tr></table></figure>
+<pre><code>在python中进行测试
+</code></pre><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"></span><br><span class="line">brower = webdriver.PhantomJS()</span><br><span class="line">brower.get(<span class="string">&quot;http://www.baidu.com&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(brower.current_url))</span><br></pre></td></tr></table></figure>
+<pre><code>使用PhantonJs不会打开一个新的窗口，但实际上已经在后台运行
+</code></pre><h4 id="aiohttp"><a href="#aiohttp" class="headerlink" title="aiohttp"></a>aiohttp</h4><pre><code>异步web服务库
+</code></pre><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install aiohttp</span><br></pre></td></tr></table></figure>
+<pre><code>此外，官方还推荐安装cchardet（字符编码检测库）和aiodns（加速dns解析库），
+</code></pre><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install cchardet aiodns</span><br></pre></td></tr></table></figure>
+<h3 id="解析库的安装"><a href="#解析库的安装" class="headerlink" title="解析库的安装"></a>解析库的安装</h3><h4 id="lxml"><a href="#lxml" class="headerlink" title="lxml"></a>lxml</h4><p>   支持html和xml的解析，支持XPath解析方式，解析效率高</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install lxml</span><br></pre></td></tr></table></figure>
+<h4 id="Beautiful-Soup"><a href="#Beautiful-Soup" class="headerlink" title="Beautiful Soup"></a>Beautiful Soup</h4><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install beautifulsoup4</span><br></pre></td></tr></table></figure>
+<h4 id="pyquery"><a href="#pyquery" class="headerlink" title="pyquery"></a>pyquery</h4><p>&emsp;&emsp;pyquery 同样是一个强大的网页解析工具，它提供了和 jQuery 类似的语法来解析 HTML 文梢，支持 css 选择器，使用非常方便.</p>
+   <figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install pyquery</span><br></pre></td></tr></table></figure>
+<h4 id="tesserocr"><a href="#tesserocr" class="headerlink" title="tesserocr"></a>tesserocr</h4><p>   &emsp;&emsp;cor识别，识别各种各样的验证码。tesserocr是对tesseract的一层python封装，因此需要先<a href="https://digi.bib.uni-mannheim.de/tesseract/">安装tesseract</a>,带dev的是开发版本，不稳定，不带dev的是稳定版本<br>    linux下</p>
+   <figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install tesserocr pillow </span><br></pre></td></tr></table></figure>
+<p>   windows下<br>    <a href="https://github.com/simonflueckiger/tesserocr-windows_build/releases">whl安装文件下载地址</a></p>
+<pre><code><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip install tesserocr-<span class="number">2</span>.<span class="number">4</span>.<span class="number">0</span>-cp36-cp36m-win_amd64.whl</span><br></pre></td></tr></table></figure>
+</code></pre><p>保存<a href="https://raw.githubusercontent.com/Python3WebSpider/TestTess/master/image.png">测试图片</a>到本地，分别对tesseract和tesserocr进行测试，看能否识别</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">tesseract image.png result -l eng &amp;&amp; <span class="built_in">type</span> result.txt</span><br><span class="line">#运行结果</span><br><span class="line">#Tesseract Open Source OCR Engine v3.<span class="number">0</span>S .<span class="number">01</span> with Leptonica</span><br><span class="line">#Python3WebSpider</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tesserocr</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line">image = Image.<span class="built_in">open</span>(<span class="string">&#x27;D:\\temp\\test\\image.png&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(tesserocr.image_to_text(image))</span><br></pre></td></tr></table></figure>
+<h3 id="数据库-略"><a href="#数据库-略" class="headerlink" title="数据库(略)"></a>数据库(略)</h3><h3 id="存储库"><a href="#存储库" class="headerlink" title="存储库"></a>存储库</h3><h4 id="PyMysql"><a href="#PyMysql" class="headerlink" title="PyMysql"></a>PyMysql</h4><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install pymysql</span><br></pre></td></tr></table></figure>
+<h4 id="PyMongo"><a href="#PyMongo" class="headerlink" title="PyMongo"></a>PyMongo</h4><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install pymongo</span><br></pre></td></tr></table></figure>
+<h4 id="redis-py"><a href="#redis-py" class="headerlink" title="redis-py"></a>redis-py</h4><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install redis</span><br></pre></td></tr></table></figure>
+<h3 id="WEB库"><a href="#WEB库" class="headerlink" title="WEB库"></a>WEB库</h3><h4 id="flask"><a href="#flask" class="headerlink" title="flask"></a>flask</h4><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install flask</span><br></pre></td></tr></table></figure>
+<h4 id="Tornado"><a href="#Tornado" class="headerlink" title="Tornado"></a>Tornado</h4><p>&emsp;&emsp;Tornado是一个支持异步的web框架，通过使用非阻塞I/O流，可以支撑成千上万的开放连接，效率非常高。</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install tornado</span><br></pre></td></tr></table></figure>
+<h3 id="App爬取相关库-暂时放弃"><a href="#App爬取相关库-暂时放弃" class="headerlink" title="App爬取相关库(暂时放弃)"></a>App爬取相关库(暂时放弃)</h3><h3 id="爬虫框架"><a href="#爬虫框架" class="headerlink" title="爬虫框架"></a>爬虫框架</h3><h4 id="pyspider"><a href="#pyspider" class="headerlink" title="pyspider"></a>pyspider</h4><p>&emsp;&emsp;它带有强大的WebUI、脚本编辑器、任务监<br>控器、项目管理器以及结果处理器，同时支持多种数据库后端、多种消息队列，另外还支持JavaScript渲染页面的爬取<br>&emsp;&emsp;pyspider是支持JavaScript渲染的，而这个过程是依赖于PhantomJS的，所以还需要安装PhantomJS</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install pyspider</span><br></pre></td></tr></table></figure>
+<h4 id="Scrapy"><a href="#Scrapy" class="headerlink" title="Scrapy"></a>Scrapy</h4><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install scrapy</span><br></pre></td></tr></table></figure>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="http://www.cuiqingcai.com">崔庆才大佬</a>的《python3网络爬虫开发实战》</p>
+]]></content>
+      <categories>
+        <category>crawler</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>web crawler</tag>
+        <tag>data mining</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据挖掘--爬虫--基础库</title>
+    <url>/2019/02/22/machine%20learning/clawler/crawler-3/</url>
+    <content><![CDATA[<h3 id="urllib"><a href="#urllib" class="headerlink" title="urllib"></a>urllib</h3><p>&emsp;&emsp;urllib包含4个模块：  </p>
+<ol>
+<li>request 基本的http请求模块，用来模拟发送请求。</li>
+<li>error 异常处理模块，用于捕获异常保证程序不会意外终止</li>
+<li>parse 工具模块，提供了许多URL的处理方法</li>
+<li>robotparser 主要用来识别网站中的robots.txt文件，判断哪些网页可以用来爬</li>
+</ol>
+<h4 id="request"><a href="#request" class="headerlink" title="request"></a>request</h4><h5 id="urlopen"><a href="#urlopen" class="headerlink" title="urlopen()"></a>urlopen()</h5><p>API—-&gt; urllib.request.urlopen(url, data=None, [timeout, ]*, cafile=None, capath=None, cadefault=False, context=None)</p>
+<ol>
+<li><p>data<br> 添加该参数之后，请求方法即为POST；如果其内容为字节流编码格式(bytes类型)的内容，需要通过bytes()方法进行转换</p>
+ <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> urllib.request <span class="keyword">as</span> requset</span><br><span class="line"><span class="keyword">import</span> urllib.parse <span class="keyword">as</span> parse</span><br><span class="line"></span><br><span class="line">data = <span class="built_in">bytes</span>(parse.urlencode(&#123;<span class="string">&#x27;world&#x27;</span>:<span class="string">&#x27;hello&#x27;</span>&#125;),encoding=<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">reponse = requset.urlopen(<span class="string">&#x27;http://httpbin.org/post&#x27;</span>,data=data)</span><br><span class="line"><span class="built_in">print</span>(reponse.read())</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>timeout<br> 用于设置超时时间，单位：秒，超出这个时间没有相应，就会抛出异常,支持http、https、ftp请求</p>
+ <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> urllib.request <span class="keyword">as</span> requset</span><br><span class="line"></span><br><span class="line">reponse = requset.urlopen(<span class="string">&#x27;http://httpbin.org/get&#x27;</span>,timeout=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>context<br> &emsp;&emsp;用来指定ssl设置，必须是ssl.SSLContext类型</p>
+</li>
+<li>cafile和capath<br>&emsp;&emsp;用来指定CA证书和它的路径，在https链接时会用到  </li>
+<li>cadefault<br>&emsp;&emsp;该参数已经弃用，默认为False</li>
+</ol>
+<h5 id="Request"><a href="#Request" class="headerlink" title="Request"></a>Request</h5><p>&emsp;&emsp;如果请求中需要添加header头信息，就需要使用Request类来构建请求。  </p>
+<p>API—-&gt; class urllib.request.Request(ur1, data=None, headers={}, origin_req_host=None, unverifiable=False, method=None)</p>
+<ol>
+<li>url<br>用于请求URL，必传参数</li>
+<li>data<br>bytes（字节流）类型</li>
+<li>headers<br>一个字典，也就是请求头，可以通过headers参数直接构造请求头，也可以通过请求实例的add_header()方法添加</li>
+<li>origin_req_host<br>指的是请求方的host名称或者IP地址</li>
+<li>unverifiable<br>标识这个请求是够是无法验证的，默认是False，也就是用户没有权限来选择接受这个请求的结果</li>
+<li>method<br>指示请求使用的方法，POST、GET、PUT等</li>
+</ol>
+<h5 id="高级用法"><a href="#高级用法" class="headerlink" title="高级用法"></a>高级用法</h5><p>&emsp;&emsp;需要更高级的操作（Cookie处理、代理设置等）的时候，使用更加强大的工具Handler，简单的可以理解为各种处理器。<br>BaseHandler是其他所有Handler的父类，提供了最基本的方法。</p>
+<ul>
+<li>HTTPDefaultErrorHandler<br>&emsp;&emsp;用于处理HTTP响应错误  </li>
+<li>HTTPRedirectHandler<br>&emsp;&emsp;用于处理重定向  </li>
+<li>HTTPCookieProcesser<br>&emsp;&emsp;用于处理Cookie  </li>
+<li>ProxyHandler<br>&emsp;&emsp;用于设置代理，默认代理为空</li>
+<li>HTTPPasswordMgr<br>&emsp;&emsp;用于管理密码，维护了用户名和密码的表</li>
+<li>HTTPBasicAuthHandler<br>&emsp;&emsp;用于管理认证</li>
+</ul>
+<h4 id="parse"><a href="#parse" class="headerlink" title="parse"></a>parse</h4><p>&emsp;&emsp;parse 模块，它定义了处理 URL 的标准接口，例如实现URL各部分的抽取、合并以及链接转换。 它支持如下协议的 URL 处理：file 、http、gopher、hdl、http、https、imap 、mailto、mms、news、nntp、prospero、rsync、rtsp、rtspu、sftp、sip、sips、snews、svn、svn+ssh、telnet和wais。  </p>
+<h5 id="urlparse"><a href="#urlparse" class="headerlink" title="urlparse()"></a>urlparse()</h5><p>&emsp;&emsp;可以实现URL的识别和分段，解析为6部分: scheme（协议）、netloc（域名）、path（访问路径）、params（参数）、query（查询条件）和fragment（锚点）。</p>
+<p>API—-&gt; urllib.parse.urlparse(urlstring, scheme=”, allow_fragments=True)</p>
+<ol>
+<li>urlstring<br>&emsp;&emsp;必填项，待解析的URL</li>
+<li>scheme<br>&emsp;&emsp;默认的协议，如果链接没有带协议信息，会以此作为默认协议</li>
+<li>allow_fragments<br>&emsp;&emsp;是够忽略 fragement。设置为false，fragement部分就会被忽略，解析为path、parameters、或者query的一部分</li>
+</ol>
+<h5 id="urlunparse"><a href="#urlunparse" class="headerlink" title="urlunparse()"></a>urlunparse()</h5><p>&emsp;&emsp;接受一个可迭代的且长度为6的对象作为参数，构造一个URL</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> urllib.parse <span class="keyword">as</span> parse</span><br><span class="line"></span><br><span class="line">data= [<span class="string">&#x27;http&#x27;</span>,<span class="string">&#x27;www.baidu.com&#x27;</span>,<span class="string">&#x27;index.html&#x27;</span>,<span class="string">&#x27;user&#x27;</span>, <span class="string">&#x27;a=6&#x27;</span>,<span class="string">&#x27;comment&#x27;</span>]</span><br><span class="line"><span class="built_in">print</span>(parse.urlunparse(data))</span><br></pre></td></tr></table></figure>
+<h5 id="urlsplit"><a href="#urlsplit" class="headerlink" title="urlsplit()"></a>urlsplit()</h5><p>&emsp;&emsp;与urlparse()类似，不过不再单独解析params部分，将其合并到path中</p>
+<h5 id="urlunsplit"><a href="#urlunsplit" class="headerlink" title="urlunsplit()"></a>urlunsplit()</h5><p>&emsp;&emsp;与urlunparse()类似，接受一个可迭代的且长度为5的对象作为参数，构造一个URL</p>
+<h5 id="urljoin"><a href="#urljoin" class="headerlink" title="urljoin()"></a>urljoin()</h5><p>&emsp;&emsp;提供一个base_url（基础链接）作为第一个参数，将新的链接作为第二个参数，该方法会分析base_url的scheme、netloc和path这3个内容并对新链接缺失的部分进行补充，最后返回结果。<br>&emsp;&emsp;base_url提供了三项内容scheme、netloc和path。如果这3项在新的链接里不存在，就予以补充；如果新的链接存在，就使用新的链接的部分。而base_url中的params、query和fragment是不起作用的。</p>
+<h5 id="urlencode"><a href="#urlencode" class="headerlink" title="urlencode()"></a>urlencode()</h5><p>&emsp;&emsp;通过序列化将字典转换为GET请求参数</p>
+<h5 id="parse-qs"><a href="#parse-qs" class="headerlink" title="parse_qs()"></a>parse_qs()</h5><p>&emsp;&emsp;通过反序列化将GET请求参数转换为字典</p>
+<h5 id="parse-qsl"><a href="#parse-qsl" class="headerlink" title="parse_qsl()"></a>parse_qsl()</h5><p>&emsp;&emsp;将参数转化为元组组成的列表</p>
+<h5 id="quote"><a href="#quote" class="headerlink" title="quote()"></a>quote()</h5><p>&emsp;&emsp;将内容转化为URL编码的格式</p>
+<h5 id="unquote"><a href="#unquote" class="headerlink" title="unquote()"></a>unquote()</h5><p>&emsp;&emsp;将URL编码格式的内容解码</p>
+<h4 id="robotparser"><a href="#robotparser" class="headerlink" title="robotparser"></a>robotparser</h4><h5 id="bobots协议"><a href="#bobots协议" class="headerlink" title="bobots协议"></a>bobots协议</h5><p>&emsp;&emsp;Robots协议也称作爬虫协议/机器人协议，全程网络爬虫排除协议(Robots Exclusion Protocol)，通常为一个robots.txt文本文件，存放于网站的根目录之下。  </p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">User-agent: *</span><br><span class="line">Disallow: I</span><br><span class="line">Allow: /public/</span><br></pre></td></tr></table></figure>
+<h5 id="常见的爬虫名称"><a href="#常见的爬虫名称" class="headerlink" title="常见的爬虫名称"></a>常见的爬虫名称</h5><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>爬虫名称</th>
+<th>名称</th>
+<th>网站</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BaiduSpider</td>
+<td>百度</td>
+<td>www.baidu.com</td>
+</tr>
+<tr>
+<td>Googlebot</td>
+<td>谷歌</td>
+<td>www.google.com</td>
+</tr>
+<tr>
+<td>360Spider</td>
+<td>360搜索</td>
+<td>www.so.com</td>
+</tr>
+<tr>
+<td>YodaoBot</td>
+<td>有道</td>
+<td>www.youdao.com</td>
+</tr>
+<tr>
+<td>ia_archiver</td>
+<td>Alexa</td>
+<td>www.alexa.cn</td>
+</tr>
+<tr>
+<td>Scooter</td>
+<td>altavista</td>
+<td>www.altavista.com</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h5 id="robotparser-1"><a href="#robotparser-1" class="headerlink" title="robotparser"></a>robotparser</h5><p>&emsp;&emsp;一些常用方法：</p>
+<ul>
+<li>set_url()： 用来设置robots.txt文件的链接。如果在创建RobotFileParser对象时传入了链接，那么就不需要再使用这个方法设置了 。</li>
+<li>read()： 读取 robots.txt文件并进行分析。注意，这个方法执行一个读取和分析操作，如果不调用这个方法，接下来的判断都会为 False，所以一定记得调用这个方法。这个方法不会返回任何内容，但是执行了读取操作。</li>
+<li>parse()： 用来解析robots.txt文件，传人的参数是robots.txt某些行的内容，它会按照 robots.txt的语法规则来分析这些内容。</li>
+<li>can_fetch()： 该方法传人两个参数，第一个是 User-agent，第二个是要抓取的URL。返回的内容是该搜索引擎是否可以抓取这个URL，返回结果是True或False</li>
+<li>mtime()： 返回的是上次抓取和分析robots.txt的时间，这对于长时间分析和抓取的搜索爬虫是很有必要的，你可能需要定期检查来抓取最新的robots.txt。</li>
+<li>modified() ：它同样对长时间分析和抓取的搜索爬虫很有帮助，将当前时间设置为上次抓取和分析robots.txt的时间 。</li>
+</ul>
+<h3 id="requests"><a href="#requests" class="headerlink" title="requests"></a>requests</h3><h4 id="GET请求"><a href="#GET请求" class="headerlink" title="GET请求"></a>GET请求</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">r = requests.get(<span class="string">&#x27;http://httpbin.org/get&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(r.text)</span><br></pre></td></tr></table></figure>
+<h4 id="POST请求"><a href="#POST请求" class="headerlink" title="POST请求"></a>POST请求</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">data = &#123;<span class="string">&#x27;name&#x27;</span>:<span class="string">&#x27;germey&#x27;</span>, <span class="string">&#x27;age&#x27;</span>:<span class="string">&#x27;22&#x27;</span>&#125;</span><br><span class="line">r = requests.post(<span class="string">&quot;http://httpbin.org/post&quot;</span>, data=data)</span><br><span class="line"><span class="built_in">print</span>(r.text)</span><br></pre></td></tr></table></figure>
+<h3 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h3><p>&emsp;&emsp;<a href="https://www.zhangbohan.com.cn/2018/08/25/theory/regex/">详情请看另一篇文章</a></p>
+<h3 id="爬取猫眼top100"><a href="#爬取猫眼top100" class="headerlink" title="爬取猫眼top100"></a>爬取猫眼top100</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_one</span>(<span class="params">url</span>):</span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.109 Safari/537.36&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">    response = requests.get(url)</span><br><span class="line">    <span class="keyword">if</span> response.status_code == <span class="number">200</span>:</span><br><span class="line">        <span class="keyword">return</span> response.text</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">parse_one_page</span>(<span class="params">html</span>):</span><br><span class="line">    soup = BeautifulSoup(html, features=<span class="string">&#x27;lxml&#x27;</span>)</span><br><span class="line">    select = soup.select(<span class="string">&#x27;dd&#x27;</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> select:</span><br><span class="line">        <span class="keyword">yield</span> &#123;</span><br><span class="line">            <span class="string">&#x27;index&#x27;</span>:i.select(<span class="string">&quot;i.board-index&quot;</span>).pop().text,</span><br><span class="line">            <span class="string">&#x27;name&#x27;</span>: i.select(<span class="string">&#x27;p.name&#x27;</span>).pop().text,</span><br><span class="line">            <span class="string">&#x27;star&#x27;</span>:re.sub( <span class="string">&quot;[\f\r\n\t\v ]&quot;</span>,<span class="string">&quot;&quot;</span>,i.select(<span class="string">&#x27;p.star&#x27;</span>).pop().text),</span><br><span class="line">            <span class="string">&#x27;releasetime&#x27;</span>: i.select(<span class="string">&#x27;p.releasetime&#x27;</span>).pop().text, </span><br><span class="line">            <span class="string">&#x27;score&#x27;</span>: i.select(<span class="string">&#x27;p.score&#x27;</span>).pop().text&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>(<span class="params">offset = <span class="number">0</span></span>):</span><br><span class="line">    url = <span class="string">&#x27;https://maoyan.com/board/4?offset=&#x27;</span>+<span class="built_in">str</span>(offset)</span><br><span class="line">    html = get_one(url)</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;result.txt&quot;</span>,<span class="string">&quot;a+&quot;</span>,encoding=<span class="string">&quot;utf-8&quot;</span>,newline=<span class="string">&quot;&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> parse_one_page(html):</span><br><span class="line">            f.write(json.dumps(i,ensure_ascii=<span class="literal">False</span>)+<span class="string">&quot;\n&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">        main(offset=i*<span class="number">10</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="http://www.cuiqingcai.com">崔庆才大佬</a>的《python3网络爬虫开发实战》</p>
+]]></content>
+      <categories>
+        <category>crawler</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>web crawler</tag>
+        <tag>data mining</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数据挖掘--爬虫--爬虫基础</title>
     <url>/2019/02/21/machine%20learning/clawler/crawler-2/</url>
     <content><![CDATA[<h3 id="HTTP基本原理"><a href="#HTTP基本原理" class="headerlink" title="HTTP基本原理"></a>HTTP基本原理</h3><h4 id="URI和URL"><a href="#URI和URL" class="headerlink" title="URI和URL"></a>URI和URL</h4><p>&emsp;&emsp;URI(Uniform Resource Identifier),统一资源标志符；URL(Uniform Resource Locator),统一资源定位符；URN(Uniform Resource Name),统一资源名称，只命名组员而不指定如何定位资源。URL和URN都是URI的子集。</p>
@@ -1254,202 +1468,6 @@
       </tags>
   </entry>
   <entry>
-    <title>数据挖掘--爬虫--准备工作</title>
-    <url>/2019/02/21/machine%20learning/clawler/crawler-1/</url>
-    <content><![CDATA[<h3 id="python环境的准备工作"><a href="#python环境的准备工作" class="headerlink" title="python环境的准备工作"></a>python环境的准备工作</h3><p>&emsp;&emsp;博主在这使用windows作为系统环境，安装anaconda3作为python运行与库管理环境。<br>&emsp;&emsp;anaconda<a href="https://www.anaconda.com/">官方网站</a><br>&emsp;&emsp;如果下载速度过慢，可以选择使用<a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/">清华大学镜像</a>，<a href="https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/">使用说明</a></p>
-<h3 id="请求库的安装"><a href="#请求库的安装" class="headerlink" title="请求库的安装"></a>请求库的安装</h3><h4 id="requests库"><a href="#requests库" class="headerlink" title="requests库"></a>requests库</h4><pre><code>&amp;emsp;&amp;emsp;阻塞式http请求库
-</code></pre><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install requests</span><br></pre></td></tr></table></figure>
-<h4 id="selenuim库"><a href="#selenuim库" class="headerlink" title="selenuim库"></a>selenuim库</h4><p>   &emsp;&emsp;selenuim是一个自动化测试工具，可以使用它驱动浏览器执行特定的动作。如点击，下拉等等</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install selenuim</span><br></pre></td></tr></table></figure>
-<h4 id="Google-Chrome-以及其驱动-ChromeDriver"><a href="#Google-Chrome-以及其驱动-ChromeDriver" class="headerlink" title="Google Chrome 以及其驱动 ChromeDriver"></a>Google Chrome 以及其驱动 ChromeDriver</h4><pre><code>&amp;emsp;&amp;emsp;Google Chrome[下载](https://chrome.en.softonic.com/)&amp;emsp;&amp;emsp; ChromeDriver[下载](https://chromedriver.storage.googleapis.com/index.html)  
-&lt;font color=&quot;red&quot;&gt;注意：安装的chromedriver版本要和google chrome版本相匹配&lt;/font&gt;  
-&amp;emsp;&amp;emsp;将下载下来的chromedriver添加到环境变量，在命令行中进行测试是否成功
-</code></pre><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">chromedriver</span><br></pre></td></tr></table></figure>
-<pre><code>显示以下类似内容说明成功
-</code></pre><figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Starting ChromeDriver 72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38) on port 9515</span><br><span class="line">Only local connections are allowed.</span><br><span class="line">Please protect ports used by ChromeDriver and related test frameworks to prevent access by malicious code</span><br></pre></td></tr></table></figure>
-<pre><code>在python中进行测试
-</code></pre><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver  </span><br><span class="line">brower = webdriver.Chrome()</span><br></pre></td></tr></table></figure>
-<pre><code>运行打开一个新的chrome窗口
-</code></pre><h4 id="Firefox以及其驱动-GeckoDriver"><a href="#Firefox以及其驱动-GeckoDriver" class="headerlink" title="Firefox以及其驱动 GeckoDriver"></a>Firefox以及其驱动 GeckoDriver</h4><pre><code>FireFox[下载](http://www.firefox.com.cn/)&amp;emsp;&amp;emsp;GeckoDriver[下载](https://github.com/mozilla/geckodriver/releases)  
-&lt;font color=&quot;red&quot;&gt;注意：安装的geckodriver版本要和firefox版本相匹配,geckodriver下载界面有版本要求说明，如果geckodriver未起作用，请尝试重装firefox最新版本并重启电脑&lt;/font&gt;  
-&amp;emsp;&amp;emsp;将下载下来的geckodriver添加到环境变量，在命令行中进行测试是否成功
-</code></pre><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">geckodriver</span><br></pre></td></tr></table></figure>
-<pre><code>在python中进行测试
-</code></pre><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line">brower = webdriver.Firefox()</span><br></pre></td></tr></table></figure>
-<pre><code>运行打开一个新的firefox窗口
-</code></pre><h4 id="PhantomJS"><a href="#PhantomJS" class="headerlink" title="PhantomJS"></a>PhantomJS</h4><p>   &emsp;&emsp;PhantomJS是一个无界面的、可脚本编程的webkit浏览器引擎，<a href="http://phantomjs.org/download.html">下载</a><br>   &emsp;&emsp;将下载下来的bin文件夹下的phantomjs.exe添加到环境变量，在命令行中进行测试是否成功</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">phantomjs</span><br></pre></td></tr></table></figure>
-<pre><code>出现以下内容说明可用
-</code></pre><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">phantomjs&gt;</span><br></pre></td></tr></table></figure>
-<pre><code>在python中进行测试
-</code></pre><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"></span><br><span class="line">brower = webdriver.PhantomJS()</span><br><span class="line">brower.get(<span class="string">&quot;http://www.baidu.com&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(brower.current_url))</span><br></pre></td></tr></table></figure>
-<pre><code>使用PhantonJs不会打开一个新的窗口，但实际上已经在后台运行
-</code></pre><h4 id="aiohttp"><a href="#aiohttp" class="headerlink" title="aiohttp"></a>aiohttp</h4><pre><code>异步web服务库
-</code></pre><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install aiohttp</span><br></pre></td></tr></table></figure>
-<pre><code>此外，官方还推荐安装cchardet（字符编码检测库）和aiodns（加速dns解析库），
-</code></pre><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install cchardet aiodns</span><br></pre></td></tr></table></figure>
-<h3 id="解析库的安装"><a href="#解析库的安装" class="headerlink" title="解析库的安装"></a>解析库的安装</h3><h4 id="lxml"><a href="#lxml" class="headerlink" title="lxml"></a>lxml</h4><p>   支持html和xml的解析，支持XPath解析方式，解析效率高</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install lxml</span><br></pre></td></tr></table></figure>
-<h4 id="Beautiful-Soup"><a href="#Beautiful-Soup" class="headerlink" title="Beautiful Soup"></a>Beautiful Soup</h4><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install beautifulsoup4</span><br></pre></td></tr></table></figure>
-<h4 id="pyquery"><a href="#pyquery" class="headerlink" title="pyquery"></a>pyquery</h4><p>&emsp;&emsp;pyquery 同样是一个强大的网页解析工具，它提供了和 jQuery 类似的语法来解析 HTML 文梢，支持 css 选择器，使用非常方便.</p>
-   <figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install pyquery</span><br></pre></td></tr></table></figure>
-<h4 id="tesserocr"><a href="#tesserocr" class="headerlink" title="tesserocr"></a>tesserocr</h4><p>   &emsp;&emsp;cor识别，识别各种各样的验证码。tesserocr是对tesseract的一层python封装，因此需要先<a href="https://digi.bib.uni-mannheim.de/tesseract/">安装tesseract</a>,带dev的是开发版本，不稳定，不带dev的是稳定版本<br>    linux下</p>
-   <figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install tesserocr pillow </span><br></pre></td></tr></table></figure>
-<p>   windows下<br>    <a href="https://github.com/simonflueckiger/tesserocr-windows_build/releases">whl安装文件下载地址</a></p>
-<pre><code><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip install tesserocr-<span class="number">2</span>.<span class="number">4</span>.<span class="number">0</span>-cp36-cp36m-win_amd64.whl</span><br></pre></td></tr></table></figure>
-</code></pre><p>保存<a href="https://raw.githubusercontent.com/Python3WebSpider/TestTess/master/image.png">测试图片</a>到本地，分别对tesseract和tesserocr进行测试，看能否识别</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">tesseract image.png result -l eng &amp;&amp; <span class="built_in">type</span> result.txt</span><br><span class="line">#运行结果</span><br><span class="line">#Tesseract Open Source OCR Engine v3.<span class="number">0</span>S .<span class="number">01</span> with Leptonica</span><br><span class="line">#Python3WebSpider</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tesserocr</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line">image = Image.<span class="built_in">open</span>(<span class="string">&#x27;D:\\temp\\test\\image.png&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(tesserocr.image_to_text(image))</span><br></pre></td></tr></table></figure>
-<h3 id="数据库-略"><a href="#数据库-略" class="headerlink" title="数据库(略)"></a>数据库(略)</h3><h3 id="存储库"><a href="#存储库" class="headerlink" title="存储库"></a>存储库</h3><h4 id="PyMysql"><a href="#PyMysql" class="headerlink" title="PyMysql"></a>PyMysql</h4><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install pymysql</span><br></pre></td></tr></table></figure>
-<h4 id="PyMongo"><a href="#PyMongo" class="headerlink" title="PyMongo"></a>PyMongo</h4><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install pymongo</span><br></pre></td></tr></table></figure>
-<h4 id="redis-py"><a href="#redis-py" class="headerlink" title="redis-py"></a>redis-py</h4><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install redis</span><br></pre></td></tr></table></figure>
-<h3 id="WEB库"><a href="#WEB库" class="headerlink" title="WEB库"></a>WEB库</h3><h4 id="flask"><a href="#flask" class="headerlink" title="flask"></a>flask</h4><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install flask</span><br></pre></td></tr></table></figure>
-<h4 id="Tornado"><a href="#Tornado" class="headerlink" title="Tornado"></a>Tornado</h4><p>&emsp;&emsp;Tornado是一个支持异步的web框架，通过使用非阻塞I/O流，可以支撑成千上万的开放连接，效率非常高。</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install tornado</span><br></pre></td></tr></table></figure>
-<h3 id="App爬取相关库-暂时放弃"><a href="#App爬取相关库-暂时放弃" class="headerlink" title="App爬取相关库(暂时放弃)"></a>App爬取相关库(暂时放弃)</h3><h3 id="爬虫框架"><a href="#爬虫框架" class="headerlink" title="爬虫框架"></a>爬虫框架</h3><h4 id="pyspider"><a href="#pyspider" class="headerlink" title="pyspider"></a>pyspider</h4><p>&emsp;&emsp;它带有强大的WebUI、脚本编辑器、任务监<br>控器、项目管理器以及结果处理器，同时支持多种数据库后端、多种消息队列，另外还支持JavaScript渲染页面的爬取<br>&emsp;&emsp;pyspider是支持JavaScript渲染的，而这个过程是依赖于PhantomJS的，所以还需要安装PhantomJS</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install pyspider</span><br></pre></td></tr></table></figure>
-<h4 id="Scrapy"><a href="#Scrapy" class="headerlink" title="Scrapy"></a>Scrapy</h4><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install scrapy</span><br></pre></td></tr></table></figure>
-<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="http://www.cuiqingcai.com">崔庆才大佬</a>的《python3网络爬虫开发实战》</p>
-]]></content>
-      <categories>
-        <category>crawler</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>web crawler</tag>
-        <tag>data mining</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数据挖掘--爬虫--基础库</title>
-    <url>/2019/02/22/machine%20learning/clawler/crawler-3/</url>
-    <content><![CDATA[<h3 id="urllib"><a href="#urllib" class="headerlink" title="urllib"></a>urllib</h3><p>&emsp;&emsp;urllib包含4个模块：  </p>
-<ol>
-<li>request 基本的http请求模块，用来模拟发送请求。</li>
-<li>error 异常处理模块，用于捕获异常保证程序不会意外终止</li>
-<li>parse 工具模块，提供了许多URL的处理方法</li>
-<li>robotparser 主要用来识别网站中的robots.txt文件，判断哪些网页可以用来爬</li>
-</ol>
-<h4 id="request"><a href="#request" class="headerlink" title="request"></a>request</h4><h5 id="urlopen"><a href="#urlopen" class="headerlink" title="urlopen()"></a>urlopen()</h5><p>API—-&gt; urllib.request.urlopen(url, data=None, [timeout, ]*, cafile=None, capath=None, cadefault=False, context=None)</p>
-<ol>
-<li><p>data<br> 添加该参数之后，请求方法即为POST；如果其内容为字节流编码格式(bytes类型)的内容，需要通过bytes()方法进行转换</p>
- <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> urllib.request <span class="keyword">as</span> requset</span><br><span class="line"><span class="keyword">import</span> urllib.parse <span class="keyword">as</span> parse</span><br><span class="line"></span><br><span class="line">data = <span class="built_in">bytes</span>(parse.urlencode(&#123;<span class="string">&#x27;world&#x27;</span>:<span class="string">&#x27;hello&#x27;</span>&#125;),encoding=<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">reponse = requset.urlopen(<span class="string">&#x27;http://httpbin.org/post&#x27;</span>,data=data)</span><br><span class="line"><span class="built_in">print</span>(reponse.read())</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>timeout<br> 用于设置超时时间，单位：秒，超出这个时间没有相应，就会抛出异常,支持http、https、ftp请求</p>
- <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> urllib.request <span class="keyword">as</span> requset</span><br><span class="line"></span><br><span class="line">reponse = requset.urlopen(<span class="string">&#x27;http://httpbin.org/get&#x27;</span>,timeout=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>context<br> &emsp;&emsp;用来指定ssl设置，必须是ssl.SSLContext类型</p>
-</li>
-<li>cafile和capath<br>&emsp;&emsp;用来指定CA证书和它的路径，在https链接时会用到  </li>
-<li>cadefault<br>&emsp;&emsp;该参数已经弃用，默认为False</li>
-</ol>
-<h5 id="Request"><a href="#Request" class="headerlink" title="Request"></a>Request</h5><p>&emsp;&emsp;如果请求中需要添加header头信息，就需要使用Request类来构建请求。  </p>
-<p>API—-&gt; class urllib.request.Request(ur1, data=None, headers={}, origin_req_host=None, unverifiable=False, method=None)</p>
-<ol>
-<li>url<br>用于请求URL，必传参数</li>
-<li>data<br>bytes（字节流）类型</li>
-<li>headers<br>一个字典，也就是请求头，可以通过headers参数直接构造请求头，也可以通过请求实例的add_header()方法添加</li>
-<li>origin_req_host<br>指的是请求方的host名称或者IP地址</li>
-<li>unverifiable<br>标识这个请求是够是无法验证的，默认是False，也就是用户没有权限来选择接受这个请求的结果</li>
-<li>method<br>指示请求使用的方法，POST、GET、PUT等</li>
-</ol>
-<h5 id="高级用法"><a href="#高级用法" class="headerlink" title="高级用法"></a>高级用法</h5><p>&emsp;&emsp;需要更高级的操作（Cookie处理、代理设置等）的时候，使用更加强大的工具Handler，简单的可以理解为各种处理器。<br>BaseHandler是其他所有Handler的父类，提供了最基本的方法。</p>
-<ul>
-<li>HTTPDefaultErrorHandler<br>&emsp;&emsp;用于处理HTTP响应错误  </li>
-<li>HTTPRedirectHandler<br>&emsp;&emsp;用于处理重定向  </li>
-<li>HTTPCookieProcesser<br>&emsp;&emsp;用于处理Cookie  </li>
-<li>ProxyHandler<br>&emsp;&emsp;用于设置代理，默认代理为空</li>
-<li>HTTPPasswordMgr<br>&emsp;&emsp;用于管理密码，维护了用户名和密码的表</li>
-<li>HTTPBasicAuthHandler<br>&emsp;&emsp;用于管理认证</li>
-</ul>
-<h4 id="parse"><a href="#parse" class="headerlink" title="parse"></a>parse</h4><p>&emsp;&emsp;parse 模块，它定义了处理 URL 的标准接口，例如实现URL各部分的抽取、合并以及链接转换。 它支持如下协议的 URL 处理：file 、http、gopher、hdl、http、https、imap 、mailto、mms、news、nntp、prospero、rsync、rtsp、rtspu、sftp、sip、sips、snews、svn、svn+ssh、telnet和wais。  </p>
-<h5 id="urlparse"><a href="#urlparse" class="headerlink" title="urlparse()"></a>urlparse()</h5><p>&emsp;&emsp;可以实现URL的识别和分段，解析为6部分: scheme（协议）、netloc（域名）、path（访问路径）、params（参数）、query（查询条件）和fragment（锚点）。</p>
-<p>API—-&gt; urllib.parse.urlparse(urlstring, scheme=”, allow_fragments=True)</p>
-<ol>
-<li>urlstring<br>&emsp;&emsp;必填项，待解析的URL</li>
-<li>scheme<br>&emsp;&emsp;默认的协议，如果链接没有带协议信息，会以此作为默认协议</li>
-<li>allow_fragments<br>&emsp;&emsp;是够忽略 fragement。设置为false，fragement部分就会被忽略，解析为path、parameters、或者query的一部分</li>
-</ol>
-<h5 id="urlunparse"><a href="#urlunparse" class="headerlink" title="urlunparse()"></a>urlunparse()</h5><p>&emsp;&emsp;接受一个可迭代的且长度为6的对象作为参数，构造一个URL</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> urllib.parse <span class="keyword">as</span> parse</span><br><span class="line"></span><br><span class="line">data= [<span class="string">&#x27;http&#x27;</span>,<span class="string">&#x27;www.baidu.com&#x27;</span>,<span class="string">&#x27;index.html&#x27;</span>,<span class="string">&#x27;user&#x27;</span>, <span class="string">&#x27;a=6&#x27;</span>,<span class="string">&#x27;comment&#x27;</span>]</span><br><span class="line"><span class="built_in">print</span>(parse.urlunparse(data))</span><br></pre></td></tr></table></figure>
-<h5 id="urlsplit"><a href="#urlsplit" class="headerlink" title="urlsplit()"></a>urlsplit()</h5><p>&emsp;&emsp;与urlparse()类似，不过不再单独解析params部分，将其合并到path中</p>
-<h5 id="urlunsplit"><a href="#urlunsplit" class="headerlink" title="urlunsplit()"></a>urlunsplit()</h5><p>&emsp;&emsp;与urlunparse()类似，接受一个可迭代的且长度为5的对象作为参数，构造一个URL</p>
-<h5 id="urljoin"><a href="#urljoin" class="headerlink" title="urljoin()"></a>urljoin()</h5><p>&emsp;&emsp;提供一个base_url（基础链接）作为第一个参数，将新的链接作为第二个参数，该方法会分析base_url的scheme、netloc和path这3个内容并对新链接缺失的部分进行补充，最后返回结果。<br>&emsp;&emsp;base_url提供了三项内容scheme、netloc和path。如果这3项在新的链接里不存在，就予以补充；如果新的链接存在，就使用新的链接的部分。而base_url中的params、query和fragment是不起作用的。</p>
-<h5 id="urlencode"><a href="#urlencode" class="headerlink" title="urlencode()"></a>urlencode()</h5><p>&emsp;&emsp;通过序列化将字典转换为GET请求参数</p>
-<h5 id="parse-qs"><a href="#parse-qs" class="headerlink" title="parse_qs()"></a>parse_qs()</h5><p>&emsp;&emsp;通过反序列化将GET请求参数转换为字典</p>
-<h5 id="parse-qsl"><a href="#parse-qsl" class="headerlink" title="parse_qsl()"></a>parse_qsl()</h5><p>&emsp;&emsp;将参数转化为元组组成的列表</p>
-<h5 id="quote"><a href="#quote" class="headerlink" title="quote()"></a>quote()</h5><p>&emsp;&emsp;将内容转化为URL编码的格式</p>
-<h5 id="unquote"><a href="#unquote" class="headerlink" title="unquote()"></a>unquote()</h5><p>&emsp;&emsp;将URL编码格式的内容解码</p>
-<h4 id="robotparser"><a href="#robotparser" class="headerlink" title="robotparser"></a>robotparser</h4><h5 id="bobots协议"><a href="#bobots协议" class="headerlink" title="bobots协议"></a>bobots协议</h5><p>&emsp;&emsp;Robots协议也称作爬虫协议/机器人协议，全程网络爬虫排除协议(Robots Exclusion Protocol)，通常为一个robots.txt文本文件，存放于网站的根目录之下。  </p>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">User-agent: *</span><br><span class="line">Disallow: I</span><br><span class="line">Allow: /public/</span><br></pre></td></tr></table></figure>
-<h5 id="常见的爬虫名称"><a href="#常见的爬虫名称" class="headerlink" title="常见的爬虫名称"></a>常见的爬虫名称</h5><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>爬虫名称</th>
-<th>名称</th>
-<th>网站</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>BaiduSpider</td>
-<td>百度</td>
-<td>www.baidu.com</td>
-</tr>
-<tr>
-<td>Googlebot</td>
-<td>谷歌</td>
-<td>www.google.com</td>
-</tr>
-<tr>
-<td>360Spider</td>
-<td>360搜索</td>
-<td>www.so.com</td>
-</tr>
-<tr>
-<td>YodaoBot</td>
-<td>有道</td>
-<td>www.youdao.com</td>
-</tr>
-<tr>
-<td>ia_archiver</td>
-<td>Alexa</td>
-<td>www.alexa.cn</td>
-</tr>
-<tr>
-<td>Scooter</td>
-<td>altavista</td>
-<td>www.altavista.com</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h5 id="robotparser-1"><a href="#robotparser-1" class="headerlink" title="robotparser"></a>robotparser</h5><p>&emsp;&emsp;一些常用方法：</p>
-<ul>
-<li>set_url()： 用来设置robots.txt文件的链接。如果在创建RobotFileParser对象时传入了链接，那么就不需要再使用这个方法设置了 。</li>
-<li>read()： 读取 robots.txt文件并进行分析。注意，这个方法执行一个读取和分析操作，如果不调用这个方法，接下来的判断都会为 False，所以一定记得调用这个方法。这个方法不会返回任何内容，但是执行了读取操作。</li>
-<li>parse()： 用来解析robots.txt文件，传人的参数是robots.txt某些行的内容，它会按照 robots.txt的语法规则来分析这些内容。</li>
-<li>can_fetch()： 该方法传人两个参数，第一个是 User-agent，第二个是要抓取的URL。返回的内容是该搜索引擎是否可以抓取这个URL，返回结果是True或False</li>
-<li>mtime()： 返回的是上次抓取和分析robots.txt的时间，这对于长时间分析和抓取的搜索爬虫是很有必要的，你可能需要定期检查来抓取最新的robots.txt。</li>
-<li>modified() ：它同样对长时间分析和抓取的搜索爬虫很有帮助，将当前时间设置为上次抓取和分析robots.txt的时间 。</li>
-</ul>
-<h3 id="requests"><a href="#requests" class="headerlink" title="requests"></a>requests</h3><h4 id="GET请求"><a href="#GET请求" class="headerlink" title="GET请求"></a>GET请求</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">r = requests.get(<span class="string">&#x27;http://httpbin.org/get&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(r.text)</span><br></pre></td></tr></table></figure>
-<h4 id="POST请求"><a href="#POST请求" class="headerlink" title="POST请求"></a>POST请求</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">data = &#123;<span class="string">&#x27;name&#x27;</span>:<span class="string">&#x27;germey&#x27;</span>, <span class="string">&#x27;age&#x27;</span>:<span class="string">&#x27;22&#x27;</span>&#125;</span><br><span class="line">r = requests.post(<span class="string">&quot;http://httpbin.org/post&quot;</span>, data=data)</span><br><span class="line"><span class="built_in">print</span>(r.text)</span><br></pre></td></tr></table></figure>
-<h3 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h3><p>&emsp;&emsp;<a href="https://www.zhangbohan.xyz/2018/08/25/theory/regex/">详情请看另一篇文章</a></p>
-<h3 id="爬取猫眼top100"><a href="#爬取猫眼top100" class="headerlink" title="爬取猫眼top100"></a>爬取猫眼top100</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_one</span>(<span class="params">url</span>):</span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.109 Safari/537.36&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">    response = requests.get(url)</span><br><span class="line">    <span class="keyword">if</span> response.status_code == <span class="number">200</span>:</span><br><span class="line">        <span class="keyword">return</span> response.text</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">parse_one_page</span>(<span class="params">html</span>):</span><br><span class="line">    soup = BeautifulSoup(html, features=<span class="string">&#x27;lxml&#x27;</span>)</span><br><span class="line">    select = soup.select(<span class="string">&#x27;dd&#x27;</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> select:</span><br><span class="line">        <span class="keyword">yield</span> &#123;</span><br><span class="line">            <span class="string">&#x27;index&#x27;</span>:i.select(<span class="string">&quot;i.board-index&quot;</span>).pop().text,</span><br><span class="line">            <span class="string">&#x27;name&#x27;</span>: i.select(<span class="string">&#x27;p.name&#x27;</span>).pop().text,</span><br><span class="line">            <span class="string">&#x27;star&#x27;</span>:re.sub( <span class="string">&quot;[\f\r\n\t\v ]&quot;</span>,<span class="string">&quot;&quot;</span>,i.select(<span class="string">&#x27;p.star&#x27;</span>).pop().text),</span><br><span class="line">            <span class="string">&#x27;releasetime&#x27;</span>: i.select(<span class="string">&#x27;p.releasetime&#x27;</span>).pop().text, </span><br><span class="line">            <span class="string">&#x27;score&#x27;</span>: i.select(<span class="string">&#x27;p.score&#x27;</span>).pop().text&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>(<span class="params">offset = <span class="number">0</span></span>):</span><br><span class="line">    url = <span class="string">&#x27;https://maoyan.com/board/4?offset=&#x27;</span>+<span class="built_in">str</span>(offset)</span><br><span class="line">    html = get_one(url)</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;result.txt&quot;</span>,<span class="string">&quot;a+&quot;</span>,encoding=<span class="string">&quot;utf-8&quot;</span>,newline=<span class="string">&quot;&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> parse_one_page(html):</span><br><span class="line">            f.write(json.dumps(i,ensure_ascii=<span class="literal">False</span>)+<span class="string">&quot;\n&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">        main(offset=i*<span class="number">10</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="http://www.cuiqingcai.com">崔庆才大佬</a>的《python3网络爬虫开发实战》</p>
-]]></content>
-      <categories>
-        <category>crawler</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>web crawler</tag>
-        <tag>data mining</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>数据结构 - 树</title>
     <url>/2018/09/17/theory/algorithm/algorithm-tree/</url>
     <content><![CDATA[<h4 id="树"><a href="#树" class="headerlink" title="树"></a>树</h4><p>&emsp;&emsp; 一棵树是一些节点的集合。如果这棵树非空，则一棵树由称作根（root）节点的r以及0个或者多个非空的(子)树组成，这些子树中每一棵的根都被来自根r的一条有向的边（edge）所连接。<br>&emsp;&emsp;每一棵子树的根叫做r的儿子，r是每一棵子树的根的父亲。没有儿子的节点称为树叶，具有相同父节点的节点称为兄弟。</p>
@@ -1502,62 +1520,6 @@
       <tags>
         <tag>algorithm</tag>
         <tag>probability theory</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Cgroup简介</title>
-    <url>/2018/09/28/theory/linux/linux-cgroup-interface/</url>
-    <content><![CDATA[<p>&emsp;&emsp;Cgroup,全称Control Group（控制组），用于限制和隔离一组进程对系统资源的调用，即做资源QoS（Quality of Service，服务质量）。<br>&emsp;&emsp;Cgroup的原生接口通过cgroupfs提供，类似于procfs和sysfs，是一种虚拟文件系统。</p>
-<ol>
-<li><p>挂载cgroupfs<br>&emsp;&emsp;此过程一般在启动时由linux发行版做好了。标准挂载点是/sys/fs/cgroup,可以变更。</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mount -t cgroup -o cpuset /sys/fs/cgroup/cpuset/</span><br><span class="line"><span class="comment"># mount: cgroup 已经挂载或 /sys/fs/cgroup/cpuset 忙</span></span><br><span class="line"><span class="comment">#        cgroup 已经挂载到 /sys/fs/cgroup/systemd 上</span></span><br><span class="line"><span class="comment">#        cgroup 已经挂载到 /sys/fs/cgroup/blkio 上</span></span><br><span class="line"><span class="comment">#        cgroup 已经挂载到 /sys/fs/cgroup/freezer 上</span></span><br><span class="line"><span class="comment">#        cgroup 已经挂载到 /sys/fs/cgroup/devices 上</span></span><br><span class="line"><span class="comment">#        cgroup 已经挂载到 /sys/fs/cgroup/perf_event 上</span></span><br><span class="line"><span class="comment">#        cgroup 已经挂载到 /sys/fs/cgroup/net_cls,net_prio 上</span></span><br><span class="line"><span class="comment">#        cgroup 已经挂载到 /sys/fs/cgroup/cpuset 上</span></span><br><span class="line"><span class="comment">#        cgroup 已经挂载到 /sys/fs/cgroup/cpu,cpuacct 上</span></span><br><span class="line"><span class="comment">#        cgroup 已经挂载到 /sys/fs/cgroup/hugetlb 上</span></span><br><span class="line"><span class="comment">#        cgroup 已经挂载到 /sys/fs/cgroup/pids 上</span></span><br><span class="line"><span class="comment">#        cgroup 已经挂载到 /sys/fs/cgroup/memory 上</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>查看cgroupfs<br>&emsp;&emsp;cpuset开头的子文件都是由cpuset子系统产生的，其他文件则由Cgroup产生。这里的tasks文件记录了这个Cgroup的所有进程，包括线程。</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">ls</span> /sys/fs/cgroup/cpuset/</span><br><span class="line"><span class="comment"># cgroup.clone_children  cpuset.memory_pressure</span></span><br><span class="line"><span class="comment"># cgroup.event_control   cpuset.memory_pressure_enabled</span></span><br><span class="line"><span class="comment"># cgroup.procs           cpuset.memory_spread_page</span></span><br><span class="line"><span class="comment"># cgroup.sane_behavior   cpuset.memory_spread_slab</span></span><br><span class="line"><span class="comment"># cpuset.cpu_exclusive   cpuset.mems</span></span><br><span class="line"><span class="comment"># cpuset.cpus            cpuset.sched_load_balance</span></span><br><span class="line"><span class="comment"># cpuset.effective_cpus  cpuset.sched_relax_domain_level</span></span><br><span class="line"><span class="comment"># cpuset.effective_mems  notify_on_release</span></span><br><span class="line"><span class="comment"># cpuset.mem_exclusive   release_agent</span></span><br><span class="line"><span class="comment"># cpuset.mem_hardwall    tasks</span></span><br><span class="line"><span class="comment"># cpuset.memory_migrate</span></span><br></pre></td></tr></table></figure></li>
-<li><p>创建Cgroup<br> &emsp;&emsp;通过mkdir创建一个新的目录，也就是常见了一个新的Cgroup</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> /sys/fs/cgroup/cpuset/child</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>配置Cgroup</p>
-<p> &emsp;&emsp;配置这个Cgroup的资源配额，通过以下命令，可以先哲这个Cgroup的进程只能在0号cpu上运行，并且只能在0号内存节点分配内存。</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> 0 &gt; /sys/fs/cgroup/cpuset/child/cpuset.cpus</span><br><span class="line"><span class="built_in">echo</span> 0 &gt; /sys/fs/cgroup/cpuset/child/cpuset.mems</span><br></pre></td></tr></table></figure></li>
-<li><p>使能Cgroup</p>
-<p> &emsp;&emsp;通过将进程id写进tasks文件，将整个进程移动到Cgroup中，Cgroup真正起作用了</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> $$ &gt; /sys/fs/cgroup/cpuset/child/tasks <span class="comment"># $$表示当前进程id</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
-        <tag>cgroup</tag>
-        <tag>kernel</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Namespace简介</title>
-    <url>/2018/09/28/theory/linux/linux-namespace-interface/</url>
-    <content><![CDATA[<p>&emsp;&emsp;Namespace是将内核的全局资源做封装，使得每个Namespace都有一份独立的资源，因此，不同的进程在各自的namespace内对同一资源的使用不会产生相互干扰。<br>&emsp;&emsp;目前，linux内核总共实现了6中namespace：  </p>
-<ol>
-<li>IPC ： 隔离System V IPC 和POSIX消息队列<br>&emsp;&emsp;IPC：Inter-Process Communication（进程间通信）,IPC namespace针对的是SystemV IPC和Posix消息队列，这些IPC机制都会用到标识符。IPC Namespace 能做到的就是使相同的标识符在两个Namespace中代表不同的消息队列，这样就使得两个Namespace中的进程不能通过IPC进程通信了。</li>
-<li><p>Network ：隔离网络资源<br>&emsp;&emsp;每个Network Namespace都有自己的网络设备、IP地址、路由表、/proc/net目录，端口号等</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ip nets add new_ns <span class="comment">#创建network namespace</span></span><br><span class="line">ip nets <span class="built_in">exec</span> new_ns ip <span class="built_in">link</span> list <span class="comment">#使用 ip nets exec可以对特定的network namespace执行网络管理</span></span><br><span class="line">ip nets <span class="built_in">exec</span> new_ns ip <span class="built_in">link</span> <span class="built_in">set</span> dev lo up <span class="comment">#启用lopopback接口</span></span><br><span class="line">ip nets delete new_ns <span class="comment">#删除namespace</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Mount ： 隔离文件系统挂载点<br>&emsp;&emsp;用来隔离文件系统挂载点，每个进程能看到的文件系统都记录在/proc/$$/mounts里，在创建了一个新的Mount Namespace后，进程系统对文件系统挂载/卸载的动作不会影响到其他Namespace。</p>
-</li>
-<li>PID ： 隔离进程ID<br>&emsp;&emsp;用于隔离进程PID号，这样一来，不同的Namespace中的进程PID号就可以是一样的了</li>
-<li>UTS ： 隔离主机名和域名<br>&emsp;&emsp;因为主机名可以代替IP，因此可以使用主机名在网络上访问某台机器，如果不做隔离，这个机制在容器里就会出问题。</li>
-<li>User ：隔离用户ID和组ID<br>&emsp;&emsp;一个进程在namespace里的用户和组ID与它在host里的ID可以不一样，最有用的地方在于可以在容器内部启用0号用户（root），但是它的特权被限定在容器内，离开容器就只是普通用户权限了</li>
-</ol>
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
-        <tag>kernel</tag>
-        <tag>namespace</tag>
       </tags>
   </entry>
   <entry>
@@ -1659,23 +1621,6 @@
       </tags>
   </entry>
   <entry>
-    <title>CCNA学习笔记三 -- 路由和交换</title>
-    <url>/2018/08/28/theory/ccna/ccna-3/</url>
-    <content><![CDATA[<h4 id="网络畅通的条件"><a href="#网络畅通的条件" class="headerlink" title="网络畅通的条件"></a>网络畅通的条件</h4><p>数据包能去能回<br>沿途的路由器必须知道到目标地址如何转发<br>沿途的路由器必须知道回来的数据包如何转发  </p>
-<p>路由器直连的网络 不用告诉路由器如何转发<br>路由器没有直连的网络 管理员需要告诉路由器到目标网络如何转发 即添加静态路由<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#ip route 192.168.1.0 255.255.255.0 192.268.2.0  设置数据包 到192.168.1.0/24的数据包下一跳给192.168.2.0</span><br><span class="line">(config)#tracroute ip_address 跟踪数据包路径</span><br><span class="line">#show ip route 查看路由表</span><br><span class="line">(config)#no ip route 192.168.1.0 255.255.255.0 删除路由表</span><br><span class="line">windows上添加路由表 route add ip_adress mask ip_web</span><br><span class="line">windows查看路由表 netstat-r    route print </span><br></pre></td></tr></table></figure></p>
-<h4 id="动态路由"><a href="#动态路由" class="headerlink" title="动态路由"></a>动态路由</h4><p>优先级 直连0 静态路由1 eigp90  rip120<br>RIP协议 跳数判断，周期性（30s）更新路由表，最大跳数16跳<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#router rip  启用rip协议  </span><br><span class="line">(config-router)#network 192.168.1.0 该网段参与rip协议  </span><br><span class="line">#debug ip rip 显示rip协议信息</span><br><span class="line">#undebug all  关闭rip协议信息显示</span><br><span class="line">#show ip protocols 显示应用协议</span><br><span class="line">EIGP协议 优先级高于RIP</span><br><span class="line">(config)#router eigp 10  启用eigp协议,相同编号路由器才可以交换路由信息</span><br><span class="line">(config-router)#network 192.168.1.0 该网段参与eigp协议</span><br></pre></td></tr></table></figure></p>
-<h4 id="交换"><a href="#交换" class="headerlink" title="交换"></a>交换</h4><p>集线器 不安全、冲突域、带宽共享<br>交换机 基于目标MAC地址转发、学习MAC地址、端口独享带宽、没有冲突、广播会出问题<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#show mac-address-table 显示MAC地址表</span><br><span class="line">  #config terminal </span><br><span class="line">  (config)#interrface fastEthernet 0/4</span><br><span class="line">  (config-if)#switchport mode access 接机算机的接口</span><br><span class="line">  (config-if)#switchport port-security 启用安全</span><br><span class="line">  (config-if)#switchport port-security violation shutdown 违反安全规则down掉</span><br><span class="line">  (config-if)#switchport port-security maxium 2 限制连接数量</span><br><span class="line">  (config)#interrface range fastEthernet 0/1 - 24 选中1-24个口</span><br><span class="line">  (config-if-range)#switchport port-security mac-adddress sticky MAC地址终止学习</span><br></pre></td></tr></table></figure></p>
-<h4 id="生成树协议"><a href="#生成树协议" class="headerlink" title="生成树协议"></a>生成树协议</h4><p> 为了高可用局域网交换机连接有了环路<br>为了阻断网络中的广播有了生成树协议<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#show spanning-tree 查看交换机端口以及生成树状态</span><br><span class="line">(config)#spanning-tree vlan 1 priority 4096更改路由器优先级为4096，值越小优先级越高</span><br><span class="line">(config)#no spanning-tree vlan 1 关闭生成树协议</span><br></pre></td></tr></table></figure></p>
-]]></content>
-      <categories>
-        <category>net</category>
-      </categories>
-      <tags>
-        <tag>ccna</tag>
-        <tag>net</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>CCNA学习笔记二 -- TCP/IP协议</title>
     <url>/2018/08/27/theory/ccna/ccna-2/</url>
     <content><![CDATA[<h4 id="DoD模型"><a href="#DoD模型" class="headerlink" title="DoD模型"></a>DoD模型</h4><p>应用层 Telent、FTP、SMTP、DNS、HTTP以及其他应用协议<br>传输层 TCP、UDP<br>网络层 IPv4、ARP、RARP、ICMP<br>网络接口 各种通信网络接口（以太网等物理网络）</p>
@@ -1744,12 +1689,14 @@
       </tags>
   </entry>
   <entry>
-    <title>CCNA学习笔记四 -- VLAN</title>
-    <url>/2018/08/28/theory/ccna/ccna-4/</url>
-    <content><![CDATA[<h4 id="VLAN虚拟局域网"><a href="#VLAN虚拟局域网" class="headerlink" title="VLAN虚拟局域网"></a>VLAN虚拟局域网</h4><p>&emsp;&emsp;VLAN是交换机组网才有的概念，按部门或管理的要求来组网，而不是按照位置组网，更灵活，安全<br>一个VLAN=一个广播域=一个网段<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#show vlan 查看VLAN</span><br><span class="line">(config)#vlan 2 创建VLAN2</span><br><span class="line">(config)#interrface range fastEthernet 0/13 - 24 选中13-24接口</span><br><span class="line">(config-if-range)#switchport mode access 设置计算机接口</span><br><span class="line">(config-if-range)#switchport access vlan 2 设置为vlan2</span><br></pre></td></tr></table></figure></p>
-<h6 id="单臂路由器实现VLAN间路由"><a href="#单臂路由器实现VLAN间路由" class="headerlink" title="单臂路由器实现VLAN间路由"></a>单臂路由器实现VLAN间路由</h6><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#interface gigabitEthernet 1/1 打开Gbit1/1接口</span><br><span class="line">(config-if)#switchport mode trunk 设置干道链路 </span><br></pre></td></tr></table></figure>
-<h6 id="三层交换机上的配置"><a href="#三层交换机上的配置" class="headerlink" title="三层交换机上的配置"></a>三层交换机上的配置</h6><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#ip routing 启用路由功能</span><br><span class="line">(config-if)#switchport trunk encapsulation dotlq设置trunk封装格式为dotlq</span><br><span class="line">(config-if)#switchport mode trunk</span><br><span class="line">(config)#Interface vlan 1</span><br><span class="line">(config-if)#ip address ip_address mask </span><br><span class="line">(config-if)# no shutdown </span><br><span class="line">(config)#interface vlan 2</span><br><span class="line">(config-if)#ip address ip_address mask </span><br><span class="line">(config-if)# no shutdown </span><br></pre></td></tr></table></figure>
-<h4 id="VTP协议"><a href="#VTP协议" class="headerlink" title="VTP协议"></a>VTP协议</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(condig)#vtp domain name   设置vtp域名</span><br><span class="line">(condig)#vtp password passwd  设置vtp密码</span><br><span class="line">(condig)#vtp mode client/server  设置客户端或者服务端，服务端可以更改整个域的VLAN的添加删除，但是不能更改其他的交换机的端口是否属于该vlan</span><br></pre></td></tr></table></figure>]]></content>
+    <title>CCNA学习笔记三 -- 路由和交换</title>
+    <url>/2018/08/28/theory/ccna/ccna-3/</url>
+    <content><![CDATA[<h4 id="网络畅通的条件"><a href="#网络畅通的条件" class="headerlink" title="网络畅通的条件"></a>网络畅通的条件</h4><p>数据包能去能回<br>沿途的路由器必须知道到目标地址如何转发<br>沿途的路由器必须知道回来的数据包如何转发  </p>
+<p>路由器直连的网络 不用告诉路由器如何转发<br>路由器没有直连的网络 管理员需要告诉路由器到目标网络如何转发 即添加静态路由<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#ip route 192.168.1.0 255.255.255.0 192.268.2.0  设置数据包 到192.168.1.0/24的数据包下一跳给192.168.2.0</span><br><span class="line">(config)#tracroute ip_address 跟踪数据包路径</span><br><span class="line">#show ip route 查看路由表</span><br><span class="line">(config)#no ip route 192.168.1.0 255.255.255.0 删除路由表</span><br><span class="line">windows上添加路由表 route add ip_adress mask ip_web</span><br><span class="line">windows查看路由表 netstat-r    route print </span><br></pre></td></tr></table></figure></p>
+<h4 id="动态路由"><a href="#动态路由" class="headerlink" title="动态路由"></a>动态路由</h4><p>优先级 直连0 静态路由1 eigp90  rip120<br>RIP协议 跳数判断，周期性（30s）更新路由表，最大跳数16跳<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#router rip  启用rip协议  </span><br><span class="line">(config-router)#network 192.168.1.0 该网段参与rip协议  </span><br><span class="line">#debug ip rip 显示rip协议信息</span><br><span class="line">#undebug all  关闭rip协议信息显示</span><br><span class="line">#show ip protocols 显示应用协议</span><br><span class="line">EIGP协议 优先级高于RIP</span><br><span class="line">(config)#router eigp 10  启用eigp协议,相同编号路由器才可以交换路由信息</span><br><span class="line">(config-router)#network 192.168.1.0 该网段参与eigp协议</span><br></pre></td></tr></table></figure></p>
+<h4 id="交换"><a href="#交换" class="headerlink" title="交换"></a>交换</h4><p>集线器 不安全、冲突域、带宽共享<br>交换机 基于目标MAC地址转发、学习MAC地址、端口独享带宽、没有冲突、广播会出问题<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#show mac-address-table 显示MAC地址表</span><br><span class="line">  #config terminal </span><br><span class="line">  (config)#interrface fastEthernet 0/4</span><br><span class="line">  (config-if)#switchport mode access 接机算机的接口</span><br><span class="line">  (config-if)#switchport port-security 启用安全</span><br><span class="line">  (config-if)#switchport port-security violation shutdown 违反安全规则down掉</span><br><span class="line">  (config-if)#switchport port-security maxium 2 限制连接数量</span><br><span class="line">  (config)#interrface range fastEthernet 0/1 - 24 选中1-24个口</span><br><span class="line">  (config-if-range)#switchport port-security mac-adddress sticky MAC地址终止学习</span><br></pre></td></tr></table></figure></p>
+<h4 id="生成树协议"><a href="#生成树协议" class="headerlink" title="生成树协议"></a>生成树协议</h4><p> 为了高可用局域网交换机连接有了环路<br>为了阻断网络中的广播有了生成树协议<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#show spanning-tree 查看交换机端口以及生成树状态</span><br><span class="line">(config)#spanning-tree vlan 1 priority 4096更改路由器优先级为4096，值越小优先级越高</span><br><span class="line">(config)#no spanning-tree vlan 1 关闭生成树协议</span><br></pre></td></tr></table></figure></p>
+]]></content>
       <categories>
         <category>net</category>
       </categories>
@@ -1790,6 +1737,21 @@
 <h4 id="路由器上配置PAT"><a href="#路由器上配置PAT" class="headerlink" title="路由器上配置PAT"></a>路由器上配置PAT</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#access-list 10 permit 10.0.0.0 0.0.0.255 定义内网地址池</span><br><span class="line">(config)#ip nat pool name 131.107.0.1 131.107.0.1 netmask 255.255.255.0定义一个名为name的公网地址池从.0.1到.0.1</span><br><span class="line">(config)#ip nat inside source list 10 pool name overload  10列表绑定到name，overload表示PAT，不加overload表示NAT</span><br><span class="line">(config)#interface serial 0/0</span><br><span class="line">(config-if)#ip nat outside  0/0公网出口</span><br><span class="line">(config-if)#exit</span><br><span class="line">(config)#interface serial 0/1</span><br><span class="line">(config-if)#ip nat inside   0/1内网入口</span><br></pre></td></tr></table></figure>
 <p>端口映射 使公网地址可以访问内网地址<br>路由端口映射<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#ip nat inside source static tcp 10.0.0.6 80 137.107.0.1 80 端口映射</span><br></pre></td></tr></table></figure></p>
 ]]></content>
+      <categories>
+        <category>net</category>
+      </categories>
+      <tags>
+        <tag>ccna</tag>
+        <tag>net</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CCNA学习笔记四 -- VLAN</title>
+    <url>/2018/08/28/theory/ccna/ccna-4/</url>
+    <content><![CDATA[<h4 id="VLAN虚拟局域网"><a href="#VLAN虚拟局域网" class="headerlink" title="VLAN虚拟局域网"></a>VLAN虚拟局域网</h4><p>&emsp;&emsp;VLAN是交换机组网才有的概念，按部门或管理的要求来组网，而不是按照位置组网，更灵活，安全<br>一个VLAN=一个广播域=一个网段<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#show vlan 查看VLAN</span><br><span class="line">(config)#vlan 2 创建VLAN2</span><br><span class="line">(config)#interrface range fastEthernet 0/13 - 24 选中13-24接口</span><br><span class="line">(config-if-range)#switchport mode access 设置计算机接口</span><br><span class="line">(config-if-range)#switchport access vlan 2 设置为vlan2</span><br></pre></td></tr></table></figure></p>
+<h6 id="单臂路由器实现VLAN间路由"><a href="#单臂路由器实现VLAN间路由" class="headerlink" title="单臂路由器实现VLAN间路由"></a>单臂路由器实现VLAN间路由</h6><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#interface gigabitEthernet 1/1 打开Gbit1/1接口</span><br><span class="line">(config-if)#switchport mode trunk 设置干道链路 </span><br></pre></td></tr></table></figure>
+<h6 id="三层交换机上的配置"><a href="#三层交换机上的配置" class="headerlink" title="三层交换机上的配置"></a>三层交换机上的配置</h6><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#ip routing 启用路由功能</span><br><span class="line">(config-if)#switchport trunk encapsulation dotlq设置trunk封装格式为dotlq</span><br><span class="line">(config-if)#switchport mode trunk</span><br><span class="line">(config)#Interface vlan 1</span><br><span class="line">(config-if)#ip address ip_address mask </span><br><span class="line">(config-if)# no shutdown </span><br><span class="line">(config)#interface vlan 2</span><br><span class="line">(config-if)#ip address ip_address mask </span><br><span class="line">(config-if)# no shutdown </span><br></pre></td></tr></table></figure>
+<h4 id="VTP协议"><a href="#VTP协议" class="headerlink" title="VTP协议"></a>VTP协议</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(condig)#vtp domain name   设置vtp域名</span><br><span class="line">(condig)#vtp password passwd  设置vtp密码</span><br><span class="line">(condig)#vtp mode client/server  设置客户端或者服务端，服务端可以更改整个域的VLAN的添加删除，但是不能更改其他的交换机的端口是否属于该vlan</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>net</category>
       </categories>
@@ -1842,6 +1804,37 @@
       <tags>
         <tag>ccna</tag>
         <tag>net</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Cgroup简介</title>
+    <url>/2018/09/28/theory/linux/linux-cgroup-interface/</url>
+    <content><![CDATA[<p>&emsp;&emsp;Cgroup,全称Control Group（控制组），用于限制和隔离一组进程对系统资源的调用，即做资源QoS（Quality of Service，服务质量）。<br>&emsp;&emsp;Cgroup的原生接口通过cgroupfs提供，类似于procfs和sysfs，是一种虚拟文件系统。</p>
+<ol>
+<li><p>挂载cgroupfs<br>&emsp;&emsp;此过程一般在启动时由linux发行版做好了。标准挂载点是/sys/fs/cgroup,可以变更。</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mount -t cgroup -o cpuset /sys/fs/cgroup/cpuset/</span><br><span class="line"><span class="comment"># mount: cgroup 已经挂载或 /sys/fs/cgroup/cpuset 忙</span></span><br><span class="line"><span class="comment">#        cgroup 已经挂载到 /sys/fs/cgroup/systemd 上</span></span><br><span class="line"><span class="comment">#        cgroup 已经挂载到 /sys/fs/cgroup/blkio 上</span></span><br><span class="line"><span class="comment">#        cgroup 已经挂载到 /sys/fs/cgroup/freezer 上</span></span><br><span class="line"><span class="comment">#        cgroup 已经挂载到 /sys/fs/cgroup/devices 上</span></span><br><span class="line"><span class="comment">#        cgroup 已经挂载到 /sys/fs/cgroup/perf_event 上</span></span><br><span class="line"><span class="comment">#        cgroup 已经挂载到 /sys/fs/cgroup/net_cls,net_prio 上</span></span><br><span class="line"><span class="comment">#        cgroup 已经挂载到 /sys/fs/cgroup/cpuset 上</span></span><br><span class="line"><span class="comment">#        cgroup 已经挂载到 /sys/fs/cgroup/cpu,cpuacct 上</span></span><br><span class="line"><span class="comment">#        cgroup 已经挂载到 /sys/fs/cgroup/hugetlb 上</span></span><br><span class="line"><span class="comment">#        cgroup 已经挂载到 /sys/fs/cgroup/pids 上</span></span><br><span class="line"><span class="comment">#        cgroup 已经挂载到 /sys/fs/cgroup/memory 上</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看cgroupfs<br>&emsp;&emsp;cpuset开头的子文件都是由cpuset子系统产生的，其他文件则由Cgroup产生。这里的tasks文件记录了这个Cgroup的所有进程，包括线程。</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">ls</span> /sys/fs/cgroup/cpuset/</span><br><span class="line"><span class="comment"># cgroup.clone_children  cpuset.memory_pressure</span></span><br><span class="line"><span class="comment"># cgroup.event_control   cpuset.memory_pressure_enabled</span></span><br><span class="line"><span class="comment"># cgroup.procs           cpuset.memory_spread_page</span></span><br><span class="line"><span class="comment"># cgroup.sane_behavior   cpuset.memory_spread_slab</span></span><br><span class="line"><span class="comment"># cpuset.cpu_exclusive   cpuset.mems</span></span><br><span class="line"><span class="comment"># cpuset.cpus            cpuset.sched_load_balance</span></span><br><span class="line"><span class="comment"># cpuset.effective_cpus  cpuset.sched_relax_domain_level</span></span><br><span class="line"><span class="comment"># cpuset.effective_mems  notify_on_release</span></span><br><span class="line"><span class="comment"># cpuset.mem_exclusive   release_agent</span></span><br><span class="line"><span class="comment"># cpuset.mem_hardwall    tasks</span></span><br><span class="line"><span class="comment"># cpuset.memory_migrate</span></span><br></pre></td></tr></table></figure></li>
+<li><p>创建Cgroup<br> &emsp;&emsp;通过mkdir创建一个新的目录，也就是常见了一个新的Cgroup</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> /sys/fs/cgroup/cpuset/child</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置Cgroup</p>
+<p> &emsp;&emsp;配置这个Cgroup的资源配额，通过以下命令，可以先哲这个Cgroup的进程只能在0号cpu上运行，并且只能在0号内存节点分配内存。</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> 0 &gt; /sys/fs/cgroup/cpuset/child/cpuset.cpus</span><br><span class="line"><span class="built_in">echo</span> 0 &gt; /sys/fs/cgroup/cpuset/child/cpuset.mems</span><br></pre></td></tr></table></figure></li>
+<li><p>使能Cgroup</p>
+<p> &emsp;&emsp;通过将进程id写进tasks文件，将整个进程移动到Cgroup中，Cgroup真正起作用了</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> $$ &gt; /sys/fs/cgroup/cpuset/child/tasks <span class="comment"># $$表示当前进程id</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>cgroup</tag>
+        <tag>kernel</tag>
       </tags>
   </entry>
   <entry>
@@ -1980,6 +1973,31 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
       </tags>
   </entry>
   <entry>
+    <title>Namespace简介</title>
+    <url>/2018/09/28/theory/linux/linux-namespace-interface/</url>
+    <content><![CDATA[<p>&emsp;&emsp;Namespace是将内核的全局资源做封装，使得每个Namespace都有一份独立的资源，因此，不同的进程在各自的namespace内对同一资源的使用不会产生相互干扰。<br>&emsp;&emsp;目前，linux内核总共实现了6中namespace：  </p>
+<ol>
+<li>IPC ： 隔离System V IPC 和POSIX消息队列<br>&emsp;&emsp;IPC：Inter-Process Communication（进程间通信）,IPC namespace针对的是SystemV IPC和Posix消息队列，这些IPC机制都会用到标识符。IPC Namespace 能做到的就是使相同的标识符在两个Namespace中代表不同的消息队列，这样就使得两个Namespace中的进程不能通过IPC进程通信了。</li>
+<li><p>Network ：隔离网络资源<br>&emsp;&emsp;每个Network Namespace都有自己的网络设备、IP地址、路由表、/proc/net目录，端口号等</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ip nets add new_ns <span class="comment">#创建network namespace</span></span><br><span class="line">ip nets <span class="built_in">exec</span> new_ns ip <span class="built_in">link</span> list <span class="comment">#使用 ip nets exec可以对特定的network namespace执行网络管理</span></span><br><span class="line">ip nets <span class="built_in">exec</span> new_ns ip <span class="built_in">link</span> <span class="built_in">set</span> dev lo up <span class="comment">#启用lopopback接口</span></span><br><span class="line">ip nets delete new_ns <span class="comment">#删除namespace</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Mount ： 隔离文件系统挂载点<br>&emsp;&emsp;用来隔离文件系统挂载点，每个进程能看到的文件系统都记录在/proc/$$/mounts里，在创建了一个新的Mount Namespace后，进程系统对文件系统挂载/卸载的动作不会影响到其他Namespace。</p>
+</li>
+<li>PID ： 隔离进程ID<br>&emsp;&emsp;用于隔离进程PID号，这样一来，不同的Namespace中的进程PID号就可以是一样的了</li>
+<li>UTS ： 隔离主机名和域名<br>&emsp;&emsp;因为主机名可以代替IP，因此可以使用主机名在网络上访问某台机器，如果不做隔离，这个机制在容器里就会出问题。</li>
+<li>User ：隔离用户ID和组ID<br>&emsp;&emsp;一个进程在namespace里的用户和组ID与它在host里的ID可以不一样，最有用的地方在于可以在容器内部启用0号用户（root），但是它的特权被限定在容器内，离开容器就只是普通用户权限了</li>
+</ol>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>kernel</tag>
+        <tag>namespace</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Centos使用记录</title>
     <url>/2018/09/26/using/linux/centos-using/</url>
     <content><![CDATA[<p>&emsp;&emsp;个人喜欢使用CentOS7 系统，本帖记录使用CentOS所使用的过程，安装过程 略  （我习惯采用最小化安装）</p>
@@ -2052,34 +2070,6 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
       <tags>
         <tag>linux</tag>
         <tag>docker</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ElasticSearch学习笔记（一）</title>
-    <url>/2018/12/04/using/middleware/elk-1/</url>
-    <content><![CDATA[<h2 id="ElasticSearch-ES-有关的基本概念"><a href="#ElasticSearch-ES-有关的基本概念" class="headerlink" title="ElasticSearch(ES)有关的基本概念"></a>ElasticSearch(ES)有关的基本概念</h2><ol>
-<li>Cluster和Node<br>&emsp;&emsp;ES中的Cluster是对外提供搜索服务的集群，组成这个Cluster的各个节点叫做Node。<br>&emsp;&emsp;Node分类：IndexNode（提供读写），DataNode（只提供数据存储和访问，负载均衡等），节点之间关系对等，弱化的Master节点提供维护集群状态的功能</li>
-<li>Shards<br>&emsp;&emsp;ES将一个完整的索引分成若干部分，每一个部分就是一个Shards，每一个Shards实际上是一个基于Lucene的索引，Shards数量一遍在创建索引前指定，且索引创建后不能修改，es的检索实际上是对多个Shards上的搜索结果的合并</li>
-<li>Replicas<br>&emsp;&emsp;Replicas是索引的冗余备份，可用于放置数据丢失或用来做负载均衡</li>
-<li>Recovery<br>&emsp;&emsp;在有节点加入或者退出集群的时候，ES会对索引分片Shards重新分配</li>
-<li>River<br>&emsp;&emsp;River是一个运行在集群内部的插件，用来从外部获取异构数据，然后在ES里创建索引。常见的有RabbitMQ river Plugin、MongoDB river Plugin等</li>
-<li>Gateway<br>&emsp;&emsp;是ES索引数据快照的存储方式，当ES关机重启的时候，就会从Gateway中读取索引快照</li>
-<li>Discovery.zen<br>&emsp;&emsp;Es的自动发现节点机制，用来实现节点自动发现和Master节点选举，Master节点负责处理及节点的加入和退出以及分片Shards的重新分配</li>
-<li>Transport<br>&emsp;&emsp;代表ES内部节点或者集群与客户端的交互方式。默认TCP，同时支持HTTP（JSON）、Thrift、Servlet等</li>
-<li>Index、Type、Document、Field<br> &emsp;&emsp;Index是ES存储数据的地方，类似RDBMS的Database;Type类似于table;Document是一行数据，可以有不同字段集合;Field是最小存储单位</li>
-<li>Mapping<br>&emsp;&emsp;定义索引下Type的字段处理规则</li>
-</ol>
-<h2 id="ES默认端口"><a href="#ES默认端口" class="headerlink" title="ES默认端口"></a>ES默认端口</h2><p>9200 是HTTP端口，9300 是Transport端口</p>
-<h2 id="ES索引机器构建"><a href="#ES索引机器构建" class="headerlink" title="ES索引机器构建"></a>ES索引机器构建</h2><p>&emsp;&emsp;ES是基于Luence构建的，采用倒排索引机制，将文件封装为索引，将文本信息切分为成为Token的信息单元，再利用这些Token构建倒排索引。</p>
-]]></content>
-      <categories>
-        <category>elk</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
-        <tag>elk</tag>
-        <tag>midedleware</tag>
-        <tag>log</tag>
       </tags>
   </entry>
   <entry>
@@ -2170,6 +2160,34 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
 <li>提升 使用boost运算符^使一个术语比另一个术语更相关。例如，如果我们想要找到关于fox的所有文件，但我们对quick fox特别感兴趣  &emsp;&emsp;-&gt;&emsp;&emsp; quick^2 fox</li>
 </ol>
 <p>参考资料<br> <a href="https://www.elastic.co/guide/en/elasticsearch/reference/6.0/query-dsl-query-string-query.html#_boosting">https://www.elastic.co/guide/en/elasticsearch/reference/6.0/query-dsl-query-string-query.html#_boosting</a></p>
+]]></content>
+      <categories>
+        <category>elk</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>elk</tag>
+        <tag>midedleware</tag>
+        <tag>log</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ElasticSearch学习笔记（一）</title>
+    <url>/2018/12/04/using/middleware/elk-1/</url>
+    <content><![CDATA[<h2 id="ElasticSearch-ES-有关的基本概念"><a href="#ElasticSearch-ES-有关的基本概念" class="headerlink" title="ElasticSearch(ES)有关的基本概念"></a>ElasticSearch(ES)有关的基本概念</h2><ol>
+<li>Cluster和Node<br>&emsp;&emsp;ES中的Cluster是对外提供搜索服务的集群，组成这个Cluster的各个节点叫做Node。<br>&emsp;&emsp;Node分类：IndexNode（提供读写），DataNode（只提供数据存储和访问，负载均衡等），节点之间关系对等，弱化的Master节点提供维护集群状态的功能</li>
+<li>Shards<br>&emsp;&emsp;ES将一个完整的索引分成若干部分，每一个部分就是一个Shards，每一个Shards实际上是一个基于Lucene的索引，Shards数量一遍在创建索引前指定，且索引创建后不能修改，es的检索实际上是对多个Shards上的搜索结果的合并</li>
+<li>Replicas<br>&emsp;&emsp;Replicas是索引的冗余备份，可用于放置数据丢失或用来做负载均衡</li>
+<li>Recovery<br>&emsp;&emsp;在有节点加入或者退出集群的时候，ES会对索引分片Shards重新分配</li>
+<li>River<br>&emsp;&emsp;River是一个运行在集群内部的插件，用来从外部获取异构数据，然后在ES里创建索引。常见的有RabbitMQ river Plugin、MongoDB river Plugin等</li>
+<li>Gateway<br>&emsp;&emsp;是ES索引数据快照的存储方式，当ES关机重启的时候，就会从Gateway中读取索引快照</li>
+<li>Discovery.zen<br>&emsp;&emsp;Es的自动发现节点机制，用来实现节点自动发现和Master节点选举，Master节点负责处理及节点的加入和退出以及分片Shards的重新分配</li>
+<li>Transport<br>&emsp;&emsp;代表ES内部节点或者集群与客户端的交互方式。默认TCP，同时支持HTTP（JSON）、Thrift、Servlet等</li>
+<li>Index、Type、Document、Field<br> &emsp;&emsp;Index是ES存储数据的地方，类似RDBMS的Database;Type类似于table;Document是一行数据，可以有不同字段集合;Field是最小存储单位</li>
+<li>Mapping<br>&emsp;&emsp;定义索引下Type的字段处理规则</li>
+</ol>
+<h2 id="ES默认端口"><a href="#ES默认端口" class="headerlink" title="ES默认端口"></a>ES默认端口</h2><p>9200 是HTTP端口，9300 是Transport端口</p>
+<h2 id="ES索引机器构建"><a href="#ES索引机器构建" class="headerlink" title="ES索引机器构建"></a>ES索引机器构建</h2><p>&emsp;&emsp;ES是基于Luence构建的，采用倒排索引机制，将文件封装为索引，将文本信息切分为成为Token的信息单元，再利用这些Token构建倒排索引。</p>
 ]]></content>
       <categories>
         <category>elk</category>
@@ -2279,7 +2297,7 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
 <li>PCRE库<br>&emsp;&emsp;PCRE（Perl Compatible Regular Expressions， Perl 兼容正则表达式） 是由 Philip Hazel开发的函数库， 目前为很多软件所使用， 该库支持正则表达式。当然，如果不打算在nginx中使用正则表达式，那么这个就不是必需的。</li>
 <li>zlib库<br> &emsp;&emsp;zlib 库用于对 HTTP 包的内容做 gzip 格式的压缩， 如果我们在 nginx.conf 里配置了 gzip on， 并指定对于某些类型（content-type） 的 HTTP 响应使用 gzip 来进行压缩以减少网络传， 那么， 在编译时就必须把 zlib 编译进 Nginx。</li>
 <li>OpenSSL 开发库<br>&emsp;&emsp;在SSL 协议上传输 HTTP，以及使用MD5、 SHA1 等散列函数都需要OpenSSL 开发库的支持。<h4 id="运行中的Nginx进程间的关系"><a href="#运行中的Nginx进程间的关系" class="headerlink" title="运行中的Nginx进程间的关系"></a>运行中的Nginx进程间的关系</h4><center>
-<img src="http://zhangbohan.xyz/images/nginx/nginx-1.png" src="ngix进程间关系" />
+<img src="http://zhangbohan.com.cn/images/nginx/nginx-1.png" src="ngix进程间关系" />
 </center><br>&emsp;&emsp;部署 Nginx 时都是使用一个 master 进程来管理多个worker 进程， 一般情况下， worker 进程的数量与服务器上的 CPU 核心数相等。</li>
 </ol>
 <h4 id="Nginx文件路径的常用定义"><a href="#Nginx文件路径的常用定义" class="headerlink" title="Nginx文件路径的常用定义"></a>Nginx文件路径的常用定义</h4><ol>
@@ -2469,32 +2487,6 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
       </tags>
   </entry>
   <entry>
-    <title>mariadb使用记录</title>
-    <url>/2018/09/29/using/db/nosql/mariadb-using/</url>
-    <content><![CDATA[<h4 id="MariaDB简介"><a href="#MariaDB简介" class="headerlink" title="MariaDB简介"></a>MariaDB简介</h4><p>&emsp;&emsp;MariaDB数据库管理系统是MySQL的一个分支，主要由开源社区在维护，采用GPL授权许可 MariaDB的目的是完全兼容MySQL，包括API和命令行，使之能轻松成为MySQL的代替品。在存储引擎方面，使用XtraDB（英语：XtraDB）来代替MySQL的InnoDB。</p>
-<h4 id="安装与配置"><a href="#安装与配置" class="headerlink" title="安装与配置"></a>安装与配置</h4><p>&emsp;&emsp;记录Mariadb的安装配置过程  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum -y install mariadb mariadb-server  <span class="comment">#安装mariadb的客户端与服务端</span></span><br><span class="line">systemctl start mariadb <span class="comment"># 启动mariadb</span></span><br><span class="line">mysql_secure_installation <span class="comment"># 进行初始的设置</span></span><br><span class="line"><span class="comment"># <span class="doctag">NOTE:</span> RUNNING ALL PARTS OF THIS SCRIPT IS RECOMMENDED FOR ALL MariaDB</span></span><br><span class="line"><span class="comment">#       SERVERS IN PRODUCTION USE!  PLEASE READ EACH STEP CAREFULLY!</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># In order to log into MariaDB to secure it, we&#x27;ll need the current</span></span><br><span class="line"><span class="comment"># password for the root user.  If you&#x27;ve just installed MariaDB, and</span></span><br><span class="line"><span class="comment"># you haven&#x27;t set the root password yet, the password will be blank,</span></span><br><span class="line"><span class="comment"># so you should just press enter here.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Enter current password for root (enter for none):  #默认无密码登录</span></span><br><span class="line"><span class="comment"># OK, successfully used password, moving on...</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Setting the root password ensures that nobody can log into the MariaDB</span></span><br><span class="line"><span class="comment"># root user without the proper authorisation.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Set root password? [Y/n] y # 是否设置新的root密码</span></span><br><span class="line"><span class="comment"># New password: </span></span><br><span class="line"><span class="comment"># Re-enter new password: </span></span><br><span class="line"><span class="comment"># Password updated successfully!</span></span><br><span class="line"><span class="comment"># Reloading privilege tables..</span></span><br><span class="line"><span class="comment">#  ... Success!</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># By default, a MariaDB installation has an anonymous user, allowing anyone</span></span><br><span class="line"><span class="comment"># to log into MariaDB without having to have a user account created for</span></span><br><span class="line"><span class="comment"># them.  This is intended only for testing, and to make the installation</span></span><br><span class="line"><span class="comment"># go a bit smoother.  You should remove them before moving into a</span></span><br><span class="line"><span class="comment"># production environment.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Remove anonymous users? [Y/n] Y # 是否删除匿名用户</span></span><br><span class="line"><span class="comment">#  ... Success!</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Normally, root should only be allowed to connect from &#x27;localhost&#x27;.  This</span></span><br><span class="line"><span class="comment"># ensures that someone cannot guess at the root password from the network.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Disallow root login remotely? [Y/n] n # 是否禁止root账户远程登录</span></span><br><span class="line"><span class="comment">#  ... skipping.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># By default, MariaDB comes with a database named &#x27;test&#x27; that anyone can</span></span><br><span class="line"><span class="comment"># access.  This is also intended only for testing, and should be removed</span></span><br><span class="line"><span class="comment"># before moving into a production environment.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Remove test database and access to it? [Y/n] n # 是否删除test数据库</span></span><br><span class="line"><span class="comment">#  ... skipping.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Reloading the privilege tables will ensure that all changes made so far</span></span><br><span class="line"><span class="comment"># will take effect immediately.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Reload privilege tables now? [Y/n] y # 是否重新加载权限表</span></span><br><span class="line"><span class="comment">#  ... Success!</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Cleaning up...</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># All done!  If you&#x27;ve completed all of the above steps, your MariaDB</span></span><br><span class="line"><span class="comment"># installation should now be secure.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Thanks for using MariaDB!</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h4 id="远程登录设置"><a href="#远程登录设置" class="headerlink" title="远程登录设置"></a>远程登录设置</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mysql -uroot -p  <span class="comment">#登录mysql</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GRANT ALL ON database_name.table_name TO databaseuser@&#x27;ip_address&#x27; IDENTIFIED BY &#x27;password&#x27;;</span><br><span class="line">flush privileges; #重新加载权限表</span><br></pre></td></tr></table></figure>
-<ul>
-<li>database_name 你要访问的数据库名称（*代表所有）</li>
-<li>table_name 你要访问的表名（*代表所有）</li>
-<li>databaseuser 新的数据库用户  </li>
-<li>password 设置新的密码（mysql将会对你的设置进行加密再到user表中）  </li>
-<li>ip_address 可访问的ip地址（使用%可以让所有的IP都可以访问）  </li>
-</ul>
-]]></content>
-      <categories>
-        <category>datebase</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
-        <tag>datebase</tag>
-        <tag>mysql</tag>
-        <tag>mariadb</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>机器学习（二）---- 单变量线性回归</title>
     <url>/2018/10/15/theory/algorithm/machinelearning/machinelearning-2/</url>
     <content><![CDATA[<h3 id="模型表示"><a href="#模型表示" class="headerlink" title="模型表示"></a>模型表示</h3><p>&emsp;&emsp;在监督学习中，有一个数据集，这个数据集被称为训练集。</p>
@@ -2561,6 +2553,32 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
         <tag>Machine Learning</tag>
         <tag>AI</tag>
         <tag>Algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>mariadb使用记录</title>
+    <url>/2018/09/29/using/db/nosql/mariadb-using/</url>
+    <content><![CDATA[<h4 id="MariaDB简介"><a href="#MariaDB简介" class="headerlink" title="MariaDB简介"></a>MariaDB简介</h4><p>&emsp;&emsp;MariaDB数据库管理系统是MySQL的一个分支，主要由开源社区在维护，采用GPL授权许可 MariaDB的目的是完全兼容MySQL，包括API和命令行，使之能轻松成为MySQL的代替品。在存储引擎方面，使用XtraDB（英语：XtraDB）来代替MySQL的InnoDB。</p>
+<h4 id="安装与配置"><a href="#安装与配置" class="headerlink" title="安装与配置"></a>安装与配置</h4><p>&emsp;&emsp;记录Mariadb的安装配置过程  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum -y install mariadb mariadb-server  <span class="comment">#安装mariadb的客户端与服务端</span></span><br><span class="line">systemctl start mariadb <span class="comment"># 启动mariadb</span></span><br><span class="line">mysql_secure_installation <span class="comment"># 进行初始的设置</span></span><br><span class="line"><span class="comment"># <span class="doctag">NOTE:</span> RUNNING ALL PARTS OF THIS SCRIPT IS RECOMMENDED FOR ALL MariaDB</span></span><br><span class="line"><span class="comment">#       SERVERS IN PRODUCTION USE!  PLEASE READ EACH STEP CAREFULLY!</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># In order to log into MariaDB to secure it, we&#x27;ll need the current</span></span><br><span class="line"><span class="comment"># password for the root user.  If you&#x27;ve just installed MariaDB, and</span></span><br><span class="line"><span class="comment"># you haven&#x27;t set the root password yet, the password will be blank,</span></span><br><span class="line"><span class="comment"># so you should just press enter here.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Enter current password for root (enter for none):  #默认无密码登录</span></span><br><span class="line"><span class="comment"># OK, successfully used password, moving on...</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Setting the root password ensures that nobody can log into the MariaDB</span></span><br><span class="line"><span class="comment"># root user without the proper authorisation.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Set root password? [Y/n] y # 是否设置新的root密码</span></span><br><span class="line"><span class="comment"># New password: </span></span><br><span class="line"><span class="comment"># Re-enter new password: </span></span><br><span class="line"><span class="comment"># Password updated successfully!</span></span><br><span class="line"><span class="comment"># Reloading privilege tables..</span></span><br><span class="line"><span class="comment">#  ... Success!</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># By default, a MariaDB installation has an anonymous user, allowing anyone</span></span><br><span class="line"><span class="comment"># to log into MariaDB without having to have a user account created for</span></span><br><span class="line"><span class="comment"># them.  This is intended only for testing, and to make the installation</span></span><br><span class="line"><span class="comment"># go a bit smoother.  You should remove them before moving into a</span></span><br><span class="line"><span class="comment"># production environment.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Remove anonymous users? [Y/n] Y # 是否删除匿名用户</span></span><br><span class="line"><span class="comment">#  ... Success!</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Normally, root should only be allowed to connect from &#x27;localhost&#x27;.  This</span></span><br><span class="line"><span class="comment"># ensures that someone cannot guess at the root password from the network.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Disallow root login remotely? [Y/n] n # 是否禁止root账户远程登录</span></span><br><span class="line"><span class="comment">#  ... skipping.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># By default, MariaDB comes with a database named &#x27;test&#x27; that anyone can</span></span><br><span class="line"><span class="comment"># access.  This is also intended only for testing, and should be removed</span></span><br><span class="line"><span class="comment"># before moving into a production environment.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Remove test database and access to it? [Y/n] n # 是否删除test数据库</span></span><br><span class="line"><span class="comment">#  ... skipping.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Reloading the privilege tables will ensure that all changes made so far</span></span><br><span class="line"><span class="comment"># will take effect immediately.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Reload privilege tables now? [Y/n] y # 是否重新加载权限表</span></span><br><span class="line"><span class="comment">#  ... Success!</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Cleaning up...</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># All done!  If you&#x27;ve completed all of the above steps, your MariaDB</span></span><br><span class="line"><span class="comment"># installation should now be secure.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Thanks for using MariaDB!</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="远程登录设置"><a href="#远程登录设置" class="headerlink" title="远程登录设置"></a>远程登录设置</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mysql -uroot -p  <span class="comment">#登录mysql</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GRANT ALL ON database_name.table_name TO databaseuser@&#x27;ip_address&#x27; IDENTIFIED BY &#x27;password&#x27;;</span><br><span class="line">flush privileges; #重新加载权限表</span><br></pre></td></tr></table></figure>
+<ul>
+<li>database_name 你要访问的数据库名称（*代表所有）</li>
+<li>table_name 你要访问的表名（*代表所有）</li>
+<li>databaseuser 新的数据库用户  </li>
+<li>password 设置新的密码（mysql将会对你的设置进行加密再到user表中）  </li>
+<li>ip_address 可访问的ip地址（使用%可以让所有的IP都可以访问）  </li>
+</ul>
+]]></content>
+      <categories>
+        <category>datebase</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>datebase</tag>
+        <tag>mysql</tag>
+        <tag>mariadb</tag>
       </tags>
   </entry>
   <entry>
@@ -2660,60 +2678,6 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
       </tags>
   </entry>
   <entry>
-    <title>Spring Cloud(一) 简介</title>
-    <url>/2018/10/11/using/java/framework/springcloud-1/</url>
-    <content><![CDATA[<h4 id="Spring-Cloud简介"><a href="#Spring-Cloud简介" class="headerlink" title="Spring Cloud简介"></a>Spring Cloud简介</h4><ol>
-<li><p>什么是微服务（Microservice）</p>
-<p> &emsp;&emsp;微服务英文名称Microservice，Microservice架构模式就是将整个Web应用组织为一系列小的Web服务。这些小的Web服务可以独立地编译及部署，并通过各自暴露的API接口相互通讯。它们彼此相互协作，作为一个整体为用户提供功能，却可以独立地进行扩展。由于有了轻量级的通信协作基础，所以这个微服务可以通过不同的语言进行开发编写。<br> &emsp;&emsp;目前主流的微服务框架：Dubbo、 Spring Cloud、thrift、Hessian等。</p>
-</li>
-<li><p>微服务框架适合的场景  </p>
-<ol>
-<li>我们把整个系统根据业务拆分成几个子系统。  </li>
-<li>每个子系统可以部署多个应用，多个应用之间使用负载均衡。  </li>
-<li>需要一个服务注册中心，所有的服务都在注册中心注册，负载均衡也是通过在注册中心注册的服务来使用一定策略来实现。  </li>
-<li>所有的客户端都通过同一个网关地址访问后台的服务，通过路由配置，网关来判断一个URL请求由哪个服务处理。请求转发到服务上的时候也使用负载均衡。  </li>
-<li>服务之间有时候也需要相互访问。例如有一个用户模块，其他服务在处理一些业务的时候，要获取用户服务的用户数据。  </li>
-<li>需要一个断路器，及时处理服务调用时的超时和错误，防止由于其中一个服务的问题而导致整体系统的瘫痪。  </li>
-<li>还需要一个监控功能，监控每个服务调用花费的时间等。</li>
-</ol>
-</li>
-</ol>
-<h4 id="初探Spring-Cloud"><a href="#初探Spring-Cloud" class="headerlink" title="初探Spring Cloud"></a>初探Spring Cloud</h4><p>&emsp;&emsp;Spring Cloud是一个基于Spring Boot实现的微服务架构开发工具，为微服务架构中的配置管理、服务治理、断路器、智能路由、微代理、控制总线、全局锁、决策竞选、分布式会话和集群状态管理等操作提供了一种简单的开发方式。<br>&emsp;&emsp;Spring Cloud包含多个子项目：</p>
-<ol>
-<li>Spring Cloud Config 配置管理工具，支持使用git存储配置内容，并支持客户端配置信息刷新、加密/解密配置内容等。</li>
-<li>Spring Cloud Netflix 核心组件，对多个Netflix进行整合。<ol>
-<li>Eureka 服务治理组件，包含服务注册中心、服务注册与发现机制的实现</li>
-<li>Hystrix 容错管理组件，实现断路器模式，帮助服务依赖中出现的延迟启动和为故障提供强大的容错能力。</li>
-<li>Ribbon 客户端负载均衡的服务调用组件</li>
-<li>Feign 基于 Ribbon和Hystrix的声明式服务调用组件</li>
-<li>Zuul 网关组件，提供智能路由、过滤访问等功能</li>
-<li>Archaius 外部化配置组件</li>
-</ol>
-</li>
-<li>Spring Cloud Bus 事件、消息总线，用于传播集群中的状态变化或者事件，以触发后续的处理，比如来动态刷新配置</li>
-<li>Spring Cloud Cluster 针对ZooKeeper、Redis、Hazelacst、Consul的选举算法和通用状态模式的实现</li>
-<li>Spring Cloud Cloudfoundry 与Pivotal Cloudfoundry的整合支持</li>
-<li>Spring Cloud Consul 服务发现与配置管理工具</li>
-<li>Spring Cloud Stream 通过Redis、Rabbit或者Kafka实现的消费微服务，可以通过简单的声明式模型来发送和接受消息。</li>
-<li>Spring Cloud AWS 简化整合aws的组件</li>
-<li>Spring Cloud Security 安全工具包，提供Zuul代理中对于OAuth2客户端请求中的中继器</li>
-<li>Spring Cloud Sleuth Spring Cloud应用的分布式跟踪实现，可以完美整合ZipKin</li>
-<li>Spring Cloud ZooKeeper 基于ZooKeeper的服务发现与配置管理组件</li>
-<li>Spring Cloud Starters Spring Cloud的基础组件，基于Spring Boot风格项目的基础依赖模块</li>
-<li>Spring Cloud CLI 用于Groovy中快速创建Spring Boot项目的Spring Boot CLI插件</li>
-<li>…</li>
-</ol>
-]]></content>
-      <categories>
-        <category>java</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>Spring Cloud</tag>
-        <tag>Microservice</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Spring Cloud(二) Eureka</title>
     <url>/2018/10/11/using/java/framework/springcloud-2/</url>
     <content><![CDATA[<h2 id="服务治理：Spring-Cloud-Eureka"><a href="#服务治理：Spring-Cloud-Eureka" class="headerlink" title="服务治理：Spring Cloud Eureka"></a>服务治理：Spring Cloud Eureka</h2><p>&emsp;&emsp;Spring Cloud Eureka是Spring Cloud Netflix的一部分，它是基于Netflix Eureka 做了二次的封装，主要完成微服务的服务治理功能。</p>
@@ -2758,6 +2722,60 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
 <li>启动项目，查看<a href="http://localhost:1301/ribbon-consumer">http://localhost:1301/ribbon-consumer</a>,通过两个hello-service的日志可以看到确实是轮询实现的负载均衡</li>
 </ol>
 <h2 id="项目代码地址"><a href="#项目代码地址" class="headerlink" title="项目代码地址"></a>项目代码地址</h2><p><a href="https://github.com/ice1995/springcloudstudy">Github</a></p>
+]]></content>
+      <categories>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>Spring Cloud</tag>
+        <tag>Microservice</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Spring Cloud(一) 简介</title>
+    <url>/2018/10/11/using/java/framework/springcloud-1/</url>
+    <content><![CDATA[<h4 id="Spring-Cloud简介"><a href="#Spring-Cloud简介" class="headerlink" title="Spring Cloud简介"></a>Spring Cloud简介</h4><ol>
+<li><p>什么是微服务（Microservice）</p>
+<p> &emsp;&emsp;微服务英文名称Microservice，Microservice架构模式就是将整个Web应用组织为一系列小的Web服务。这些小的Web服务可以独立地编译及部署，并通过各自暴露的API接口相互通讯。它们彼此相互协作，作为一个整体为用户提供功能，却可以独立地进行扩展。由于有了轻量级的通信协作基础，所以这个微服务可以通过不同的语言进行开发编写。<br> &emsp;&emsp;目前主流的微服务框架：Dubbo、 Spring Cloud、thrift、Hessian等。</p>
+</li>
+<li><p>微服务框架适合的场景  </p>
+<ol>
+<li>我们把整个系统根据业务拆分成几个子系统。  </li>
+<li>每个子系统可以部署多个应用，多个应用之间使用负载均衡。  </li>
+<li>需要一个服务注册中心，所有的服务都在注册中心注册，负载均衡也是通过在注册中心注册的服务来使用一定策略来实现。  </li>
+<li>所有的客户端都通过同一个网关地址访问后台的服务，通过路由配置，网关来判断一个URL请求由哪个服务处理。请求转发到服务上的时候也使用负载均衡。  </li>
+<li>服务之间有时候也需要相互访问。例如有一个用户模块，其他服务在处理一些业务的时候，要获取用户服务的用户数据。  </li>
+<li>需要一个断路器，及时处理服务调用时的超时和错误，防止由于其中一个服务的问题而导致整体系统的瘫痪。  </li>
+<li>还需要一个监控功能，监控每个服务调用花费的时间等。</li>
+</ol>
+</li>
+</ol>
+<h4 id="初探Spring-Cloud"><a href="#初探Spring-Cloud" class="headerlink" title="初探Spring Cloud"></a>初探Spring Cloud</h4><p>&emsp;&emsp;Spring Cloud是一个基于Spring Boot实现的微服务架构开发工具，为微服务架构中的配置管理、服务治理、断路器、智能路由、微代理、控制总线、全局锁、决策竞选、分布式会话和集群状态管理等操作提供了一种简单的开发方式。<br>&emsp;&emsp;Spring Cloud包含多个子项目：</p>
+<ol>
+<li>Spring Cloud Config 配置管理工具，支持使用git存储配置内容，并支持客户端配置信息刷新、加密/解密配置内容等。</li>
+<li>Spring Cloud Netflix 核心组件，对多个Netflix进行整合。<ol>
+<li>Eureka 服务治理组件，包含服务注册中心、服务注册与发现机制的实现</li>
+<li>Hystrix 容错管理组件，实现断路器模式，帮助服务依赖中出现的延迟启动和为故障提供强大的容错能力。</li>
+<li>Ribbon 客户端负载均衡的服务调用组件</li>
+<li>Feign 基于 Ribbon和Hystrix的声明式服务调用组件</li>
+<li>Zuul 网关组件，提供智能路由、过滤访问等功能</li>
+<li>Archaius 外部化配置组件</li>
+</ol>
+</li>
+<li>Spring Cloud Bus 事件、消息总线，用于传播集群中的状态变化或者事件，以触发后续的处理，比如来动态刷新配置</li>
+<li>Spring Cloud Cluster 针对ZooKeeper、Redis、Hazelacst、Consul的选举算法和通用状态模式的实现</li>
+<li>Spring Cloud Cloudfoundry 与Pivotal Cloudfoundry的整合支持</li>
+<li>Spring Cloud Consul 服务发现与配置管理工具</li>
+<li>Spring Cloud Stream 通过Redis、Rabbit或者Kafka实现的消费微服务，可以通过简单的声明式模型来发送和接受消息。</li>
+<li>Spring Cloud AWS 简化整合aws的组件</li>
+<li>Spring Cloud Security 安全工具包，提供Zuul代理中对于OAuth2客户端请求中的中继器</li>
+<li>Spring Cloud Sleuth Spring Cloud应用的分布式跟踪实现，可以完美整合ZipKin</li>
+<li>Spring Cloud ZooKeeper 基于ZooKeeper的服务发现与配置管理组件</li>
+<li>Spring Cloud Starters Spring Cloud的基础组件，基于Spring Boot风格项目的基础依赖模块</li>
+<li>Spring Cloud CLI 用于Groovy中快速创建Spring Boot项目的Spring Boot CLI插件</li>
+<li>…</li>
+</ol>
 ]]></content>
       <categories>
         <category>java</category>
@@ -3027,6 +3045,30 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
       </tags>
   </entry>
   <entry>
+    <title>PyQT学习记录（二）</title>
+    <url>/2018/09/11/using/python/framework/pyqt-2/</url>
+    <content><![CDATA[<h4 id="PyQt5-程序基础解析"><a href="#PyQt5-程序基础解析" class="headerlink" title="PyQt5 程序基础解析"></a>PyQt5 程序基础解析</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> time </span><br><span class="line"><span class="keyword">from</span> PyQt5.QtCore <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> PyQt5.QtGui <span class="keyword">import</span> * </span><br></pre></td></tr></table></figure>
+<ol>
+<li>导入sys模块，为了访问在sys.argv列cd cd 表中的那些命令行参数  </li>
+<li>导入time模块，使用time.sleep()  <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">app = QApplication(sys.argv)</span><br></pre></td></tr></table></figure>
+&emsp;&emsp;每个PyQt GUI程序都必须有一个QApplication对象。这个对象会提供访问全局信息的能力，包括程序的目录、屏幕大小、程序运行在哪个屏幕上（对于多线程系统来说）。这个对象还还会提供后续会说到的事件循环。<br>&emsp;&emsp;PyQt可以是是被一些自己的参数的，如 - geometry 和 - style 等，这些参数在QApplication的初始化文档中。</li>
+</ol>
+<p>&emsp;&emsp;调用app.exec_()会开始执行QApplication对象的事件循环，第一个事件就是绘制事件，调用QApplication.quit()方法会干净的结束该GUI程序，关闭所有已经打开的窗口，释放所占用的资源，然后退出程序。<br>&emsp;&emsp;事件循环用伪代码展示就是这个样子：<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">while True:</span><br><span class="line">    event = getNextEvent()</span><br><span class="line">    if event:</span><br><span class="line">        if event == Terminates:</span><br><span class="line">            break</span><br><span class="line">        processEvent(Event)</span><br></pre></td></tr></table></figure><br>&emsp;&emsp;当用户与应用程序交互的时候，或是发生特定事情时，会在PyQt内部产生一个事件并将其添加到事件列表中去。</p>
+<h4 id="PyQt5布局"><a href="#PyQt5布局" class="headerlink" title="PyQt5布局"></a>PyQt5布局</h4><h5 id="1-绝对定位"><a href="#1-绝对定位" class="headerlink" title="1. 绝对定位"></a>1. 绝对定位</h5><p>&emsp;&emsp;程序指定每个控件的位置和大小(以像素为单位)。<br>绝对定位有以下限制:<br>&emsp;- 如果我们调整窗口，控件的大小和位置不会改变<br>&emsp;- 在各种平台上应用程序看起来会不一样<br>&emsp;- 如果改变字体，我们的应用程序的布局就会改变<br>&emsp;- 如果我们决定改变我们的布局,我们必须完全重做我们的布局  </p>
+<h5 id="2-盒布局-Boxlayout"><a href="#2-盒布局-Boxlayout" class="headerlink" title="2. 盒布局 Boxlayout"></a>2. 盒布局 Boxlayout</h5><p>&emsp;&emsp;我们使用QHBoxLayout和QVBoxLayout，来分别创建横向布局和纵向布局<br>&emsp;&emsp;如果我们需要把两个按钮放在程序的右下角，创建这样的布局，我们只需要一个水平布局加一个垂直布局的盒子就可以了。再用弹性布局增加一点间隙。  </p>
+<h5 id="3-格栅布局"><a href="#3-格栅布局" class="headerlink" title="3. 格栅布局"></a>3. 格栅布局</h5><p>&emsp;&emsp;最常用的还是栅格布局了。这种布局是把窗口分为行和列。创建和使用栅格布局，需要使用QGridLayout模块。  </p>
+<h4 id="做了一个小型的demo"><a href="#做了一个小型的demo" class="headerlink" title="做了一个小型的demo"></a>做了一个小型的demo</h4><p>关于pyqt的更多知识，有空余时间的时候会继续补充。<br>项目地址： <a href="https://github.com/ice1995/ncmdump">ncmdump</a><br>项目介绍： 原作者写出了ncm转换为MP3的基础版本，用这不是很方便，就用正在学习的pyrt做了一个初版的demo图形化界面，后续有时间继续优化  </p>
+]]></content>
+      <categories>
+        <category>PyQT</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>PyQT</tag>
+        <tag>GUI</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>PyQt学习记录（一） -- 初识PyQt</title>
     <url>/2018/09/11/using/python/framework/pyqt-1/</url>
     <content><![CDATA[<h4 id="PyQt介绍"><a href="#PyQt介绍" class="headerlink" title="PyQt介绍"></a>PyQt介绍</h4><p>&emsp;&emsp;PyQt5是一套Python绑定Digia QT5应用的框架。它可用于Python 2和3。本教程使用Python 3。Qt库是最强大的GUI库之一。PyQt5的官方网站<a href="http://www.riverbankcomputing.co.uk/news。">http://www.riverbankcomputing.co.uk/news。</a><br>&emsp;&emsp;PyQt5做为Python的一个模块，它有620多个类和6000个函数和方法。这是一个跨平台的工具包，它可以运行在所有主要的操作系统，包括UNIX，Windows，Mac OS。PyQt5是双重许可。开发者可以在GPL和商业许可之间进行选择。、</p>
@@ -3047,7 +3089,7 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
 <li>QtTest包含的功能，使PyQt5应用程序的单元测试</li>
 </ul>
 <h4 id="PyQt5尝试"><a href="#PyQt5尝试" class="headerlink" title="PyQt5尝试"></a>PyQt5尝试</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"> </span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">PyQt5 学习</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"> </span><br><span class="line"><span class="comment">#这里我们提供必要的引用。基本控件位于PyQt5.qtwidgets模块中。</span></span><br><span class="line"><span class="keyword">from</span> PyQt5.QtWidgets <span class="keyword">import</span> QApplication, QWidget</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="comment">#每一PyQt5应用程序必须创建一个应用程序对象。sys.argv参数是一个列表，从命令行输入参数。</span></span><br><span class="line">    app = QApplication(sys.argv)</span><br><span class="line">    <span class="comment">#QWidget部件是PyQt5所有用户界面对象的基类。他为QWidget提供默认构造函数。默认构造函数没有父类。</span></span><br><span class="line">    w = QWidget()</span><br><span class="line">    <span class="comment">#resize()方法调整窗口的大小。这离是250px宽150px高</span></span><br><span class="line">    w.resize(<span class="number">250</span>, <span class="number">150</span>)</span><br><span class="line">    <span class="comment">#move()方法移动窗口在屏幕上的位置到x = 300，y = 300坐标。</span></span><br><span class="line">    w.move(<span class="number">300</span>, <span class="number">300</span>)</span><br><span class="line">    <span class="comment">#设置窗口的标题</span></span><br><span class="line">    w.setWindowTitle(<span class="string">&#x27;Simple&#x27;</span>)</span><br><span class="line">    <span class="comment">#显示在屏幕上</span></span><br><span class="line">    w.show()</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#系统exit()方法确保应用程序干净的退出</span></span><br><span class="line">    <span class="comment">#的exec_()方法有下划线。因为执行是一个Python关键词。因此，exec_()代替</span></span><br><span class="line">    sys.exit(app.exec_())</span><br></pre></td></tr></table></figure>
-<p>效果如图：<br><img src="http://zhangbohan.xyz/images/pyqt/pyqt-1.png" alt="PyQt-1.png"></p>
+<p>效果如图：<br><img src="http://zhangbohan.com.cn/images/pyqt/pyqt-1.png" alt="PyQt-1.png"></p>
 <h4 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h4><p><a href="https://maicss.gitbooks.io/PyQt5/content/">https://maicss.gitbooks.io/PyQt5/content/</a><br>Python Qt GUI 快速编程  —— PyQt编程指南（Mark Summerfield 著 ）</p>
 ]]></content>
       <categories>
@@ -3055,32 +3097,8 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
       </categories>
       <tags>
         <tag>python</tag>
+        <tag>GUI</tag>
         <tag>PyQt</tag>
-        <tag>GUI</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>PyQT学习记录（二）</title>
-    <url>/2018/09/11/using/python/framework/pyqt-2/</url>
-    <content><![CDATA[<h4 id="PyQt5-程序基础解析"><a href="#PyQt5-程序基础解析" class="headerlink" title="PyQt5 程序基础解析"></a>PyQt5 程序基础解析</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> time </span><br><span class="line"><span class="keyword">from</span> PyQt5.QtCore <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> PyQt5.QtGui <span class="keyword">import</span> * </span><br></pre></td></tr></table></figure>
-<ol>
-<li>导入sys模块，为了访问在sys.argv列cd cd 表中的那些命令行参数  </li>
-<li>导入time模块，使用time.sleep()  <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">app = QApplication(sys.argv)</span><br></pre></td></tr></table></figure>
-&emsp;&emsp;每个PyQt GUI程序都必须有一个QApplication对象。这个对象会提供访问全局信息的能力，包括程序的目录、屏幕大小、程序运行在哪个屏幕上（对于多线程系统来说）。这个对象还还会提供后续会说到的事件循环。<br>&emsp;&emsp;PyQt可以是是被一些自己的参数的，如 - geometry 和 - style 等，这些参数在QApplication的初始化文档中。</li>
-</ol>
-<p>&emsp;&emsp;调用app.exec_()会开始执行QApplication对象的事件循环，第一个事件就是绘制事件，调用QApplication.quit()方法会干净的结束该GUI程序，关闭所有已经打开的窗口，释放所占用的资源，然后退出程序。<br>&emsp;&emsp;事件循环用伪代码展示就是这个样子：<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">while True:</span><br><span class="line">    event = getNextEvent()</span><br><span class="line">    if event:</span><br><span class="line">        if event == Terminates:</span><br><span class="line">            break</span><br><span class="line">        processEvent(Event)</span><br></pre></td></tr></table></figure><br>&emsp;&emsp;当用户与应用程序交互的时候，或是发生特定事情时，会在PyQt内部产生一个事件并将其添加到事件列表中去。</p>
-<h4 id="PyQt5布局"><a href="#PyQt5布局" class="headerlink" title="PyQt5布局"></a>PyQt5布局</h4><h5 id="1-绝对定位"><a href="#1-绝对定位" class="headerlink" title="1. 绝对定位"></a>1. 绝对定位</h5><p>&emsp;&emsp;程序指定每个控件的位置和大小(以像素为单位)。<br>绝对定位有以下限制:<br>&emsp;- 如果我们调整窗口，控件的大小和位置不会改变<br>&emsp;- 在各种平台上应用程序看起来会不一样<br>&emsp;- 如果改变字体，我们的应用程序的布局就会改变<br>&emsp;- 如果我们决定改变我们的布局,我们必须完全重做我们的布局  </p>
-<h5 id="2-盒布局-Boxlayout"><a href="#2-盒布局-Boxlayout" class="headerlink" title="2. 盒布局 Boxlayout"></a>2. 盒布局 Boxlayout</h5><p>&emsp;&emsp;我们使用QHBoxLayout和QVBoxLayout，来分别创建横向布局和纵向布局<br>&emsp;&emsp;如果我们需要把两个按钮放在程序的右下角，创建这样的布局，我们只需要一个水平布局加一个垂直布局的盒子就可以了。再用弹性布局增加一点间隙。  </p>
-<h5 id="3-格栅布局"><a href="#3-格栅布局" class="headerlink" title="3. 格栅布局"></a>3. 格栅布局</h5><p>&emsp;&emsp;最常用的还是栅格布局了。这种布局是把窗口分为行和列。创建和使用栅格布局，需要使用QGridLayout模块。  </p>
-<h4 id="做了一个小型的demo"><a href="#做了一个小型的demo" class="headerlink" title="做了一个小型的demo"></a>做了一个小型的demo</h4><p>关于pyqt的更多知识，有空余时间的时候会继续补充。<br>项目地址： <a href="https://github.com/ice1995/ncmdump">ncmdump</a><br>项目介绍： 原作者写出了ncm转换为MP3的基础版本，用这不是很方便，就用正在学习的pyrt做了一个初版的demo图形化界面，后续有时间继续优化  </p>
-]]></content>
-      <categories>
-        <category>PyQT</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>GUI</tag>
-        <tag>PyQT</tag>
       </tags>
   </entry>
   <entry>
