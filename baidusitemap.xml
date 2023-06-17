@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://132.232.42.89/2019/12/28/jenkins-1/</loc>
+    <lastmod>2023-06-17</lastmod>
+  </url>
+  <url>
     <loc>http://132.232.42.89/2018/09/01/using/middleware/nginx-2/</loc>
     <lastmod>2023-06-17</lastmod>
   </url>
   <url>
     <loc>http://132.232.42.89/2018/09/11/using/python/framework/pyqt-1/</loc>
-    <lastmod>2023-06-17</lastmod>
-  </url>
-  <url>
-    <loc>http://132.232.42.89/2019/12/28/jenkins-1/</loc>
     <lastmod>2023-06-17</lastmod>
   </url>
   <url>
@@ -65,11 +65,11 @@
     <lastmod>2023-02-26</lastmod>
   </url>
   <url>
-    <loc>http://132.232.42.89/2018/08/30/using/middleware/mycat-1/</loc>
+    <loc>http://132.232.42.89/2018/08/25/using/middleware/nginx-1/</loc>
     <lastmod>2023-02-26</lastmod>
   </url>
   <url>
-    <loc>http://132.232.42.89/2018/08/25/using/middleware/nginx-1/</loc>
+    <loc>http://132.232.42.89/2018/08/30/using/middleware/mycat-1/</loc>
     <lastmod>2023-02-26</lastmod>
   </url>
   <url>
@@ -113,19 +113,19 @@
     <lastmod>2023-02-26</lastmod>
   </url>
   <url>
-    <loc>http://132.232.42.89/2018/10/11/using/java/framework/springcloud-2/</loc>
-    <lastmod>2023-02-26</lastmod>
-  </url>
-  <url>
     <loc>http://132.232.42.89/2018/10/11/using/java/framework/springcloud-1/</loc>
     <lastmod>2023-02-26</lastmod>
   </url>
   <url>
-    <loc>http://132.232.42.89/2018/08/25/using/Git/</loc>
+    <loc>http://132.232.42.89/2018/10/11/using/java/framework/springcloud-2/</loc>
     <lastmod>2023-02-26</lastmod>
   </url>
   <url>
     <loc>http://132.232.42.89/2018/08/25/theory/regex/</loc>
+    <lastmod>2023-02-26</lastmod>
+  </url>
+  <url>
+    <loc>http://132.232.42.89/2018/08/25/using/Git/</loc>
     <lastmod>2023-02-26</lastmod>
   </url>
   <url>
@@ -161,15 +161,11 @@
     <lastmod>2023-02-26</lastmod>
   </url>
   <url>
-    <loc>http://132.232.42.89/2018/09/27/theory/algorithm/points_bookies/</loc>
-    <lastmod>2023-02-26</lastmod>
-  </url>
-  <url>
-    <loc>http://132.232.42.89/2018/09/27/theory/algorithm/three-door/</loc>
-    <lastmod>2023-02-26</lastmod>
-  </url>
-  <url>
     <loc>http://132.232.42.89/2018/08/27/theory/ccna/ccna-1/</loc>
+    <lastmod>2023-02-26</lastmod>
+  </url>
+  <url>
+    <loc>http://132.232.42.89/2018/08/27/theory/ccna/ccna-2/</loc>
     <lastmod>2023-02-26</lastmod>
   </url>
   <url>
@@ -177,7 +173,11 @@
     <lastmod>2023-02-26</lastmod>
   </url>
   <url>
-    <loc>http://132.232.42.89/2018/08/27/theory/ccna/ccna-2/</loc>
+    <loc>http://132.232.42.89/2018/09/27/theory/algorithm/points_bookies/</loc>
+    <lastmod>2023-02-26</lastmod>
+  </url>
+  <url>
+    <loc>http://132.232.42.89/2018/09/27/theory/algorithm/three-door/</loc>
     <lastmod>2023-02-26</lastmod>
   </url>
   <url>
@@ -225,11 +225,11 @@
     <lastmod>2023-02-26</lastmod>
   </url>
   <url>
-    <loc>http://132.232.42.89/2019/02/22/machine%20learning/clawler/clawler-5/</loc>
+    <loc>http://132.232.42.89/2019/02/22/machine%20learning/clawler/clawler-4/</loc>
     <lastmod>2023-02-26</lastmod>
   </url>
   <url>
-    <loc>http://132.232.42.89/2019/02/22/machine%20learning/clawler/clawler-4/</loc>
+    <loc>http://132.232.42.89/2019/02/22/machine%20learning/clawler/clawler-5/</loc>
     <lastmod>2023-02-26</lastmod>
   </url>
 </urlset> 
