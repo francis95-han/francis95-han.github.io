@@ -1,29 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>git本地仓库搭建</title>
-    <url>/2020/03/29/git-using/</url>
-    <content><![CDATA[<h3 id="在centos下搭建本地git"><a href="#在centos下搭建本地git" class="headerlink" title="在centos下搭建本地git"></a>在centos下搭建本地git</h3><ol>
-<li>安装git<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install git</span><br></pre></td></tr></table></figure></li>
-<li>初始化仓库 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git init --bare cloud-eureka.git</span><br></pre></td></tr></table></figure>
- 在当前目录下创建cloud-eureka.git文件夹</li>
-<li>创建git用户用于git连接<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#添加用户组git</span></span><br><span class="line">groupadd git</span><br><span class="line"><span class="comment">#添加用户git</span></span><br><span class="line">useradd git -g git -p password</span><br></pre></td></tr></table></figure></li>
-<li>配置公钥 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/.ssh</span><br><span class="line"><span class="comment">#如果没有xxx.ras或者xxx.pub文件，生成一下：</span></span><br><span class="line">ssh-keygen -t rsa</span><br><span class="line">su git</span><br><span class="line"><span class="built_in">cd</span> /home/git  </span><br><span class="line"><span class="built_in">ls</span> -a  </span><br><span class="line"><span class="comment">#首先确认是否有ssh密钥：若有.ssh文件夹，进入查看是否有authorized_keys文件，如果都没有</span></span><br><span class="line"><span class="comment">#创建.ssh文件夹</span></span><br><span class="line"><span class="built_in">mkdir</span> .ssh</span><br><span class="line"><span class="comment">#创建authorized_keys文件：</span></span><br><span class="line"><span class="built_in">touch</span> authorized_keys</span><br><span class="line"><span class="comment">#将登录电脑的公钥填写到authorized_keys，即可免密</span></span><br></pre></td></tr></table></figure></li>
-<li>禁用git的普通shell<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"> <span class="comment">#禁用普通的bash</span></span><br><span class="line">vim /etc/passwd</span><br></pre></td></tr></table></figure>
-<figure class="highlight vim"><table><tr><td class="code"><pre><span class="line">#修改</span><br><span class="line"> gi<span class="variable">t:x</span>:<span class="number">1001</span>:<span class="number">1001</span>::/home/git:/bin/bash</span><br><span class="line">#为</span><br><span class="line"> gi<span class="variable">t:x</span>:<span class="number">1001</span>:<span class="number">1001</span>::/home/git:/usr/bin/git-<span class="keyword">shell</span></span><br></pre></td></tr></table></figure></li>
-<li>修改远程访问权限<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#在git项目目录下</span></span><br><span class="line"><span class="built_in">chown</span> -R git:git cloud-eureka.git</span><br></pre></td></tr></table></figure></li>
-<li>访问项目<br> git@192.168.226.130:/opt/project/cloud-eureka.git </li>
-</ol>
-]]></content>
-      <categories>
-        <category>git</category>
-      </categories>
-      <tags>
-        <tag>git</tag>
-        <tag>CI/CD</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>jenkins的安装使用</title>
     <url>/2019/12/28/jenkins-1/</url>
     <content><![CDATA[<h3 id="jenkins的安装"><a href="#jenkins的安装" class="headerlink" title="jenkins的安装"></a>jenkins的安装</h3><ol>
@@ -62,23 +39,26 @@
       </tags>
   </entry>
   <entry>
-    <title>python通过boost.python使用c/c++</title>
-    <url>/2020/01/15/pythonwithc-1/</url>
-    <content><![CDATA[<h3 id="安装boost环境"><a href="#安装boost环境" class="headerlink" title="安装boost环境"></a>安装boost环境</h3><p><a href="https://www.boost.org/">https://www.boost.org/</a>下载，解压设置环境变量即可在c/c++中日常使用<br>但是对于boost.python来说需要对boost进行编译  </p>
-<p>编写user-config.jam文件，设置python目录、链接文件目录、头文件目录，位于c:/users/用户/user-config.jam  </p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import toolset : using ;</span><br><span class="line">using python</span><br><span class="line">: 3.7</span><br><span class="line">: D:/Applications/python/python37/python.exe  </span><br><span class="line">: D:/Applications/python/python37/include</span><br><span class="line">: D:/Applications/python/python37/libs</span><br><span class="line">: &lt;toolset&gt;gcc</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">bootstrap.bat gcc  #生成b2.exe等文件</span><br><span class="line">b2 --with-python --toolset=gcc architecture=x86 address-model=<span class="number">64</span> link=shared #在stage/lib下生成boost.python的对应Python版本的dll和dll.a文件</span><br></pre></td></tr></table></figure>
-<h3 id="编写并编译c-程序"><a href="#编写并编译c-程序" class="headerlink" title="编写并编译c++程序"></a>编写并编译c++程序</h3><p>使用boost.python导出需要使用的c++模块，使用说明见<a href="https://wiki.python.org/moin/boost.python/module">https://wiki.python.org/moin/boost.python/module</a><br>需要注意的是，BOOST_PYTHON_MODULE(my_module)中的my_module必须和文件名相同<br>编译c++程序生成dll文件</p>
-<h3 id="python使用c-编译后的dll文件"><a href="#python使用c-编译后的dll文件" class="headerlink" title="python使用c++编译后的dll文件"></a>python使用c++编译后的dll文件</h3><p>将使用boost.python的dll文件改名为pyd（python的链接库文件）<br>在Python中添加路径（可以使用sys.path.append或者复制到python执行目录下） ，需要注意，除了添加.pyd文件之外，还需要添加 boost.python的对应Python版本的dll文件  </p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> my_module</span><br></pre></td></tr></table></figure>
+    <title>git本地仓库搭建</title>
+    <url>/2020/03/29/git-using/</url>
+    <content><![CDATA[<h3 id="在centos下搭建本地git"><a href="#在centos下搭建本地git" class="headerlink" title="在centos下搭建本地git"></a>在centos下搭建本地git</h3><ol>
+<li>安装git<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install git</span><br></pre></td></tr></table></figure></li>
+<li>初始化仓库 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git init --bare cloud-eureka.git</span><br></pre></td></tr></table></figure>
+ 在当前目录下创建cloud-eureka.git文件夹</li>
+<li>创建git用户用于git连接<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#添加用户组git</span></span><br><span class="line">groupadd git</span><br><span class="line"><span class="comment">#添加用户git</span></span><br><span class="line">useradd git -g git -p password</span><br></pre></td></tr></table></figure></li>
+<li>配置公钥 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/.ssh</span><br><span class="line"><span class="comment">#如果没有xxx.ras或者xxx.pub文件，生成一下：</span></span><br><span class="line">ssh-keygen -t rsa</span><br><span class="line">su git</span><br><span class="line"><span class="built_in">cd</span> /home/git  </span><br><span class="line"><span class="built_in">ls</span> -a  </span><br><span class="line"><span class="comment">#首先确认是否有ssh密钥：若有.ssh文件夹，进入查看是否有authorized_keys文件，如果都没有</span></span><br><span class="line"><span class="comment">#创建.ssh文件夹</span></span><br><span class="line"><span class="built_in">mkdir</span> .ssh</span><br><span class="line"><span class="comment">#创建authorized_keys文件：</span></span><br><span class="line"><span class="built_in">touch</span> authorized_keys</span><br><span class="line"><span class="comment">#将登录电脑的公钥填写到authorized_keys，即可免密</span></span><br></pre></td></tr></table></figure></li>
+<li>禁用git的普通shell<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"> <span class="comment">#禁用普通的bash</span></span><br><span class="line">vim /etc/passwd</span><br></pre></td></tr></table></figure>
+<figure class="highlight vim"><table><tr><td class="code"><pre><span class="line">#修改</span><br><span class="line"> gi<span class="variable">t:x</span>:<span class="number">1001</span>:<span class="number">1001</span>::/home/git:/bin/bash</span><br><span class="line">#为</span><br><span class="line"> gi<span class="variable">t:x</span>:<span class="number">1001</span>:<span class="number">1001</span>::/home/git:/usr/bin/git-<span class="keyword">shell</span></span><br></pre></td></tr></table></figure></li>
+<li>修改远程访问权限<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#在git项目目录下</span></span><br><span class="line"><span class="built_in">chown</span> -R git:git cloud-eureka.git</span><br></pre></td></tr></table></figure></li>
+<li>访问项目<br> git@192.168.226.130:/opt/project/cloud-eureka.git </li>
+</ol>
 ]]></content>
       <categories>
-        <category>c/c++</category>
+        <category>git</category>
       </categories>
       <tags>
-        <tag>python</tag>
-        <tag>c/c++</tag>
-        <tag>boost</tag>
+        <tag>CI/CD</tag>
+        <tag>git</tag>
       </tags>
   </entry>
   <entry>
@@ -131,53 +111,23 @@
       </tags>
   </entry>
   <entry>
-    <title>web攻击方式相关知识简介以及Burpsuite工具的使用</title>
-    <url>/2023/02/26/web%E6%94%BB%E5%87%BB%E6%96%B9%E5%BC%8F%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E7%AE%80%E4%BB%8B%E4%BB%A5%E5%8F%8ABurpsuite%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<blockquote>
-<p><strong>声明：本文仅限学习研究讨论，切忌做非法乱纪之事</strong></p>
-</blockquote>
-<h2 id="常见名词及其解释"><a href="#常见名词及其解释" class="headerlink" title="常见名词及其解释"></a>常见名词及其解释</h2><ol>
-<li><p>渗透</p>
-<p>渗透测试（Penetration Testing）是由具备高技能和高素质的安全服务人员发起、并模拟常见黑客所使用的攻击手段对目标系统进行模拟入侵。</p>
-<p>渗透测试服务的目的在于充分挖掘和暴露系统的弱点，从而让管理人员了解其系统所面临的威胁。</p>
-<p>渗透测试工作往往作为风险评估的一个重要环节，为风险评估提供重要的原始参考数据。</p>
-</li>
-<li><p>提权<br>提权就是通过获得低权限用户再通过漏洞获得最高权限的过程. 假如当你得到一个 系统用户,但是有一些事情你做不了,你就想要怎么才可以有那种权限呢?你把的这个用 户的权利通过漏洞变高的过程就叫提权.</p>
-</li>
-<li><p>0day <a href="https://zhuanlan.zhihu.com/p/30044629">https://zhuanlan.zhihu.com/p/30044629</a><br>0day在网络安全界通常是指没有补丁的漏洞利用程序.提供该利用程序的人通常是该漏洞的首发者或是第一个公开该漏洞利用细节的人。</p>
-</li>
-</ol>
-<h2 id="一些简单的攻击方式相关知识简介"><a href="#一些简单的攻击方式相关知识简介" class="headerlink" title="一些简单的攻击方式相关知识简介"></a>一些简单的攻击方式相关知识简介</h2><p><a href="http://image.zhangbohan.com.cn/pic/md/学习方向.jpg"><img src="https://www.zhangbohan.com.cn/images/%E5%AD%A6%E4%B9%A0%E6%96%B9%E5%90%91.jpg" alt="学习方向"></a></p>
-<p>这里介绍几种最基础的web攻击方式</p>
-<h4 id="XSS注入"><a href="#XSS注入" class="headerlink" title="XSS注入"></a>XSS注入</h4><p><a href="https://www.freebuf.com/vuls/334263.html">https://www.freebuf.com/vuls/334263.html</a></p>
-<h4 id="拒接服务攻击"><a href="#拒接服务攻击" class="headerlink" title="拒接服务攻击"></a>拒接服务攻击</h4><p>可以这么理解，凡是能导致合法用户不能够访问正常网络服务的行为都算是拒绝服务攻击。 也就是说拒绝服务攻击的目的非常明确，就是要阻止合法用户对正常网络资源的访问，从而 达成攻击者不可告人的目的。 虽然同样是拒绝服务攻击， 但是 DDOS 和 DOS 还是有所不同， DDOS 的攻击策略侧重于通过很多“僵尸主机”（被攻击者入侵过或可间接利用的主机）向 受害主机发送大量看似合法的网络包，从而造成网络阻塞或服务器资源耗尽而导致拒绝服 务，分布式拒绝服务攻击一旦被实施，攻击网络包就会犹如洪水般涌向受害主机，从而把合 法用户的网络包淹没，导致合法用户无法正常访问服务器的网络资源，因此，拒绝服务攻击 又被称之为 “洪水式攻击”</p>
-<h5 id="DOS攻击、DDOS攻击、CC攻击"><a href="#DOS攻击、DDOS攻击、CC攻击" class="headerlink" title="DOS攻击、DDOS攻击、CC攻击"></a>DOS攻击、DDOS攻击、CC攻击</h5><p><a href="https://www.cloudflare.com/zh-cn/learning/ddos/what-is-a-ddos-attack/">https://www.cloudflare.com/zh-cn/learning/ddos/what-is-a-ddos-attack/</a></p>
-<h5 id="zip炸弹"><a href="#zip炸弹" class="headerlink" title="zip炸弹"></a>zip炸弹</h5><p><a href="https://www.cntonan.com/pc/computer/show-8-854-1.html">https://www.cntonan.com/pc/computer/show-8-854-1.html</a></p>
-<h5 id="ARP协议欺诈"><a href="#ARP协议欺诈" class="headerlink" title="ARP协议欺诈"></a>ARP协议欺诈</h5><p><a href="https://blog.csdn.net/weixin_46560512/article/details/123325604">https://blog.csdn.net/weixin_46560512/article/details/123325604</a></p>
-<h4 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a>SQL注入</h4><p><a href="https://blog.csdn.net/qq_44159028/article/details/114325805">https://blog.csdn.net/qq_44159028/article/details/114325805</a><br>随着B/S模式（Browser/Server，浏览器/服务器）应用开发的发展，使用这种模式编写应用程序的程序员也越来越多。但是由于这个行业的入门门槛不高，程序员的水平及经验也参差不齐，相当大一部分程序员在编写代码的时候，没有对用户输入数据的合法性进行判断，使应用程序存在安全隐患。用户可以提交一段数据库查询代码，根据程序返回的结果，获得某些他想得知的数据，这就是所谓的SQL Injection，即SQL注入。 例如:目标服务器的网页脚本(ASP或 PHP)与数据库的数据交换过程存在检测不够严格的漏洞,攻击者通过构建特殊代码暴出数据库信息,包括用户信息,管理员密码等敏感信息以入侵远程服务器的网站系统。</p>
-<h4 id="越权"><a href="#越权" class="headerlink" title="越权"></a>越权</h4><p> <a href="https://www.freebuf.com/vuls/313396.html">https://www.freebuf.com/vuls/313396.html</a></p>
-<p><strong>横向越权</strong>：攻击者尝试访问与他拥有相同权限的用户的资源</p>
-<p><strong>纵向越权</strong>：攻击者可以使用低权限的账户去使用高权限账户的功能。</p>
-<h4 id="CSRF攻击"><a href="#CSRF攻击" class="headerlink" title="CSRF攻击"></a>CSRF攻击</h4><p><a href="https://baijiahao.baidu.com/s?id=1727601372183126511&amp;wfr=spider&amp;for=pc">https://baijiahao.baidu.com/s?id=1727601372183126511&amp;wfr=spider&amp;for=pc</a></p>
-<h3 id="Burpsuite工具使用"><a href="#Burpsuite工具使用" class="headerlink" title="Burpsuite工具使用"></a>Burpsuite工具使用</h3><p><a href="https://www.jianshu.com/p/ee2ce74cb5e5">https://www.jianshu.com/p/ee2ce74cb5e5</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>下馆子记录</title>
-    <url>/2023/06/17/%E4%B8%8B%E9%A6%86%E5%AD%90%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<ol>
-<li>公司附近，不做评价了，有的吃就不错了：<br>大包间：龙船人鱼头泡饼·江湖菜(温泉店)、潇湘府(环保店)、潇湘楼(温泉店)<br>三结义烧鸽子·烧烤融合菜(温泉路店)<br>城都成串串香(创客小镇店)</li>
-<li>稍远一点：<br>小吊梨汤(融科店)：<br>环境真的好，在科资讯大厦，环境也非常棒，同楼层还有一家书店，有个音乐喷泉，设计都非常棒，排队等位置的时候可以看看书，环境如图 <center>
-     <img src="https://www.zhangbohan.com.cn/images/eating/rongke-bookshop.jpg" src="融科书店" />
-</center></li>
-<li>进城啦：<br> 丰泽园饭庄(王府商厦店)：<br>   味道很棒，不点太过分的菜品（葱烧海参之类的）的话价格也能接受的，和一般吃一顿价格高不了多少<br> 北平楼(牡丹园店)：<br> 味道不如丰泽园，烤鸭不错</li>
-</ol>
+    <title>python通过boost.python使用c/c++</title>
+    <url>/2020/01/15/pythonwithc-1/</url>
+    <content><![CDATA[<h3 id="安装boost环境"><a href="#安装boost环境" class="headerlink" title="安装boost环境"></a>安装boost环境</h3><p><a href="https://www.boost.org/">https://www.boost.org/</a>下载，解压设置环境变量即可在c/c++中日常使用<br>但是对于boost.python来说需要对boost进行编译  </p>
+<p>编写user-config.jam文件，设置python目录、链接文件目录、头文件目录，位于c:/users/用户/user-config.jam  </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import toolset : using ;</span><br><span class="line">using python</span><br><span class="line">: 3.7</span><br><span class="line">: D:/Applications/python/python37/python.exe  </span><br><span class="line">: D:/Applications/python/python37/include</span><br><span class="line">: D:/Applications/python/python37/libs</span><br><span class="line">: &lt;toolset&gt;gcc</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">bootstrap.bat gcc  #生成b2.exe等文件</span><br><span class="line">b2 --with-python --toolset=gcc architecture=x86 address-model=<span class="number">64</span> link=shared #在stage/lib下生成boost.python的对应Python版本的dll和dll.a文件</span><br></pre></td></tr></table></figure>
+<h3 id="编写并编译c-程序"><a href="#编写并编译c-程序" class="headerlink" title="编写并编译c++程序"></a>编写并编译c++程序</h3><p>使用boost.python导出需要使用的c++模块，使用说明见<a href="https://wiki.python.org/moin/boost.python/module">https://wiki.python.org/moin/boost.python/module</a><br>需要注意的是，BOOST_PYTHON_MODULE(my_module)中的my_module必须和文件名相同<br>编译c++程序生成dll文件</p>
+<h3 id="python使用c-编译后的dll文件"><a href="#python使用c-编译后的dll文件" class="headerlink" title="python使用c++编译后的dll文件"></a>python使用c++编译后的dll文件</h3><p>将使用boost.python的dll文件改名为pyd（python的链接库文件）<br>在Python中添加路径（可以使用sys.path.append或者复制到python执行目录下） ，需要注意，除了添加.pyd文件之外，还需要添加 boost.python的对应Python版本的dll文件  </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> my_module</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>吃喝玩乐</category>
+        <category>c/c++</category>
       </categories>
       <tags>
-        <tag>吃喝玩乐</tag>
+        <tag>python</tag>
+        <tag>c/c++</tag>
+        <tag>boost</tag>
       </tags>
   </entry>
   <entry>
@@ -253,6 +203,56 @@
       <categories>
         <category>java</category>
       </categories>
+  </entry>
+  <entry>
+    <title>web攻击方式相关知识简介以及Burpsuite工具的使用</title>
+    <url>/2023/02/26/web%E6%94%BB%E5%87%BB%E6%96%B9%E5%BC%8F%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E7%AE%80%E4%BB%8B%E4%BB%A5%E5%8F%8ABurpsuite%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<blockquote>
+<p><strong>声明：本文仅限学习研究讨论，切忌做非法乱纪之事</strong></p>
+</blockquote>
+<h2 id="常见名词及其解释"><a href="#常见名词及其解释" class="headerlink" title="常见名词及其解释"></a>常见名词及其解释</h2><ol>
+<li><p>渗透</p>
+<p>渗透测试（Penetration Testing）是由具备高技能和高素质的安全服务人员发起、并模拟常见黑客所使用的攻击手段对目标系统进行模拟入侵。</p>
+<p>渗透测试服务的目的在于充分挖掘和暴露系统的弱点，从而让管理人员了解其系统所面临的威胁。</p>
+<p>渗透测试工作往往作为风险评估的一个重要环节，为风险评估提供重要的原始参考数据。</p>
+</li>
+<li><p>提权<br>提权就是通过获得低权限用户再通过漏洞获得最高权限的过程. 假如当你得到一个 系统用户,但是有一些事情你做不了,你就想要怎么才可以有那种权限呢?你把的这个用 户的权利通过漏洞变高的过程就叫提权.</p>
+</li>
+<li><p>0day <a href="https://zhuanlan.zhihu.com/p/30044629">https://zhuanlan.zhihu.com/p/30044629</a><br>0day在网络安全界通常是指没有补丁的漏洞利用程序.提供该利用程序的人通常是该漏洞的首发者或是第一个公开该漏洞利用细节的人。</p>
+</li>
+</ol>
+<h2 id="一些简单的攻击方式相关知识简介"><a href="#一些简单的攻击方式相关知识简介" class="headerlink" title="一些简单的攻击方式相关知识简介"></a>一些简单的攻击方式相关知识简介</h2><p><a href="http://image.zhangbohan.com.cn/pic/md/学习方向.jpg"><img src="https://www.zhangbohan.com.cn/images/%E5%AD%A6%E4%B9%A0%E6%96%B9%E5%90%91.jpg" alt="学习方向"></a></p>
+<p>这里介绍几种最基础的web攻击方式</p>
+<h4 id="XSS注入"><a href="#XSS注入" class="headerlink" title="XSS注入"></a>XSS注入</h4><p><a href="https://www.freebuf.com/vuls/334263.html">https://www.freebuf.com/vuls/334263.html</a></p>
+<h4 id="拒接服务攻击"><a href="#拒接服务攻击" class="headerlink" title="拒接服务攻击"></a>拒接服务攻击</h4><p>可以这么理解，凡是能导致合法用户不能够访问正常网络服务的行为都算是拒绝服务攻击。 也就是说拒绝服务攻击的目的非常明确，就是要阻止合法用户对正常网络资源的访问，从而 达成攻击者不可告人的目的。 虽然同样是拒绝服务攻击， 但是 DDOS 和 DOS 还是有所不同， DDOS 的攻击策略侧重于通过很多“僵尸主机”（被攻击者入侵过或可间接利用的主机）向 受害主机发送大量看似合法的网络包，从而造成网络阻塞或服务器资源耗尽而导致拒绝服 务，分布式拒绝服务攻击一旦被实施，攻击网络包就会犹如洪水般涌向受害主机，从而把合 法用户的网络包淹没，导致合法用户无法正常访问服务器的网络资源，因此，拒绝服务攻击 又被称之为 “洪水式攻击”</p>
+<h5 id="DOS攻击、DDOS攻击、CC攻击"><a href="#DOS攻击、DDOS攻击、CC攻击" class="headerlink" title="DOS攻击、DDOS攻击、CC攻击"></a>DOS攻击、DDOS攻击、CC攻击</h5><p><a href="https://www.cloudflare.com/zh-cn/learning/ddos/what-is-a-ddos-attack/">https://www.cloudflare.com/zh-cn/learning/ddos/what-is-a-ddos-attack/</a></p>
+<h5 id="zip炸弹"><a href="#zip炸弹" class="headerlink" title="zip炸弹"></a>zip炸弹</h5><p><a href="https://www.cntonan.com/pc/computer/show-8-854-1.html">https://www.cntonan.com/pc/computer/show-8-854-1.html</a></p>
+<h5 id="ARP协议欺诈"><a href="#ARP协议欺诈" class="headerlink" title="ARP协议欺诈"></a>ARP协议欺诈</h5><p><a href="https://blog.csdn.net/weixin_46560512/article/details/123325604">https://blog.csdn.net/weixin_46560512/article/details/123325604</a></p>
+<h4 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a>SQL注入</h4><p><a href="https://blog.csdn.net/qq_44159028/article/details/114325805">https://blog.csdn.net/qq_44159028/article/details/114325805</a><br>随着B/S模式（Browser/Server，浏览器/服务器）应用开发的发展，使用这种模式编写应用程序的程序员也越来越多。但是由于这个行业的入门门槛不高，程序员的水平及经验也参差不齐，相当大一部分程序员在编写代码的时候，没有对用户输入数据的合法性进行判断，使应用程序存在安全隐患。用户可以提交一段数据库查询代码，根据程序返回的结果，获得某些他想得知的数据，这就是所谓的SQL Injection，即SQL注入。 例如:目标服务器的网页脚本(ASP或 PHP)与数据库的数据交换过程存在检测不够严格的漏洞,攻击者通过构建特殊代码暴出数据库信息,包括用户信息,管理员密码等敏感信息以入侵远程服务器的网站系统。</p>
+<h4 id="越权"><a href="#越权" class="headerlink" title="越权"></a>越权</h4><p> <a href="https://www.freebuf.com/vuls/313396.html">https://www.freebuf.com/vuls/313396.html</a></p>
+<p><strong>横向越权</strong>：攻击者尝试访问与他拥有相同权限的用户的资源</p>
+<p><strong>纵向越权</strong>：攻击者可以使用低权限的账户去使用高权限账户的功能。</p>
+<h4 id="CSRF攻击"><a href="#CSRF攻击" class="headerlink" title="CSRF攻击"></a>CSRF攻击</h4><p><a href="https://baijiahao.baidu.com/s?id=1727601372183126511&amp;wfr=spider&amp;for=pc">https://baijiahao.baidu.com/s?id=1727601372183126511&amp;wfr=spider&amp;for=pc</a></p>
+<h3 id="Burpsuite工具使用"><a href="#Burpsuite工具使用" class="headerlink" title="Burpsuite工具使用"></a>Burpsuite工具使用</h3><p><a href="https://www.jianshu.com/p/ee2ce74cb5e5">https://www.jianshu.com/p/ee2ce74cb5e5</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>下馆子记录</title>
+    <url>/2023/06/17/%E4%B8%8B%E9%A6%86%E5%AD%90%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<ol>
+<li>公司附近，不做评价了，有的吃就不错了：<br>大包间：龙船人鱼头泡饼·江湖菜(温泉店)、潇湘府(环保店)、潇湘楼(温泉店)<br>三结义烧鸽子·烧烤融合菜(温泉路店)<br>城都成串串香(创客小镇店)</li>
+<li>稍远一点：<br>小吊梨汤(融科店)：<br>环境真的好，在科资讯大厦，环境也非常棒，同楼层还有一家书店，有个音乐喷泉，设计都非常棒，排队等位置的时候可以看看书，环境如图 <center>
+     <img src="https://www.zhangbohan.com.cn/images/eating/rongke-bookshop.jpg" src="融科书店" />
+</center></li>
+<li>进城啦：<br> 丰泽园饭庄(王府商厦店)：<br>   味道很棒，不点太过分的菜品（葱烧海参之类的）的话价格也能接受的，和一般吃一顿价格高不了多少<br> 北平楼(牡丹园店)：<br> 味道不如丰泽园，烤鸭不错</li>
+</ol>
+]]></content>
+      <categories>
+        <category>吃喝玩乐</category>
+      </categories>
+      <tags>
+        <tag>吃喝玩乐</tag>
+      </tags>
   </entry>
   <entry>
     <title>领域驱动设计----消化知识</title>
@@ -583,177 +583,6 @@
       </tags>
   </entry>
   <entry>
-    <title>数据挖掘--爬虫--解析库</title>
-    <url>/2019/02/22/machine%20learning/clawler/clawler-4/</url>
-    <content><![CDATA[<h3 id="XPath"><a href="#XPath" class="headerlink" title="XPath"></a>XPath</h3><p>&emsp;&emsp;XPath，全程XML Path Language，是一门在XML文档中查找信息的语言，也适用于HTML文档的搜索<br>&emsp;&emsp;XPath<a href="http://www.w3school.com.cn/xpath/index.asp">用法</a> &emsp;&emsp; lxml库<a href="http://lxml.de/">用法</a></p>
-<h4 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h4><p>常用规则</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>表达式</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>nodename</td>
-<td>选取此节点的所有子节点</td>
-</tr>
-<tr>
-<td>/</td>
-<td>从当前节点选取直接子节点</td>
-</tr>
-<tr>
-<td>//</td>
-<td>从当前节点选取子孙节点</td>
-</tr>
-<tr>
-<td>.</td>
-<td>选取当前节点</td>
-</tr>
-<tr>
-<td>..</td>
-<td>选取当前节点的父节点</td>
-</tr>
-<tr>
-<td>@</td>
-<td>选取属性</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>运算符以及介绍</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>运算符</th>
-<th>描述</th>
-<th>实例</th>
-<th>返回值</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>or</td>
-<td>或</td>
-<td></td>
-</tr>
-<tr>
-<td>and</td>
-<td>与</td>
-<td></td>
-</tr>
-<tr>
-<td>mod</td>
-<td>取余</td>
-<td></td>
-</tr>
-<tr>
-<td>\</td>
-<td></td>
-<td>计算两个节点集</td>
-<td>//book \</td>
-<td>//cd</td>
-<td>返回所有拥有book和cd元素的节点集</td>
-</tr>
-<tr>
-<td>+</td>
-<td>加法</td>
-</tr>
-<tr>
-<td>-</td>
-<td>减法</td>
-</tr>
-<tr>
-<td>*</td>
-<td>乘法</td>
-</tr>
-<tr>
-<td>div</td>
-<td>除法</td>
-</tr>
-<tr>
-<td>=</td>
-<td>等于</td>
-</tr>
-<tr>
-<td>!=</td>
-<td>不等于</td>
-</tr>
-<tr>
-<td>&lt;</td>
-<td>小于</td>
-</tr>
-<tr>
-<td>&gt;</td>
-<td>大于</td>
-</tr>
-<tr>
-<td>&gt;=</td>
-<td>大于等于</td>
-</tr>
-<tr>
-<td>&lt;=</td>
-<td>小于等</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="Beautiful-soup"><a href="#Beautiful-soup" class="headerlink" title="Beautiful soup"></a>Beautiful soup</h3><p>&emsp;&emsp;Beautiful Soup就是Python的一个HTML或XML的解析库</p>
-<h4 id="解析器"><a href="#解析器" class="headerlink" title="解析器"></a>解析器</h4><p>Beautiful soup在解析时实际上依赖解析库，支持的解析库如下</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>解析器</th>
-<th>使用的方法</th>
-<th>优势</th>
-<th>劣势</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Python标准库</td>
-<td>BeautifulSoup(markup,”html.parser”)</td>
-<td>Python内置标准库，执行速度适中，文档容错能力强</td>
-<td>Python2.7.3以及3.2.2之前的版本文档容错能力差</td>
-</tr>
-<tr>
-<td>lxml html解析器</td>
-<td>BeautifulSoup(markup,”lxml”)</td>
-<td>速度快，文档容错能力强</td>
-<td>需要c语言库</td>
-</tr>
-<tr>
-<td>lxml xml解析器</td>
-<td>BeautifulSoup(markup,”xml”)</td>
-<td>速度快，唯一支持xml的解析器</td>
-<td>需要c语言库</td>
-</tr>
-<tr>
-<td>html5lib</td>
-<td>BeautifulSoup(markup,”html5lib”)</td>
-<td>最好的容错性、以浏览器的方式解析文档、生成html5格式的文档</td>
-<td>速度慢、不依赖扩展</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="puquery"><a href="#puquery" class="headerlink" title="puquery"></a>puquery</h3><p>&emsp;&emsp;获取元素方式和jquery类似</p>
-<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="http://www.cuiqingcai.com">崔庆才大佬</a>的《python3网络爬虫开发实战》</p>
-]]></content>
-      <categories>
-        <category>crawler</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>web crawler</tag>
-        <tag>data mining</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>数据挖掘--爬虫--Ajax数据爬取</title>
     <url>/2019/02/22/machine%20learning/clawler/clawler-5/</url>
     <content><![CDATA[<h3 id="Ajax"><a href="#Ajax" class="headerlink" title="Ajax"></a>Ajax</h3><p>&emsp;&emsp;Ajax，全程Asynchronous JavaScript and XML，即异步的JavaScript和XML，在保证页面不被刷新、页面链接不改变的情况下与服务器交换数据并更新部分网页的技术。</p>
@@ -921,6 +750,177 @@
 <h3 id="App爬取相关库-暂时放弃"><a href="#App爬取相关库-暂时放弃" class="headerlink" title="App爬取相关库(暂时放弃)"></a>App爬取相关库(暂时放弃)</h3><h3 id="爬虫框架"><a href="#爬虫框架" class="headerlink" title="爬虫框架"></a>爬虫框架</h3><h4 id="pyspider"><a href="#pyspider" class="headerlink" title="pyspider"></a>pyspider</h4><p>&emsp;&emsp;它带有强大的WebUI、脚本编辑器、任务监<br>控器、项目管理器以及结果处理器，同时支持多种数据库后端、多种消息队列，另外还支持JavaScript渲染页面的爬取<br>&emsp;&emsp;pyspider是支持JavaScript渲染的，而这个过程是依赖于PhantomJS的，所以还需要安装PhantomJS</p>
 <figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install pyspider</span><br></pre></td></tr></table></figure>
 <h4 id="Scrapy"><a href="#Scrapy" class="headerlink" title="Scrapy"></a>Scrapy</h4><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">pip3 install scrapy</span><br></pre></td></tr></table></figure>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="http://www.cuiqingcai.com">崔庆才大佬</a>的《python3网络爬虫开发实战》</p>
+]]></content>
+      <categories>
+        <category>crawler</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>web crawler</tag>
+        <tag>data mining</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据挖掘--爬虫--解析库</title>
+    <url>/2019/02/22/machine%20learning/clawler/clawler-4/</url>
+    <content><![CDATA[<h3 id="XPath"><a href="#XPath" class="headerlink" title="XPath"></a>XPath</h3><p>&emsp;&emsp;XPath，全程XML Path Language，是一门在XML文档中查找信息的语言，也适用于HTML文档的搜索<br>&emsp;&emsp;XPath<a href="http://www.w3school.com.cn/xpath/index.asp">用法</a> &emsp;&emsp; lxml库<a href="http://lxml.de/">用法</a></p>
+<h4 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h4><p>常用规则</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>表达式</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nodename</td>
+<td>选取此节点的所有子节点</td>
+</tr>
+<tr>
+<td>/</td>
+<td>从当前节点选取直接子节点</td>
+</tr>
+<tr>
+<td>//</td>
+<td>从当前节点选取子孙节点</td>
+</tr>
+<tr>
+<td>.</td>
+<td>选取当前节点</td>
+</tr>
+<tr>
+<td>..</td>
+<td>选取当前节点的父节点</td>
+</tr>
+<tr>
+<td>@</td>
+<td>选取属性</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>运算符以及介绍</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>描述</th>
+<th>实例</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>or</td>
+<td>或</td>
+<td></td>
+</tr>
+<tr>
+<td>and</td>
+<td>与</td>
+<td></td>
+</tr>
+<tr>
+<td>mod</td>
+<td>取余</td>
+<td></td>
+</tr>
+<tr>
+<td>\</td>
+<td></td>
+<td>计算两个节点集</td>
+<td>//book \</td>
+<td>//cd</td>
+<td>返回所有拥有book和cd元素的节点集</td>
+</tr>
+<tr>
+<td>+</td>
+<td>加法</td>
+</tr>
+<tr>
+<td>-</td>
+<td>减法</td>
+</tr>
+<tr>
+<td>*</td>
+<td>乘法</td>
+</tr>
+<tr>
+<td>div</td>
+<td>除法</td>
+</tr>
+<tr>
+<td>=</td>
+<td>等于</td>
+</tr>
+<tr>
+<td>!=</td>
+<td>不等于</td>
+</tr>
+<tr>
+<td>&lt;</td>
+<td>小于</td>
+</tr>
+<tr>
+<td>&gt;</td>
+<td>大于</td>
+</tr>
+<tr>
+<td>&gt;=</td>
+<td>大于等于</td>
+</tr>
+<tr>
+<td>&lt;=</td>
+<td>小于等</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="Beautiful-soup"><a href="#Beautiful-soup" class="headerlink" title="Beautiful soup"></a>Beautiful soup</h3><p>&emsp;&emsp;Beautiful Soup就是Python的一个HTML或XML的解析库</p>
+<h4 id="解析器"><a href="#解析器" class="headerlink" title="解析器"></a>解析器</h4><p>Beautiful soup在解析时实际上依赖解析库，支持的解析库如下</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>解析器</th>
+<th>使用的方法</th>
+<th>优势</th>
+<th>劣势</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python标准库</td>
+<td>BeautifulSoup(markup,”html.parser”)</td>
+<td>Python内置标准库，执行速度适中，文档容错能力强</td>
+<td>Python2.7.3以及3.2.2之前的版本文档容错能力差</td>
+</tr>
+<tr>
+<td>lxml html解析器</td>
+<td>BeautifulSoup(markup,”lxml”)</td>
+<td>速度快，文档容错能力强</td>
+<td>需要c语言库</td>
+</tr>
+<tr>
+<td>lxml xml解析器</td>
+<td>BeautifulSoup(markup,”xml”)</td>
+<td>速度快，唯一支持xml的解析器</td>
+<td>需要c语言库</td>
+</tr>
+<tr>
+<td>html5lib</td>
+<td>BeautifulSoup(markup,”html5lib”)</td>
+<td>最好的容错性、以浏览器的方式解析文档、生成html5格式的文档</td>
+<td>速度慢、不依赖扩展</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="puquery"><a href="#puquery" class="headerlink" title="puquery"></a>puquery</h3><p>&emsp;&emsp;获取元素方式和jquery类似</p>
 <h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="http://www.cuiqingcai.com">崔庆才大佬</a>的《python3网络爬虫开发实战》</p>
 ]]></content>
       <categories>
@@ -1474,6 +1474,61 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
       </tags>
   </entry>
   <entry>
+    <title>数据结构 - 树</title>
+    <url>/2018/09/17/theory/algorithm/algorithm-tree/</url>
+    <content><![CDATA[<h4 id="树"><a href="#树" class="headerlink" title="树"></a>树</h4><p>&emsp;&emsp; 一棵树是一些节点的集合。如果这棵树非空，则一棵树由称作根（root）节点的r以及0个或者多个非空的(子)树组成，这些子树中每一棵的根都被来自根r的一条有向的边（edge）所连接。<br>&emsp;&emsp;每一棵子树的根叫做r的儿子，r是每一棵子树的根的父亲。没有儿子的节点称为树叶，具有相同父节点的节点称为兄弟。</p>
+]]></content>
+      <categories>
+        <category>algorithm</category>
+      </categories>
+      <tags>
+        <tag>algorithm</tag>
+        <tag>data structure</tag>
+        <tag>tree</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>分赌本问题</title>
+    <url>/2018/09/27/theory/algorithm/points_bookies/</url>
+    <content><![CDATA[<h4 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h4><p>&emsp;&emsp;假设A、B两个人赌博，假设每一局中每人获胜的概率是相同的，刚开始下的赌注均是100法郎，并且约定双方谁先获胜3局，谁就拿走所有的赌本，但是中途由于一些原因，不得不终止比赛，此时A胜2局，B胜1局，问此时赌本该怎么分配才均匀？<br>&emsp;&emsp;<font color ="red">注意：假设在赛点不会出现平局。</font></p>
+<h4 id="思路解析"><a href="#思路解析" class="headerlink" title="思路解析"></a>思路解析</h4><ol>
+<li>假设继续赌下去，至多两局结束</li>
+<li>若接下来的第四局A胜（1/2），则A获得所有赌注</li>
+<li>若接下来的第四局B胜（1/2），则进行第五局，第五局中，A胜（1/2*1/2=1/4）才能获得所有赌注</li>
+</ol>
+<h4 id="python模拟"><a href="#python模拟" class="headerlink" title="python模拟"></a>python模拟</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="string">&quot;&quot;&quot; @author zhangbohan.dell@gmail.com</span></span><br><span class="line"><span class="string">    @function: 分赌本问题</span></span><br><span class="line"><span class="string">    @create 2018/9/27 11:00&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">:param n 赢钱所需要的局数</span></span><br><span class="line"><span class="string">:param n1 第一个人已经赢得局数</span></span><br><span class="line"><span class="string">:param n2 第二个人已经赢得局数</span></span><br><span class="line"><span class="string">本程序中取n =3,n1 = 2,n2 = 1</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Bookies</span>(<span class="params">n, n1, n2</span>):</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span> * n - n1 - n2 - <span class="number">1</span>):</span><br><span class="line">        D = random.randint(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">        <span class="keyword">if</span> D == <span class="number">1</span>:</span><br><span class="line">            n1 += <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            n2 += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> n1 == n:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> n2 == n:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">2</span></span><br><span class="line"></span><br><span class="line">n = <span class="number">10000</span></span><br><span class="line">win = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">    <span class="keyword">if</span> Bookies(<span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>) == <span class="number">1</span>:</span><br><span class="line">        win += <span class="number">1</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;A获得赢钱的可能为&#123;&#125;&quot;</span>.<span class="built_in">format</span>(<span class="built_in">float</span>(win / n)))</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>probability theory</category>
+      </categories>
+      <tags>
+        <tag>algorithm</tag>
+        <tag>probability theory</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>蒙提霍尔三门问题</title>
+    <url>/2018/09/27/theory/algorithm/three-door/</url>
+    <content><![CDATA[<p>&emsp;&emsp;蒙提霍尔三门问题亦称蒙提霍尔悖论</p>
+<h4 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h4><p>&emsp;&emsp;参赛者会看见三扇关闭了的门，其中一扇的后面有一辆汽车，选中后面有车的那扇门可赢得该汽车，另外两扇门后面则各藏有一只山羊。当参赛者选定了一扇门，但未去开启它的时候，节目主持人开启剩下两扇门的其中一扇，露出其中一只山羊。主持人其后会问参赛者要不要换另一扇仍然关上的门。<br>&emsp;&emsp;<font color="red">问题是</font>：换另一扇门会否增加参赛者赢得汽车的机率？</p>
+<h4 id="思路解析"><a href="#思路解析" class="headerlink" title="思路解析"></a>思路解析</h4><ol>
+<li>三扇门，只有一扇门后有有汽车，其余的为山羊</li>
+<li>汽车事前等可能放置到三扇门中的其中一个</li>
+<li>参赛者等可能选择其中一扇，挑选前不知道门后有什么</li>
+<li>主持人清楚的知道门后有什么</li>
+<li>如果参赛者挑选了一扇有山羊的门，则主持人必须打开另一扇有山羊的门</li>
+<li>如果参赛者挑选了有汽车的门，主持人等可能在另外两扇有山羊的门选择一扇打开</li>
+<li>参赛者会被问保持原先选择还是转而选择另一扇门</li>
+</ol>
+<h4 id="Python模拟以上过程"><a href="#Python模拟以上过程" class="headerlink" title="Python模拟以上过程"></a>Python模拟以上过程</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="string">&quot;&quot;&quot; @author zhangbohan.dell@gmail.com</span></span><br><span class="line"><span class="string">    @function: 蒙提霍尔三门问题</span></span><br><span class="line"><span class="string">    @create 2018/9/27 10:09&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">MontyHall</span>(<span class="params">Dselect, Dchange</span>):</span><br><span class="line">    Dcar = random.randint(<span class="number">1</span>, <span class="number">3</span>)  <span class="comment"># 随机等可能放置汽车</span></span><br><span class="line">    <span class="keyword">if</span> Dcar == Dselect <span class="keyword">and</span> Dchange == <span class="number">0</span>:  <span class="comment"># 一开始选中并且没有改变选择</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">elif</span> Dcar != Dselect <span class="keyword">and</span> Dchange == <span class="number">0</span>:  <span class="comment"># 一开始没选中也没有改变选择</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">elif</span> Dcar == Dselect <span class="keyword">and</span> Dchange == <span class="number">1</span>:  <span class="comment"># 一开始选中并且改变选择</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">else</span>:  <span class="comment"># 一开始没选中并且改变选择</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">n = <span class="number">10000</span></span><br><span class="line">win = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">    select = random.randint(<span class="number">1</span>, <span class="number">3</span>)</span><br><span class="line">    win += MontyHall(select, random.randint(<span class="number">0</span>, <span class="number">1</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;不确认是够改变选择&#123;&#125;&quot;</span>.<span class="built_in">format</span>(<span class="built_in">float</span>(win / n)))</span><br><span class="line"></span><br><span class="line">win = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">    select = random.randint(<span class="number">1</span>, <span class="number">3</span>)</span><br><span class="line">    win += MontyHall(select, <span class="number">0</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;确认不改变选择&#123;&#125;&quot;</span>.<span class="built_in">format</span>(<span class="built_in">float</span>(win / n)))</span><br><span class="line"></span><br><span class="line">win = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">    select = random.randint(<span class="number">1</span>, <span class="number">3</span>)</span><br><span class="line">    win += MontyHall(select, <span class="number">1</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;确认改变选择&#123;&#125;&quot;</span>.<span class="built_in">format</span>(<span class="built_in">float</span>(win / n)))</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>probability theory</category>
+      </categories>
+      <tags>
+        <tag>algorithm</tag>
+        <tag>probability theory</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数据挖掘--爬虫--基础库</title>
     <url>/2019/02/22/machine%20learning/clawler/crawler-3/</url>
     <content><![CDATA[<h3 id="urllib"><a href="#urllib" class="headerlink" title="urllib"></a>urllib</h3><p>&emsp;&emsp;urllib包含4个模块：  </p>
@@ -1629,6 +1684,172 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
       </tags>
   </entry>
   <entry>
+    <title>CCNA学习笔记一 -- 计算机网络详解</title>
+    <url>/2018/08/27/theory/ccna/ccna-1/</url>
+    <content><![CDATA[<h4 id="局域网与广域网"><a href="#局域网与广域网" class="headerlink" title="局域网与广域网"></a>局域网与广域网</h4><ol>
+<li>局域网 自己花钱买设备自己搭配服务器，带宽固定</li>
+<li>广域网 花钱租带宽</li>
+</ol>
+<h4 id="OSI参考模型"><a href="#OSI参考模型" class="headerlink" title="OSI参考模型"></a>OSI参考模型</h4><pre><code>↑7 应用层      能产生网络流量的应用程序
+↑6 表示层      表示数据，处理数据 加密 压缩 等
+↑5 会话层      msconfig netstat -nb (显示程序)
+↑4 传输层      可靠传输 建立会话 流量控制 差错检查 不可靠传输 不建立会话 节省服务器资源
+↑3 网络层      选择最佳路径
+↑2 数据链路层  网络设备 如何封装数据帧 设备地址
+↑1 物理层      规定了电压标准、接口标准
+</code></pre><p>程序员的工作层  应用层、表示层、会话层<br>网络工程师的工作层  传输层、网络层、数据链路层、物理层<br>网络分层的好处：每一层互不干扰，没有影响；有助于设备标准化</p>
+<h4 id="网络排错和OSI参考模型"><a href="#网络排错和OSI参考模型" class="headerlink" title="网络排错和OSI参考模型"></a>网络排错和OSI参考模型</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>网络层</th>
+<th>可能出现的错误</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>物理层</td>
+<td>连接问题</td>
+</tr>
+<tr>
+<td>数据链路层</td>
+<td>MAC地址冲突 ADSL拨号密码错误</td>
+</tr>
+<tr>
+<td>网络层</td>
+<td>计算机网关设置错误、路由器路由表错误</td>
+</tr>
+<tr>
+<td>应用层</td>
+<td>IE代理设置错误</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="网络安全和OSI参考模型"><a href="#网络安全和OSI参考模型" class="headerlink" title="网络安全和OSI参考模型"></a>网络安全和OSI参考模型</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>网络层</th>
+<th>安全问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>物理层安全</td>
+<td></td>
+</tr>
+<tr>
+<td>数据链路层安全</td>
+<td>MAC地址认证 ADSL拨号上网账号密码 划分VLAN</td>
+</tr>
+<tr>
+<td>网络层安全</td>
+<td>路由器ACL</td>
+</tr>
+<tr>
+<td>传输层安全</td>
+<td>计算机端口安全</td>
+</tr>
+<tr>
+<td>应用层安全</td>
+<td>网站安全、操作系统安全</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="网络设备"><a href="#网络设备" class="headerlink" title="网络设备"></a>网络设备</h4><ol>
+<li>网线<br>双绞线  4对 8根 100米 10M 100M（实际用了4根） 1000M （实际用了8根）<br>线序 直通线（都按B连） 同类设备用交叉线（一个A 一个B）<br>不同类设备用直通线<br><font color="#12a112">水晶头接法</font><ul>
+<li>RJ45 A 绿白 绿 橙白 蓝 蓝白 橙 棕白 棕</li>
+<li>RJ45 B 橙白 橙 绿白 蓝 蓝白 绿 棕白 棕</li>
+</ul>
+</li>
+<li>网卡 MAC地址（物理地址）不能更改<br>MAC地址由48位二进制组成，前24位代表厂家 后边为厂家自己所设置的序号<br>查看MAC地址的指令（dos下） ipconfig /all</li>
+<li>集线器 HUB 不安全 带宽共享 效率低下 半双工</li>
+<li>网桥 隔绝冲突域</li>
+<li>交换机 基于MAC地址转发数据、带宽独享、全双工、安全、学习MAC地址</li>
+<li>路由器 负责在不同网段转发数据 一般有广域网接口 隔绝广播（MAC地址全1）</li>
+</ol>
+<h4 id="网络设备和OSI参考模型"><a href="#网络设备和OSI参考模型" class="headerlink" title="网络设备和OSI参考模型"></a>网络设备和OSI参考模型</h4><p>集线器 物理层设备<br>交换机 基于MAC地址转发 数据链路层设备<br>路由器 基于IP地址转发 三层设备  </p>
+<h4 id="分层考虑问题"><a href="#分层考虑问题" class="headerlink" title="分层考虑问题"></a>分层考虑问题</h4><p>网络排错方法 替换法</p>
+]]></content>
+      <categories>
+        <category>net</category>
+      </categories>
+      <tags>
+        <tag>ccna</tag>
+        <tag>net</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CCNA学习笔记二 -- TCP/IP协议</title>
+    <url>/2018/08/27/theory/ccna/ccna-2/</url>
+    <content><![CDATA[<h4 id="DoD模型"><a href="#DoD模型" class="headerlink" title="DoD模型"></a>DoD模型</h4><p>应用层 Telent、FTP、SMTP、DNS、HTTP以及其他应用协议<br>传输层 TCP、UDP<br>网络层 IPv4、ARP、RARP、ICMP<br>网络接口 各种通信网络接口（以太网等物理网络）</p>
+<h4 id="传输层协议"><a href="#传输层协议" class="headerlink" title="传输层协议"></a>传输层协议</h4><p>可靠传输 TCP 分段传输 建立会话（消耗系统资源） 丢失重传<br>不可靠传输 UDP 一个数据包就能表达完整 屏幕广播</p>
+<h4 id="应用层协议"><a href="#应用层协议" class="headerlink" title="应用层协议"></a>应用层协议</h4><h5 id="默认端口"><a href="#默认端口" class="headerlink" title="默认端口"></a>默认端口</h5><p>http=TCP+80<br>ftp=TCP+21（接受命令、验证身份等） 20（传输数据）<br>https=TCP+443<br>SMTP=TCP+25（发邮件）<br>POP3=TCP+110（收邮件）<br>RDP=TCP+3389(远程桌面)<br>DNS=UDP+53（DNS解析）<br>IP地址访问Windows共享文件夹=TCP+445<br>计算机名访问windows共享文件夹=TCP+139<br>SQL=TCP+1433（访问数据库）<br>telnet=TCP+23</p>
+<h4 id="服务和端口的关系"><a href="#服务和端口的关系" class="headerlink" title="服务和端口的关系"></a>服务和端口的关系</h4><p>服务侦听端口<br>客户端请求服务 使用目标端口来区分（服务器根据数据包的目标端口来区分客户端）<br>服务停止 侦听的端口关闭<br>查看侦听的端口 netstat -anb|find “content”<br>检测端口  telnet ip 端口</p>
+<h4 id="网络安全"><a href="#网络安全" class="headerlink" title="网络安全"></a>网络安全</h4><p>win2003service tcp/ip筛选不影响出去的流量<br>wf.msc windows高级防火墙</p>
+<h4 id="网络层协议"><a href="#网络层协议" class="headerlink" title="网络层协议"></a>网络层协议</h4><p>IP协议 选择最佳路径的协议（RIP OSPF EIGRP BGP）<br>ICMP协议 测试网络是否畅通<br>ping 估计带宽 查看网络是否畅通 断定远程系统 每过一个路由器TTL-1<br>TTL 128 windows系统<br>TTL 64  linux系统<br>pathping 跟踪路径 计算丢包情况<br>IGMP协议 组播<br>点到点 广播 多播（组播）<br>ARP协议 将计算机的IP地址解析成MAC地址<br>数据跨网段通讯和同一网段通信过程<br>MAC地址决定了下一跳给那个设备<br>IP地址决定最终计算机</p>
+<h4 id="IP地址"><a href="#IP地址" class="headerlink" title="IP地址"></a>IP地址</h4><p>32位二进制组成</p>
+<h5 id="ip地址分类"><a href="#ip地址分类" class="headerlink" title="ip地址分类"></a>ip地址分类</h5><p>  x:network id  y:host id</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>功能</th>
+<th>开头</th>
+<th>个头</th>
+<th>缺省子网掩码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>xyyy</td>
+<td>1-127</td>
+<td>256^3-2</td>
+<td>255.0.0.0</td>
+</tr>
+<tr>
+<td>B</td>
+<td>xxyy</td>
+<td>128-191</td>
+<td>256^2-2</td>
+<td>255.255.0.0</td>
+</tr>
+<tr>
+<td>C</td>
+<td>xxxy</td>
+<td>192-223</td>
+<td>256-2</td>
+<td>255.255.255.0</td>
+</tr>
+<tr>
+<td>D</td>
+<td>组播</td>
+<td>224-239</td>
+</tr>
+<tr>
+<td>E</td>
+<td>研究</td>
+<td>240-255</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h5 id="保留的私网地址"><a href="#保留的私网地址" class="headerlink" title="保留的私网地址"></a>保留的私网地址</h5><p>A 10.0.0.0<br>B 172.16.0.0-172.31.0.0<br>C 192.168.0.0-192.168.255.0</p>
+<h5 id="本地环回地址"><a href="#本地环回地址" class="headerlink" title="本地环回地址"></a>本地环回地址</h5><p>127.0.0.1  ping通过表示TCP/IP协议安装正常<br>169.254.0.0 DHCP获取网络地址未果的时候得到的地址</p>
+]]></content>
+      <categories>
+        <category>net</category>
+      </categories>
+      <tags>
+        <tag>ccna</tag>
+        <tag>net</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Linux指令记录合集（长期更新）</title>
     <url>/2018/08/30/using/linux/linux-command/</url>
     <content><![CDATA[<p>此命令合集适合于Centos <font color="#40B245">7</font></p>
@@ -1662,13 +1883,164 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
       </tags>
   </entry>
   <entry>
+    <title>CCNA学习笔记三 -- 路由和交换</title>
+    <url>/2018/08/28/theory/ccna/ccna-3/</url>
+    <content><![CDATA[<h4 id="网络畅通的条件"><a href="#网络畅通的条件" class="headerlink" title="网络畅通的条件"></a>网络畅通的条件</h4><p>数据包能去能回<br>沿途的路由器必须知道到目标地址如何转发<br>沿途的路由器必须知道回来的数据包如何转发  </p>
+<p>路由器直连的网络 不用告诉路由器如何转发<br>路由器没有直连的网络 管理员需要告诉路由器到目标网络如何转发 即添加静态路由<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#ip route 192.168.1.0 255.255.255.0 192.268.2.0  设置数据包 到192.168.1.0/24的数据包下一跳给192.168.2.0</span><br><span class="line">(config)#tracroute ip_address 跟踪数据包路径</span><br><span class="line">#show ip route 查看路由表</span><br><span class="line">(config)#no ip route 192.168.1.0 255.255.255.0 删除路由表</span><br><span class="line">windows上添加路由表 route add ip_adress mask ip_web</span><br><span class="line">windows查看路由表 netstat-r    route print </span><br></pre></td></tr></table></figure></p>
+<h4 id="动态路由"><a href="#动态路由" class="headerlink" title="动态路由"></a>动态路由</h4><p>优先级 直连0 静态路由1 eigp90  rip120<br>RIP协议 跳数判断，周期性（30s）更新路由表，最大跳数16跳<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#router rip  启用rip协议  </span><br><span class="line">(config-router)#network 192.168.1.0 该网段参与rip协议  </span><br><span class="line">#debug ip rip 显示rip协议信息</span><br><span class="line">#undebug all  关闭rip协议信息显示</span><br><span class="line">#show ip protocols 显示应用协议</span><br><span class="line">EIGP协议 优先级高于RIP</span><br><span class="line">(config)#router eigp 10  启用eigp协议,相同编号路由器才可以交换路由信息</span><br><span class="line">(config-router)#network 192.168.1.0 该网段参与eigp协议</span><br></pre></td></tr></table></figure></p>
+<h4 id="交换"><a href="#交换" class="headerlink" title="交换"></a>交换</h4><p>集线器 不安全、冲突域、带宽共享<br>交换机 基于目标MAC地址转发、学习MAC地址、端口独享带宽、没有冲突、广播会出问题<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#show mac-address-table 显示MAC地址表</span><br><span class="line">  #config terminal </span><br><span class="line">  (config)#interrface fastEthernet 0/4</span><br><span class="line">  (config-if)#switchport mode access 接机算机的接口</span><br><span class="line">  (config-if)#switchport port-security 启用安全</span><br><span class="line">  (config-if)#switchport port-security violation shutdown 违反安全规则down掉</span><br><span class="line">  (config-if)#switchport port-security maxium 2 限制连接数量</span><br><span class="line">  (config)#interrface range fastEthernet 0/1 - 24 选中1-24个口</span><br><span class="line">  (config-if-range)#switchport port-security mac-adddress sticky MAC地址终止学习</span><br></pre></td></tr></table></figure></p>
+<h4 id="生成树协议"><a href="#生成树协议" class="headerlink" title="生成树协议"></a>生成树协议</h4><p> 为了高可用局域网交换机连接有了环路<br>为了阻断网络中的广播有了生成树协议<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#show spanning-tree 查看交换机端口以及生成树状态</span><br><span class="line">(config)#spanning-tree vlan 1 priority 4096更改路由器优先级为4096，值越小优先级越高</span><br><span class="line">(config)#no spanning-tree vlan 1 关闭生成树协议</span><br></pre></td></tr></table></figure></p>
+]]></content>
+      <categories>
+        <category>net</category>
+      </categories>
+      <tags>
+        <tag>ccna</tag>
+        <tag>net</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CCNA学习笔记四 -- VLAN</title>
+    <url>/2018/08/28/theory/ccna/ccna-4/</url>
+    <content><![CDATA[<h4 id="VLAN虚拟局域网"><a href="#VLAN虚拟局域网" class="headerlink" title="VLAN虚拟局域网"></a>VLAN虚拟局域网</h4><p>&emsp;&emsp;VLAN是交换机组网才有的概念，按部门或管理的要求来组网，而不是按照位置组网，更灵活，安全<br>一个VLAN=一个广播域=一个网段<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#show vlan 查看VLAN</span><br><span class="line">(config)#vlan 2 创建VLAN2</span><br><span class="line">(config)#interrface range fastEthernet 0/13 - 24 选中13-24接口</span><br><span class="line">(config-if-range)#switchport mode access 设置计算机接口</span><br><span class="line">(config-if-range)#switchport access vlan 2 设置为vlan2</span><br></pre></td></tr></table></figure></p>
+<h6 id="单臂路由器实现VLAN间路由"><a href="#单臂路由器实现VLAN间路由" class="headerlink" title="单臂路由器实现VLAN间路由"></a>单臂路由器实现VLAN间路由</h6><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#interface gigabitEthernet 1/1 打开Gbit1/1接口</span><br><span class="line">(config-if)#switchport mode trunk 设置干道链路 </span><br></pre></td></tr></table></figure>
+<h6 id="三层交换机上的配置"><a href="#三层交换机上的配置" class="headerlink" title="三层交换机上的配置"></a>三层交换机上的配置</h6><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#ip routing 启用路由功能</span><br><span class="line">(config-if)#switchport trunk encapsulation dotlq设置trunk封装格式为dotlq</span><br><span class="line">(config-if)#switchport mode trunk</span><br><span class="line">(config)#Interface vlan 1</span><br><span class="line">(config-if)#ip address ip_address mask </span><br><span class="line">(config-if)# no shutdown </span><br><span class="line">(config)#interface vlan 2</span><br><span class="line">(config-if)#ip address ip_address mask </span><br><span class="line">(config-if)# no shutdown </span><br></pre></td></tr></table></figure>
+<h4 id="VTP协议"><a href="#VTP协议" class="headerlink" title="VTP协议"></a>VTP协议</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(condig)#vtp domain name   设置vtp域名</span><br><span class="line">(condig)#vtp password passwd  设置vtp密码</span><br><span class="line">(condig)#vtp mode client/server  设置客户端或者服务端，服务端可以更改整个域的VLAN的添加删除，但是不能更改其他的交换机的端口是否属于该vlan</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>net</category>
+      </categories>
+      <tags>
+        <tag>ccna</tag>
+        <tag>net</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CCNA学习笔记五 -- ACL</title>
+    <url>/2018/08/28/theory/ccna/ccna-5/</url>
+    <content><![CDATA[<h4 id="网络安全"><a href="#网络安全" class="headerlink" title="网络安全"></a>网络安全</h4><p>物理层安全 墙上不用的网线接口，连接交换机的端口关掉<br>数据链路层安全 ADSL拨号账号和密码 MAC地址绑定 交换机连接计算机数量控制 创建VLAN<br>网络层安全 基于源ip地址目标IP地址的控制<br>传输层安全 会话攻击 LAND攻击 syn洪水攻击<br>应用层安全 登录密码  </p>
+<h4 id="网络层安全"><a href="#网络层安全" class="headerlink" title="网络层安全"></a>网络层安全</h4><p>标准的ACL  基于源地址进行控制<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#config terminal  </span><br><span class="line">(config)#access-list 10 deny host 192.168.1.2</span><br><span class="line">(config)#access-list 10 permit 192.168.1.0 0.0.0.255 允许192.168.1.0访问，使用翻转子网掩码</span><br><span class="line">(config)(config)#interface serial 3/0</span><br><span class="line">(config-if)#ip access-group 10 in/out 绑定控制列表到物理接口并确定出还是进检查访问列表</span><br><span class="line">(config)#no access-list 10 删除ACL10</span><br><span class="line">ACL的顺序影响访问控制</span><br><span class="line">扩展的ACL  基于源地址、目标地址、协议、端口号进行控制</span><br><span class="line">(config)#access-list 100 permit ip 192.168.1.0 0.0.0.255 any 允许192.168.1.0/24访问任何</span><br><span class="line">(config)#access-list 100 permit tcp 192.18.2.0 0.0.0.255 10.0.0.0 0.0.0.255 eq 80 允许192.18.2.0/24访问10.0.0.0/8上的web服务器</span><br><span class="line">(config)#access-list 100 permit icmp 192.18.2.0 0.0.0.255 any 允许192.18.2.0/24ping任何因特网</span><br></pre></td></tr></table></figure><br>将acl绑定到telnet接口<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config-line)#access-class 10 in/out </span><br></pre></td></tr></table></figure></p>
+<h4 id="acl具体应用"><a href="#acl具体应用" class="headerlink" title="acl具体应用"></a>acl具体应用</h4><ol>
+<li>入站————决不允许任何源地址是内部主机地址或网络地址的数据包进入一个私有的网络<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#access-list 150 deny ip 127.0.0.0 0.255.255.255 any log</span><br><span class="line">#access-list 150 deny ip 0.0.0.0 255.255.255.255 any log</span><br><span class="line">#access-list 150 deny ip 10.0.0.0 0.255.255.255 any log</span><br><span class="line">#access-list 150 deny ip 127.16.0.0 0.15.255.255 any log</span><br><span class="line">#access-list 150 deny ip 192.168.0.0 0.0.255.255 any log</span><br><span class="line">#access-list 150 deny ip 224.0.0.0 15.255.255.255 any log</span><br><span class="line">#access-list 150 deny ip host 255.255.255.255 any log</span><br><span class="line">#access-list 150 permit ip any any</span><br></pre></td></tr></table></figure></li>
+<li>出站————决不允许任何含有非内部网络有效的ip数据包出站<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#access-list 150 permit 192.168.0.0 0.0.255.255 any</span><br><span class="line">#access-list 150 deny ip any any log</span><br></pre></td></tr></table></figure></li>
+<li>阻塞外部访问<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#access-list 109 permit any 192.268.0.0 0.0.255.255 established </span><br><span class="line">#access-list 109 deny ip any any log</span><br></pre></td></tr></table></figure></li>
+<li>过滤ICMP消息————禁止ping命令进内网<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#access-list 112 deny icmp any any echo log </span><br><span class="line">#access-list 112 deny icmp any any redirect log </span><br><span class="line">#access-list 112 deny icmp any any mask-request log</span><br><span class="line">#access-list 112 permit icmp any 192.168.0.0 0.0.255.255  </span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>net</category>
+      </categories>
+      <tags>
+        <tag>ccna</tag>
+        <tag>net</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CCNA学习笔记六 -- NAT</title>
+    <url>/2018/08/28/theory/ccna/ccna-6/</url>
+    <content><![CDATA[<h4 id="地址转换技术"><a href="#地址转换技术" class="headerlink" title="地址转换技术"></a>地址转换技术</h4><ol>
+<li>内网能够主动访问外网，外网不能主动访问内网，相对而言内网更安全一些  </li>
+<li>节省公网ip地址  </li>
+<li>缺点 慢  <h4 id="NAT（网络地址转换）"><a href="#NAT（网络地址转换）" class="headerlink" title="NAT（网络地址转换）"></a>NAT（网络地址转换）</h4>静态NAT 动态NAT  不节省公网地址、一个公网替换一个内网地址<br>PAT（端口地址转换）  节省公网ip、替换源端口和源地址  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#debug ip packet 开启数据包转发显示</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="路由器上配置PAT"><a href="#路由器上配置PAT" class="headerlink" title="路由器上配置PAT"></a>路由器上配置PAT</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#access-list 10 permit 10.0.0.0 0.0.0.255 定义内网地址池</span><br><span class="line">(config)#ip nat pool name 131.107.0.1 131.107.0.1 netmask 255.255.255.0定义一个名为name的公网地址池从.0.1到.0.1</span><br><span class="line">(config)#ip nat inside source list 10 pool name overload  10列表绑定到name，overload表示PAT，不加overload表示NAT</span><br><span class="line">(config)#interface serial 0/0</span><br><span class="line">(config-if)#ip nat outside  0/0公网出口</span><br><span class="line">(config-if)#exit</span><br><span class="line">(config)#interface serial 0/1</span><br><span class="line">(config-if)#ip nat inside   0/1内网入口</span><br></pre></td></tr></table></figure>
+<p>端口映射 使公网地址可以访问内网地址<br>路由端口映射<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#ip nat inside source static tcp 10.0.0.6 80 137.107.0.1 80 端口映射</span><br></pre></td></tr></table></figure></p>
+]]></content>
+      <categories>
+        <category>net</category>
+      </categories>
+      <tags>
+        <tag>ccna</tag>
+        <tag>net</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CCNA学习笔记七 -- IPv6</title>
+    <url>/2018/08/28/theory/ccna/ccna-7/</url>
+    <content><![CDATA[<h4 id="DoD模型"><a href="#DoD模型" class="headerlink" title="DoD模型"></a>DoD模型</h4><p>应用层 Telent、FTP、SMTP、DNS、HTTP以及其他应用协议<br>传输层 TCP、UDP<br>网络层 ND、MLD、ICMPv6、IPv6<br>网络接口 各种通信网络接口（以太网等物理网络）  </p>
+<h4 id="IPv6地址（128位）"><a href="#IPv6地址（128位）" class="headerlink" title="IPv6地址（128位）"></a>IPv6地址（128位）</h4><ol>
+<li>首选的格式<br>128比特分成8段，每段的16比特用16进制表示，中间用:隔开<br>xxxx:xxxx:xxxx:xxxx:xxxx:xxxx:xxxx:xxxx</li>
+<li>压缩格式，允许0压缩<br>xxxx:xxxx::xx:xxx:x:xxxx<br>一对::在一个地址中只能出现1次</li>
+<li>IPv4构造IPv6<br>0:0:0:0:0:0:192.168.0.1或者::192.168.0.1</li>
+<li>子网掩码<br>xxxx:xxxx:xxxx:xxxx:xxxx:xxxx:xxxx:xxxx/n 前n位是网络部分，后边是主机部分<h4 id="单播地址"><a href="#单播地址" class="headerlink" title="单播地址"></a>单播地址</h4>全球路由前缀  |子网|接口ID<br>2001:0db8:3c4d:0012:a:d:1234:56ab<br>链路本地地址 link local address  该地址用于同一网段中IPv6计算机通信<br>多播地址<br>任播地址  </li>
+</ol>
+<p>::  相当于0.0.0.0<br>::1 相当于127.0.0.1<br>2000::/3 全球单播地址范围，前三位是001<br>FE80::/10 链路本地单播地址<br>FF00::/8 组播地址范围<br>3FFF:FFFF::/32 示例和文档保留地址<br>2001:oDB8::/32 示例和文档保留地址<br>2002::/16 用于IPv6到IPv4的转换系统</p>
+<h4 id="IPv6地址分配"><a href="#IPv6地址分配" class="headerlink" title="IPv6地址分配"></a>IPv6地址分配</h4><ol>
+<li>静态</li>
+<li>自动<br>无状态 向路由器发送路由前缀请求，配置IPv6的路由器接口收到，然后发送路由通告，计算机获得网络部分+自己的MAC地址，进行构造IPv6地址<br>有DHCP服务器 路由通告中M=1，则向DHCP服务器请求ip地址；路由通告中O=1，则向DHCP服务器请求其他设置如DNS服务器、搜索后缀等  </li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#ipv6 unicast-routing 启用IPv6</span><br><span class="line">(config)#interface fastEthernet 0/0</span><br><span class="line">(config-if)#ipv6 address 2001:13::1/64</span><br><span class="line"></span><br><span class="line">(config-if)#ipv6 nd managed-config-flag  令路由通告中M=1</span><br><span class="line">(config-if)#ipv6 nd other-config-flag 令路由通告中O=1</span><br></pre></td></tr></table></figure>
+<h4 id="IPv6路由添加"><a href="#IPv6路由添加" class="headerlink" title="IPv6路由添加"></a>IPv6路由添加</h4><h5 id="静态路由"><a href="#静态路由" class="headerlink" title="静态路由"></a>静态路由</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#show ipv6 interface fastEthernet 0/0 </span><br><span class="line">#show ipv6 route 查看IPv6路由表查</span><br><span class="line">(config)#ipv6 route 2001:1::/64 2001:1::1</span><br><span class="line">(config-if)#ipv6 address 2001:1::/64 eui-64 自己根据前缀和自己的MAC地址构造IPv6地址</span><br><span class="line">(config-if)#ipv6 address 2001:1::1/64 </span><br></pre></td></tr></table></figure>
+<h5 id="动态路由"><a href="#动态路由" class="headerlink" title="动态路由"></a>动态路由</h5><ol>
+<li>RIPng协议<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#ipv6 unicast-routing</span><br><span class="line">(config)#ipv6 router rip 1</span><br><span class="line">(config-rtr)#exit</span><br><span class="line">(config)#interface fastEthernet 0/1</span><br><span class="line">(config-if)#ipv6 rip 1 enable</span><br></pre></td></tr></table></figure></li>
+<li>EIGRPv6协议<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#ipv6 unicast-routing</span><br><span class="line">(config)#ipv6 router eigrp 10</span><br><span class="line">(config-rtr)#no shutdown</span><br><span class="line">(config-rtr)#router-id 4.0.0.1</span><br><span class="line">(config-rtr)#exit</span><br><span class="line">(config)#interface fastEthernet 0/1</span><br><span class="line">(config-if)#ipv6 eigrp 10 </span><br></pre></td></tr></table></figure></li>
+<li>OSPFv3协议<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#ipv6 unicast-routing</span><br><span class="line">(config)#ipv6 router ospf 1</span><br><span class="line">(config-rtr)#router-id 4.0.0.1</span><br><span class="line">(config-rtr)#exit</span><br><span class="line">(config)#interface fastEthernet 0/1</span><br><span class="line">(config-if)#ipv6 ospf 1 area 0</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="IPv4和IPv6共存技术"><a href="#IPv4和IPv6共存技术" class="headerlink" title="IPv4和IPv6共存技术"></a>IPv4和IPv6共存技术</h4><p>双协议栈</p>
+<ol>
+<li>IPv6 to IPv4隧道技术<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#ipv6 unicast-routing</span><br><span class="line">(config)#interface fastEthernet 0/1</span><br><span class="line">(config-if)#ipv6 address 2001:1::1/64 </span><br><span class="line">(config-if)#exit</span><br><span class="line">(config)#interface tunnel 0 隧道虚拟端口</span><br><span class="line">(config-if)#no shutdown</span><br><span class="line">(config-if)#ipv6 address 2001:2::1/64 给隧道虚拟端口配置IPv6</span><br><span class="line">(config-if)#tunnel source 10.0.0.1  隧道源地址</span><br><span class="line">(config-if)#tunnel destination 10.0.1.2 隧道目标地址</span><br><span class="line">(config-if)#tunnel mode ipv6ip 设置隧道加密模式</span><br><span class="line">(config-if)#exit</span><br></pre></td></tr></table></figure></li>
+<li>ISATAP隧道<ol>
+<li>配置ISATAP路由(该路由与IPv4网络接口为192.168.0.2) <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#interface tunnel 0</span><br><span class="line">(config-if)#ipv6 address 2001:1::/64 eui-64</span><br><span class="line">(config-if)#no ipv6 nd suppress-ra</span><br><span class="line">(config-if)#tunnel source 10.0.0.1</span><br><span class="line">(config-if)#tunnel mode ipv6ip isatap</span><br><span class="line">(config-if)#no shutdown</span><br></pre></td></tr></table></figure></li>
+<li>windows下 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&gt;netsh</span><br><span class="line">netsh&gt;interface</span><br><span class="line">netsh interface&gt;ipv6</span><br><span class="line">netsh interface ipv6&gt;isatap</span><br><span class="line">netsh interface ipv6 isatap&gt;set router 192.168.0.2</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><p>静态NAT-PT</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#interface fastEthernet 0/1</span><br><span class="line">(config-if)#ipv6 nat </span><br><span class="line">(config-if)#exit</span><br><span class="line">(config)#interface serial 1/0</span><br><span class="line">(config-if)#ipv6 nat </span><br><span class="line">(config-if)#exit</span><br><span class="line">(config)#ipv6 nat v6v4 source 10.0.0.2 2001:2::2 </span><br><span class="line">(config)#ipv6 nat v6v4 source 2001:2::4 10.0.0.4</span><br><span class="line">(config)#ipv6 prefix 2001:3::/96</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>动态NAT-PT 只能由IPv6网络主动向IPv4网络发起通信</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#interface fastEthernet 0/1</span><br><span class="line">(config-if)#ipv6 nat </span><br><span class="line">(config-if)#exit</span><br><span class="line">(config)#interface serial 1/0</span><br><span class="line">(config-if)#ipv6 nat </span><br><span class="line">(config-if)#exit</span><br><span class="line">(config)#ipv6 access-list v4map </span><br><span class="line">(config-ipv6-acl)#permit 2001:2::/64 any </span><br><span class="line">(config-ipv6-acl)#exit</span><br><span class="line">(config)#ipv6 access-list v6map</span><br><span class="line">(config-ipv6-acl)#permit 2001:2::/64 any </span><br><span class="line">(config-ipv6-acl)#exit</span><br><span class="line">(config)#ipv6 nat</span><br><span class="line">(config)#ipv6 nat v6v4 pool v4pool 10.0.2.100 10.0.2.200 prefix-length 24 </span><br><span class="line">(config)#ipv6 nat v6v4 source list v6list pool v4pool </span><br><span class="line">(config)#ipv6 nat prefix 2001::/96 v4-mapped v4map  2001::/96用v4map里的地址替代</span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>net</category>
+      </categories>
+      <tags>
+        <tag>ccna</tag>
+        <tag>net</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ElasticSearch学习笔记（一）</title>
+    <url>/2018/12/04/using/middleware/elk-1/</url>
+    <content><![CDATA[<h2 id="ElasticSearch-ES-有关的基本概念"><a href="#ElasticSearch-ES-有关的基本概念" class="headerlink" title="ElasticSearch(ES)有关的基本概念"></a>ElasticSearch(ES)有关的基本概念</h2><ol>
+<li>Cluster和Node<br>&emsp;&emsp;ES中的Cluster是对外提供搜索服务的集群，组成这个Cluster的各个节点叫做Node。<br>&emsp;&emsp;Node分类：IndexNode（提供读写），DataNode（只提供数据存储和访问，负载均衡等），节点之间关系对等，弱化的Master节点提供维护集群状态的功能</li>
+<li>Shards<br>&emsp;&emsp;ES将一个完整的索引分成若干部分，每一个部分就是一个Shards，每一个Shards实际上是一个基于Lucene的索引，Shards数量一遍在创建索引前指定，且索引创建后不能修改，es的检索实际上是对多个Shards上的搜索结果的合并</li>
+<li>Replicas<br>&emsp;&emsp;Replicas是索引的冗余备份，可用于放置数据丢失或用来做负载均衡</li>
+<li>Recovery<br>&emsp;&emsp;在有节点加入或者退出集群的时候，ES会对索引分片Shards重新分配</li>
+<li>River<br>&emsp;&emsp;River是一个运行在集群内部的插件，用来从外部获取异构数据，然后在ES里创建索引。常见的有RabbitMQ river Plugin、MongoDB river Plugin等</li>
+<li>Gateway<br>&emsp;&emsp;是ES索引数据快照的存储方式，当ES关机重启的时候，就会从Gateway中读取索引快照</li>
+<li>Discovery.zen<br>&emsp;&emsp;Es的自动发现节点机制，用来实现节点自动发现和Master节点选举，Master节点负责处理及节点的加入和退出以及分片Shards的重新分配</li>
+<li>Transport<br>&emsp;&emsp;代表ES内部节点或者集群与客户端的交互方式。默认TCP，同时支持HTTP（JSON）、Thrift、Servlet等</li>
+<li>Index、Type、Document、Field<br> &emsp;&emsp;Index是ES存储数据的地方，类似RDBMS的Database;Type类似于table;Document是一行数据，可以有不同字段集合;Field是最小存储单位</li>
+<li>Mapping<br>&emsp;&emsp;定义索引下Type的字段处理规则</li>
+</ol>
+<h2 id="ES默认端口"><a href="#ES默认端口" class="headerlink" title="ES默认端口"></a>ES默认端口</h2><p>9200 是HTTP端口，9300 是Transport端口</p>
+<h2 id="ES索引机器构建"><a href="#ES索引机器构建" class="headerlink" title="ES索引机器构建"></a>ES索引机器构建</h2><p>&emsp;&emsp;ES是基于Luence构建的，采用倒排索引机制，将文件封装为索引，将文本信息切分为成为Token的信息单元，再利用这些Token构建倒排索引。</p>
+]]></content>
+      <categories>
+        <category>elk</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>elk</tag>
+        <tag>midedleware</tag>
+        <tag>log</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Docker使用记录</title>
     <url>/2018/09/28/using/middleware/docker-using/</url>
     <content><![CDATA[<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install -y docker</span><br></pre></td></tr></table></figure>
 <h4 id="修改docker下载源为国内源-这里使用的阿里源"><a href="#修改docker下载源为国内源-这里使用的阿里源" class="headerlink" title="修改docker下载源为国内源(这里使用的阿里源)"></a>修改docker下载源为国内源(这里使用的阿里源)</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo <span class="built_in">mkdir</span> -p /etc/docker</span><br><span class="line">sudo <span class="built_in">tee</span> /etc/docker/daemon.json &lt;&lt;-<span class="string">&#x27;EOF&#x27;</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;registry-mirrors&quot;</span>: [<span class="string">&quot;https://n9tog3ea.mirror.aliyuncs.com&quot;</span>]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl restart docker</span><br></pre></td></tr></table></figure>
 <p>其他源：<br><a href="https://registry.docker-cn.com">Docker 官方中国区 https://registry.docker-cn.com</a><br><a href="http://hub-mirror.c.163.com">网易 http://hub-mirror.c.163.com</a><br><a href="http://hub-mirror.c.163.com">ustc https://docker.mirrors.ustc.edu.cn</a>  </p>
 <h4 id="Docker镜像使用"><a href="#Docker镜像使用" class="headerlink" title="Docker镜像使用"></a>Docker镜像使用</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#docekr search software 查找镜像</span></span><br><span class="line">docker search httpd</span><br><span class="line"><span class="comment">#docker pull software 下拉镜像</span></span><br><span class="line">docker pull redis</span><br><span class="line">docker pull mariadb</span><br><span class="line">docekr pull mongo</span><br><span class="line">docker pull cloudesire/activemq</span><br><span class="line">docker pull rabbitmq</span><br><span class="line">docker pull rabbitmq:3-management</span><br><span class="line">docker pull nginx</span><br><span class="line">docker pull tomcat </span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h4 id="docker指令帮助"><a href="#docker指令帮助" class="headerlink" title="docker指令帮助"></a>docker指令帮助</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker --<span class="built_in">help</span></span><br><span class="line"><span class="comment">#docker command --help 查看docker帮助</span></span><br><span class="line">docker start --<span class="built_in">help</span></span><br><span class="line"><span class="comment">#man docker command 查看command的man文档</span></span><br><span class="line">man docker start</span><br></pre></td></tr></table></figure>]]></content>
+<h4 id="docker指令帮助"><a href="#docker指令帮助" class="headerlink" title="docker指令帮助"></a>docker指令帮助</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker --<span class="built_in">help</span></span><br><span class="line"><span class="comment">#docker command --help 查看docker帮助</span></span><br><span class="line">docker start --<span class="built_in">help</span></span><br><span class="line"><span class="comment">#man docker command 查看command的man文档</span></span><br><span class="line">man docker start</span><br></pre></td></tr></table></figure>
+<h1 id="编辑-etc-profile"><a href="#编辑-etc-profile" class="headerlink" title="编辑/etc/profile"></a>编辑/etc/profile</h1><p>vim /etc/profile</p>
+<h1 id="将jdk配置到path"><a href="#将jdk配置到path" class="headerlink" title="将jdk配置到path"></a>将jdk配置到path</h1><p>export JAVA_HOME=java-1.8.0-openjdk-1.8.0.372.b07-1.el7_9.x86_64<br>export CLASSPATH=$:CLASSPATH:$JAVA_HOME/lib/<br>export PATH=$PATH:$JAVA_HOME/bin:$M2_HOME/bin</p>
+<h1 id="配置hadoop"><a href="#配置hadoop" class="headerlink" title="配置hadoop"></a>配置hadoop</h1><p>export HADOOP_HOME=/opt/hadoop-3.1.1<br>export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin</p>
+<h1 id="刷新环境变量"><a href="#刷新环境变量" class="headerlink" title="刷新环境变量"></a>刷新环境变量</h1><p>source /etc/profile</p>
+]]></content>
       <categories>
         <category>docker</category>
       </categories>
@@ -1833,34 +2205,6 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
       </tags>
   </entry>
   <entry>
-    <title>ElasticSearch学习笔记（一）</title>
-    <url>/2018/12/04/using/middleware/elk-1/</url>
-    <content><![CDATA[<h2 id="ElasticSearch-ES-有关的基本概念"><a href="#ElasticSearch-ES-有关的基本概念" class="headerlink" title="ElasticSearch(ES)有关的基本概念"></a>ElasticSearch(ES)有关的基本概念</h2><ol>
-<li>Cluster和Node<br>&emsp;&emsp;ES中的Cluster是对外提供搜索服务的集群，组成这个Cluster的各个节点叫做Node。<br>&emsp;&emsp;Node分类：IndexNode（提供读写），DataNode（只提供数据存储和访问，负载均衡等），节点之间关系对等，弱化的Master节点提供维护集群状态的功能</li>
-<li>Shards<br>&emsp;&emsp;ES将一个完整的索引分成若干部分，每一个部分就是一个Shards，每一个Shards实际上是一个基于Lucene的索引，Shards数量一遍在创建索引前指定，且索引创建后不能修改，es的检索实际上是对多个Shards上的搜索结果的合并</li>
-<li>Replicas<br>&emsp;&emsp;Replicas是索引的冗余备份，可用于放置数据丢失或用来做负载均衡</li>
-<li>Recovery<br>&emsp;&emsp;在有节点加入或者退出集群的时候，ES会对索引分片Shards重新分配</li>
-<li>River<br>&emsp;&emsp;River是一个运行在集群内部的插件，用来从外部获取异构数据，然后在ES里创建索引。常见的有RabbitMQ river Plugin、MongoDB river Plugin等</li>
-<li>Gateway<br>&emsp;&emsp;是ES索引数据快照的存储方式，当ES关机重启的时候，就会从Gateway中读取索引快照</li>
-<li>Discovery.zen<br>&emsp;&emsp;Es的自动发现节点机制，用来实现节点自动发现和Master节点选举，Master节点负责处理及节点的加入和退出以及分片Shards的重新分配</li>
-<li>Transport<br>&emsp;&emsp;代表ES内部节点或者集群与客户端的交互方式。默认TCP，同时支持HTTP（JSON）、Thrift、Servlet等</li>
-<li>Index、Type、Document、Field<br> &emsp;&emsp;Index是ES存储数据的地方，类似RDBMS的Database;Type类似于table;Document是一行数据，可以有不同字段集合;Field是最小存储单位</li>
-<li>Mapping<br>&emsp;&emsp;定义索引下Type的字段处理规则</li>
-</ol>
-<h2 id="ES默认端口"><a href="#ES默认端口" class="headerlink" title="ES默认端口"></a>ES默认端口</h2><p>9200 是HTTP端口，9300 是Transport端口</p>
-<h2 id="ES索引机器构建"><a href="#ES索引机器构建" class="headerlink" title="ES索引机器构建"></a>ES索引机器构建</h2><p>&emsp;&emsp;ES是基于Luence构建的，采用倒排索引机制，将文件封装为索引，将文本信息切分为成为Token的信息单元，再利用这些Token构建倒排索引。</p>
-]]></content>
-      <categories>
-        <category>elk</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
-        <tag>elk</tag>
-        <tag>midedleware</tag>
-        <tag>log</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>nginx的使用（一）-- 简单的安装使用</title>
     <url>/2018/08/25/using/middleware/nginx-1/</url>
     <content><![CDATA[<h2 id="一、nginx简介"><a href="#一、nginx简介" class="headerlink" title="一、nginx简介"></a>一、nginx简介</h2><h4 id="1、nginx是什么"><a href="#1、nginx是什么" class="headerlink" title="1、nginx是什么"></a>1、nginx是什么</h4><p>Nginx (engine x) 是一个高性能的HTTP和反向代理服务，也是一个IMAP/POP3/SMTP服务。其特点是占有内存少，并发能力强，事实上nginx的并发能力确实在同类型的网页服务器中表现较好。</p>
@@ -1924,104 +2268,6 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
       </tags>
   </entry>
   <entry>
-    <title>CCNA学习笔记一 -- 计算机网络详解</title>
-    <url>/2018/08/27/theory/ccna/ccna-1/</url>
-    <content><![CDATA[<h4 id="局域网与广域网"><a href="#局域网与广域网" class="headerlink" title="局域网与广域网"></a>局域网与广域网</h4><ol>
-<li>局域网 自己花钱买设备自己搭配服务器，带宽固定</li>
-<li>广域网 花钱租带宽</li>
-</ol>
-<h4 id="OSI参考模型"><a href="#OSI参考模型" class="headerlink" title="OSI参考模型"></a>OSI参考模型</h4><pre><code>↑7 应用层      能产生网络流量的应用程序
-↑6 表示层      表示数据，处理数据 加密 压缩 等
-↑5 会话层      msconfig netstat -nb (显示程序)
-↑4 传输层      可靠传输 建立会话 流量控制 差错检查 不可靠传输 不建立会话 节省服务器资源
-↑3 网络层      选择最佳路径
-↑2 数据链路层  网络设备 如何封装数据帧 设备地址
-↑1 物理层      规定了电压标准、接口标准
-</code></pre><p>程序员的工作层  应用层、表示层、会话层<br>网络工程师的工作层  传输层、网络层、数据链路层、物理层<br>网络分层的好处：每一层互不干扰，没有影响；有助于设备标准化</p>
-<h4 id="网络排错和OSI参考模型"><a href="#网络排错和OSI参考模型" class="headerlink" title="网络排错和OSI参考模型"></a>网络排错和OSI参考模型</h4><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>网络层</th>
-<th>可能出现的错误</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>物理层</td>
-<td>连接问题</td>
-</tr>
-<tr>
-<td>数据链路层</td>
-<td>MAC地址冲突 ADSL拨号密码错误</td>
-</tr>
-<tr>
-<td>网络层</td>
-<td>计算机网关设置错误、路由器路由表错误</td>
-</tr>
-<tr>
-<td>应用层</td>
-<td>IE代理设置错误</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h4 id="网络安全和OSI参考模型"><a href="#网络安全和OSI参考模型" class="headerlink" title="网络安全和OSI参考模型"></a>网络安全和OSI参考模型</h4><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>网络层</th>
-<th>安全问题</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>物理层安全</td>
-<td></td>
-</tr>
-<tr>
-<td>数据链路层安全</td>
-<td>MAC地址认证 ADSL拨号上网账号密码 划分VLAN</td>
-</tr>
-<tr>
-<td>网络层安全</td>
-<td>路由器ACL</td>
-</tr>
-<tr>
-<td>传输层安全</td>
-<td>计算机端口安全</td>
-</tr>
-<tr>
-<td>应用层安全</td>
-<td>网站安全、操作系统安全</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h4 id="网络设备"><a href="#网络设备" class="headerlink" title="网络设备"></a>网络设备</h4><ol>
-<li>网线<br>双绞线  4对 8根 100米 10M 100M（实际用了4根） 1000M （实际用了8根）<br>线序 直通线（都按B连） 同类设备用交叉线（一个A 一个B）<br>不同类设备用直通线<br><font color="#12a112">水晶头接法</font><ul>
-<li>RJ45 A 绿白 绿 橙白 蓝 蓝白 橙 棕白 棕</li>
-<li>RJ45 B 橙白 橙 绿白 蓝 蓝白 绿 棕白 棕</li>
-</ul>
-</li>
-<li>网卡 MAC地址（物理地址）不能更改<br>MAC地址由48位二进制组成，前24位代表厂家 后边为厂家自己所设置的序号<br>查看MAC地址的指令（dos下） ipconfig /all</li>
-<li>集线器 HUB 不安全 带宽共享 效率低下 半双工</li>
-<li>网桥 隔绝冲突域</li>
-<li>交换机 基于MAC地址转发数据、带宽独享、全双工、安全、学习MAC地址</li>
-<li>路由器 负责在不同网段转发数据 一般有广域网接口 隔绝广播（MAC地址全1）</li>
-</ol>
-<h4 id="网络设备和OSI参考模型"><a href="#网络设备和OSI参考模型" class="headerlink" title="网络设备和OSI参考模型"></a>网络设备和OSI参考模型</h4><p>集线器 物理层设备<br>交换机 基于MAC地址转发 数据链路层设备<br>路由器 基于IP地址转发 三层设备  </p>
-<h4 id="分层考虑问题"><a href="#分层考虑问题" class="headerlink" title="分层考虑问题"></a>分层考虑问题</h4><p>网络排错方法 替换法</p>
-]]></content>
-      <categories>
-        <category>net</category>
-      </categories>
-      <tags>
-        <tag>ccna</tag>
-        <tag>net</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>nginx的使用（三）-- 使用gzip加速页面加载</title>
     <url>/2019/10/18/using/middleware/nginx-3/</url>
     <content><![CDATA[<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Nginx实现资源压缩的原理是通过ngx_http_gzip_module模块拦截请求，并对需要做gzip的类型做gzip，ngx_http_gzip_module是Nginx默认集成的，不需要重新编译，直接开启即可。  </p>
@@ -2060,192 +2306,6 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
       <tags>
         <tag>linux</tag>
         <tag>nginx</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CCNA学习笔记二 -- TCP/IP协议</title>
-    <url>/2018/08/27/theory/ccna/ccna-2/</url>
-    <content><![CDATA[<h4 id="DoD模型"><a href="#DoD模型" class="headerlink" title="DoD模型"></a>DoD模型</h4><p>应用层 Telent、FTP、SMTP、DNS、HTTP以及其他应用协议<br>传输层 TCP、UDP<br>网络层 IPv4、ARP、RARP、ICMP<br>网络接口 各种通信网络接口（以太网等物理网络）</p>
-<h4 id="传输层协议"><a href="#传输层协议" class="headerlink" title="传输层协议"></a>传输层协议</h4><p>可靠传输 TCP 分段传输 建立会话（消耗系统资源） 丢失重传<br>不可靠传输 UDP 一个数据包就能表达完整 屏幕广播</p>
-<h4 id="应用层协议"><a href="#应用层协议" class="headerlink" title="应用层协议"></a>应用层协议</h4><h5 id="默认端口"><a href="#默认端口" class="headerlink" title="默认端口"></a>默认端口</h5><p>http=TCP+80<br>ftp=TCP+21（接受命令、验证身份等） 20（传输数据）<br>https=TCP+443<br>SMTP=TCP+25（发邮件）<br>POP3=TCP+110（收邮件）<br>RDP=TCP+3389(远程桌面)<br>DNS=UDP+53（DNS解析）<br>IP地址访问Windows共享文件夹=TCP+445<br>计算机名访问windows共享文件夹=TCP+139<br>SQL=TCP+1433（访问数据库）<br>telnet=TCP+23</p>
-<h4 id="服务和端口的关系"><a href="#服务和端口的关系" class="headerlink" title="服务和端口的关系"></a>服务和端口的关系</h4><p>服务侦听端口<br>客户端请求服务 使用目标端口来区分（服务器根据数据包的目标端口来区分客户端）<br>服务停止 侦听的端口关闭<br>查看侦听的端口 netstat -anb|find “content”<br>检测端口  telnet ip 端口</p>
-<h4 id="网络安全"><a href="#网络安全" class="headerlink" title="网络安全"></a>网络安全</h4><p>win2003service tcp/ip筛选不影响出去的流量<br>wf.msc windows高级防火墙</p>
-<h4 id="网络层协议"><a href="#网络层协议" class="headerlink" title="网络层协议"></a>网络层协议</h4><p>IP协议 选择最佳路径的协议（RIP OSPF EIGRP BGP）<br>ICMP协议 测试网络是否畅通<br>ping 估计带宽 查看网络是否畅通 断定远程系统 每过一个路由器TTL-1<br>TTL 128 windows系统<br>TTL 64  linux系统<br>pathping 跟踪路径 计算丢包情况<br>IGMP协议 组播<br>点到点 广播 多播（组播）<br>ARP协议 将计算机的IP地址解析成MAC地址<br>数据跨网段通讯和同一网段通信过程<br>MAC地址决定了下一跳给那个设备<br>IP地址决定最终计算机</p>
-<h4 id="IP地址"><a href="#IP地址" class="headerlink" title="IP地址"></a>IP地址</h4><p>32位二进制组成</p>
-<h5 id="ip地址分类"><a href="#ip地址分类" class="headerlink" title="ip地址分类"></a>ip地址分类</h5><p>  x:network id  y:host id</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>类别</th>
-<th>功能</th>
-<th>开头</th>
-<th>个头</th>
-<th>缺省子网掩码</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>A</td>
-<td>xyyy</td>
-<td>1-127</td>
-<td>256^3-2</td>
-<td>255.0.0.0</td>
-</tr>
-<tr>
-<td>B</td>
-<td>xxyy</td>
-<td>128-191</td>
-<td>256^2-2</td>
-<td>255.255.0.0</td>
-</tr>
-<tr>
-<td>C</td>
-<td>xxxy</td>
-<td>192-223</td>
-<td>256-2</td>
-<td>255.255.255.0</td>
-</tr>
-<tr>
-<td>D</td>
-<td>组播</td>
-<td>224-239</td>
-</tr>
-<tr>
-<td>E</td>
-<td>研究</td>
-<td>240-255</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h5 id="保留的私网地址"><a href="#保留的私网地址" class="headerlink" title="保留的私网地址"></a>保留的私网地址</h5><p>A 10.0.0.0<br>B 172.16.0.0-172.31.0.0<br>C 192.168.0.0-192.168.255.0</p>
-<h5 id="本地环回地址"><a href="#本地环回地址" class="headerlink" title="本地环回地址"></a>本地环回地址</h5><p>127.0.0.1  ping通过表示TCP/IP协议安装正常<br>169.254.0.0 DHCP获取网络地址未果的时候得到的地址</p>
-]]></content>
-      <categories>
-        <category>net</category>
-      </categories>
-      <tags>
-        <tag>ccna</tag>
-        <tag>net</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CCNA学习笔记三 -- 路由和交换</title>
-    <url>/2018/08/28/theory/ccna/ccna-3/</url>
-    <content><![CDATA[<h4 id="网络畅通的条件"><a href="#网络畅通的条件" class="headerlink" title="网络畅通的条件"></a>网络畅通的条件</h4><p>数据包能去能回<br>沿途的路由器必须知道到目标地址如何转发<br>沿途的路由器必须知道回来的数据包如何转发  </p>
-<p>路由器直连的网络 不用告诉路由器如何转发<br>路由器没有直连的网络 管理员需要告诉路由器到目标网络如何转发 即添加静态路由<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#ip route 192.168.1.0 255.255.255.0 192.268.2.0  设置数据包 到192.168.1.0/24的数据包下一跳给192.168.2.0</span><br><span class="line">(config)#tracroute ip_address 跟踪数据包路径</span><br><span class="line">#show ip route 查看路由表</span><br><span class="line">(config)#no ip route 192.168.1.0 255.255.255.0 删除路由表</span><br><span class="line">windows上添加路由表 route add ip_adress mask ip_web</span><br><span class="line">windows查看路由表 netstat-r    route print </span><br></pre></td></tr></table></figure></p>
-<h4 id="动态路由"><a href="#动态路由" class="headerlink" title="动态路由"></a>动态路由</h4><p>优先级 直连0 静态路由1 eigp90  rip120<br>RIP协议 跳数判断，周期性（30s）更新路由表，最大跳数16跳<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#router rip  启用rip协议  </span><br><span class="line">(config-router)#network 192.168.1.0 该网段参与rip协议  </span><br><span class="line">#debug ip rip 显示rip协议信息</span><br><span class="line">#undebug all  关闭rip协议信息显示</span><br><span class="line">#show ip protocols 显示应用协议</span><br><span class="line">EIGP协议 优先级高于RIP</span><br><span class="line">(config)#router eigp 10  启用eigp协议,相同编号路由器才可以交换路由信息</span><br><span class="line">(config-router)#network 192.168.1.0 该网段参与eigp协议</span><br></pre></td></tr></table></figure></p>
-<h4 id="交换"><a href="#交换" class="headerlink" title="交换"></a>交换</h4><p>集线器 不安全、冲突域、带宽共享<br>交换机 基于目标MAC地址转发、学习MAC地址、端口独享带宽、没有冲突、广播会出问题<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#show mac-address-table 显示MAC地址表</span><br><span class="line">  #config terminal </span><br><span class="line">  (config)#interrface fastEthernet 0/4</span><br><span class="line">  (config-if)#switchport mode access 接机算机的接口</span><br><span class="line">  (config-if)#switchport port-security 启用安全</span><br><span class="line">  (config-if)#switchport port-security violation shutdown 违反安全规则down掉</span><br><span class="line">  (config-if)#switchport port-security maxium 2 限制连接数量</span><br><span class="line">  (config)#interrface range fastEthernet 0/1 - 24 选中1-24个口</span><br><span class="line">  (config-if-range)#switchport port-security mac-adddress sticky MAC地址终止学习</span><br></pre></td></tr></table></figure></p>
-<h4 id="生成树协议"><a href="#生成树协议" class="headerlink" title="生成树协议"></a>生成树协议</h4><p> 为了高可用局域网交换机连接有了环路<br>为了阻断网络中的广播有了生成树协议<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#show spanning-tree 查看交换机端口以及生成树状态</span><br><span class="line">(config)#spanning-tree vlan 1 priority 4096更改路由器优先级为4096，值越小优先级越高</span><br><span class="line">(config)#no spanning-tree vlan 1 关闭生成树协议</span><br></pre></td></tr></table></figure></p>
-]]></content>
-      <categories>
-        <category>net</category>
-      </categories>
-      <tags>
-        <tag>ccna</tag>
-        <tag>net</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CCNA学习笔记四 -- VLAN</title>
-    <url>/2018/08/28/theory/ccna/ccna-4/</url>
-    <content><![CDATA[<h4 id="VLAN虚拟局域网"><a href="#VLAN虚拟局域网" class="headerlink" title="VLAN虚拟局域网"></a>VLAN虚拟局域网</h4><p>&emsp;&emsp;VLAN是交换机组网才有的概念，按部门或管理的要求来组网，而不是按照位置组网，更灵活，安全<br>一个VLAN=一个广播域=一个网段<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#show vlan 查看VLAN</span><br><span class="line">(config)#vlan 2 创建VLAN2</span><br><span class="line">(config)#interrface range fastEthernet 0/13 - 24 选中13-24接口</span><br><span class="line">(config-if-range)#switchport mode access 设置计算机接口</span><br><span class="line">(config-if-range)#switchport access vlan 2 设置为vlan2</span><br></pre></td></tr></table></figure></p>
-<h6 id="单臂路由器实现VLAN间路由"><a href="#单臂路由器实现VLAN间路由" class="headerlink" title="单臂路由器实现VLAN间路由"></a>单臂路由器实现VLAN间路由</h6><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#interface gigabitEthernet 1/1 打开Gbit1/1接口</span><br><span class="line">(config-if)#switchport mode trunk 设置干道链路 </span><br></pre></td></tr></table></figure>
-<h6 id="三层交换机上的配置"><a href="#三层交换机上的配置" class="headerlink" title="三层交换机上的配置"></a>三层交换机上的配置</h6><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#ip routing 启用路由功能</span><br><span class="line">(config-if)#switchport trunk encapsulation dotlq设置trunk封装格式为dotlq</span><br><span class="line">(config-if)#switchport mode trunk</span><br><span class="line">(config)#Interface vlan 1</span><br><span class="line">(config-if)#ip address ip_address mask </span><br><span class="line">(config-if)# no shutdown </span><br><span class="line">(config)#interface vlan 2</span><br><span class="line">(config-if)#ip address ip_address mask </span><br><span class="line">(config-if)# no shutdown </span><br></pre></td></tr></table></figure>
-<h4 id="VTP协议"><a href="#VTP协议" class="headerlink" title="VTP协议"></a>VTP协议</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(condig)#vtp domain name   设置vtp域名</span><br><span class="line">(condig)#vtp password passwd  设置vtp密码</span><br><span class="line">(condig)#vtp mode client/server  设置客户端或者服务端，服务端可以更改整个域的VLAN的添加删除，但是不能更改其他的交换机的端口是否属于该vlan</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>net</category>
-      </categories>
-      <tags>
-        <tag>ccna</tag>
-        <tag>net</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CCNA学习笔记五 -- ACL</title>
-    <url>/2018/08/28/theory/ccna/ccna-5/</url>
-    <content><![CDATA[<h4 id="网络安全"><a href="#网络安全" class="headerlink" title="网络安全"></a>网络安全</h4><p>物理层安全 墙上不用的网线接口，连接交换机的端口关掉<br>数据链路层安全 ADSL拨号账号和密码 MAC地址绑定 交换机连接计算机数量控制 创建VLAN<br>网络层安全 基于源ip地址目标IP地址的控制<br>传输层安全 会话攻击 LAND攻击 syn洪水攻击<br>应用层安全 登录密码  </p>
-<h4 id="网络层安全"><a href="#网络层安全" class="headerlink" title="网络层安全"></a>网络层安全</h4><p>标准的ACL  基于源地址进行控制<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#config terminal  </span><br><span class="line">(config)#access-list 10 deny host 192.168.1.2</span><br><span class="line">(config)#access-list 10 permit 192.168.1.0 0.0.0.255 允许192.168.1.0访问，使用翻转子网掩码</span><br><span class="line">(config)(config)#interface serial 3/0</span><br><span class="line">(config-if)#ip access-group 10 in/out 绑定控制列表到物理接口并确定出还是进检查访问列表</span><br><span class="line">(config)#no access-list 10 删除ACL10</span><br><span class="line">ACL的顺序影响访问控制</span><br><span class="line">扩展的ACL  基于源地址、目标地址、协议、端口号进行控制</span><br><span class="line">(config)#access-list 100 permit ip 192.168.1.0 0.0.0.255 any 允许192.168.1.0/24访问任何</span><br><span class="line">(config)#access-list 100 permit tcp 192.18.2.0 0.0.0.255 10.0.0.0 0.0.0.255 eq 80 允许192.18.2.0/24访问10.0.0.0/8上的web服务器</span><br><span class="line">(config)#access-list 100 permit icmp 192.18.2.0 0.0.0.255 any 允许192.18.2.0/24ping任何因特网</span><br></pre></td></tr></table></figure><br>将acl绑定到telnet接口<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config-line)#access-class 10 in/out </span><br></pre></td></tr></table></figure></p>
-<h4 id="acl具体应用"><a href="#acl具体应用" class="headerlink" title="acl具体应用"></a>acl具体应用</h4><ol>
-<li>入站————决不允许任何源地址是内部主机地址或网络地址的数据包进入一个私有的网络<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#access-list 150 deny ip 127.0.0.0 0.255.255.255 any log</span><br><span class="line">#access-list 150 deny ip 0.0.0.0 255.255.255.255 any log</span><br><span class="line">#access-list 150 deny ip 10.0.0.0 0.255.255.255 any log</span><br><span class="line">#access-list 150 deny ip 127.16.0.0 0.15.255.255 any log</span><br><span class="line">#access-list 150 deny ip 192.168.0.0 0.0.255.255 any log</span><br><span class="line">#access-list 150 deny ip 224.0.0.0 15.255.255.255 any log</span><br><span class="line">#access-list 150 deny ip host 255.255.255.255 any log</span><br><span class="line">#access-list 150 permit ip any any</span><br></pre></td></tr></table></figure></li>
-<li>出站————决不允许任何含有非内部网络有效的ip数据包出站<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#access-list 150 permit 192.168.0.0 0.0.255.255 any</span><br><span class="line">#access-list 150 deny ip any any log</span><br></pre></td></tr></table></figure></li>
-<li>阻塞外部访问<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#access-list 109 permit any 192.268.0.0 0.0.255.255 established </span><br><span class="line">#access-list 109 deny ip any any log</span><br></pre></td></tr></table></figure></li>
-<li>过滤ICMP消息————禁止ping命令进内网<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#access-list 112 deny icmp any any echo log </span><br><span class="line">#access-list 112 deny icmp any any redirect log </span><br><span class="line">#access-list 112 deny icmp any any mask-request log</span><br><span class="line">#access-list 112 permit icmp any 192.168.0.0 0.0.255.255  </span><br></pre></td></tr></table></figure></li>
-</ol>
-]]></content>
-      <categories>
-        <category>net</category>
-      </categories>
-      <tags>
-        <tag>ccna</tag>
-        <tag>net</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CCNA学习笔记六 -- NAT</title>
-    <url>/2018/08/28/theory/ccna/ccna-6/</url>
-    <content><![CDATA[<h4 id="地址转换技术"><a href="#地址转换技术" class="headerlink" title="地址转换技术"></a>地址转换技术</h4><ol>
-<li>内网能够主动访问外网，外网不能主动访问内网，相对而言内网更安全一些  </li>
-<li>节省公网ip地址  </li>
-<li>缺点 慢  <h4 id="NAT（网络地址转换）"><a href="#NAT（网络地址转换）" class="headerlink" title="NAT（网络地址转换）"></a>NAT（网络地址转换）</h4>静态NAT 动态NAT  不节省公网地址、一个公网替换一个内网地址<br>PAT（端口地址转换）  节省公网ip、替换源端口和源地址  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#debug ip packet 开启数据包转发显示</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h4 id="路由器上配置PAT"><a href="#路由器上配置PAT" class="headerlink" title="路由器上配置PAT"></a>路由器上配置PAT</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#access-list 10 permit 10.0.0.0 0.0.0.255 定义内网地址池</span><br><span class="line">(config)#ip nat pool name 131.107.0.1 131.107.0.1 netmask 255.255.255.0定义一个名为name的公网地址池从.0.1到.0.1</span><br><span class="line">(config)#ip nat inside source list 10 pool name overload  10列表绑定到name，overload表示PAT，不加overload表示NAT</span><br><span class="line">(config)#interface serial 0/0</span><br><span class="line">(config-if)#ip nat outside  0/0公网出口</span><br><span class="line">(config-if)#exit</span><br><span class="line">(config)#interface serial 0/1</span><br><span class="line">(config-if)#ip nat inside   0/1内网入口</span><br></pre></td></tr></table></figure>
-<p>端口映射 使公网地址可以访问内网地址<br>路由端口映射<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#ip nat inside source static tcp 10.0.0.6 80 137.107.0.1 80 端口映射</span><br></pre></td></tr></table></figure></p>
-]]></content>
-      <categories>
-        <category>net</category>
-      </categories>
-      <tags>
-        <tag>ccna</tag>
-        <tag>net</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CCNA学习笔记七 -- IPv6</title>
-    <url>/2018/08/28/theory/ccna/ccna-7/</url>
-    <content><![CDATA[<h4 id="DoD模型"><a href="#DoD模型" class="headerlink" title="DoD模型"></a>DoD模型</h4><p>应用层 Telent、FTP、SMTP、DNS、HTTP以及其他应用协议<br>传输层 TCP、UDP<br>网络层 ND、MLD、ICMPv6、IPv6<br>网络接口 各种通信网络接口（以太网等物理网络）  </p>
-<h4 id="IPv6地址（128位）"><a href="#IPv6地址（128位）" class="headerlink" title="IPv6地址（128位）"></a>IPv6地址（128位）</h4><ol>
-<li>首选的格式<br>128比特分成8段，每段的16比特用16进制表示，中间用:隔开<br>xxxx:xxxx:xxxx:xxxx:xxxx:xxxx:xxxx:xxxx</li>
-<li>压缩格式，允许0压缩<br>xxxx:xxxx::xx:xxx:x:xxxx<br>一对::在一个地址中只能出现1次</li>
-<li>IPv4构造IPv6<br>0:0:0:0:0:0:192.168.0.1或者::192.168.0.1</li>
-<li>子网掩码<br>xxxx:xxxx:xxxx:xxxx:xxxx:xxxx:xxxx:xxxx/n 前n位是网络部分，后边是主机部分<h4 id="单播地址"><a href="#单播地址" class="headerlink" title="单播地址"></a>单播地址</h4>全球路由前缀  |子网|接口ID<br>2001:0db8:3c4d:0012:a:d:1234:56ab<br>链路本地地址 link local address  该地址用于同一网段中IPv6计算机通信<br>多播地址<br>任播地址  </li>
-</ol>
-<p>::  相当于0.0.0.0<br>::1 相当于127.0.0.1<br>2000::/3 全球单播地址范围，前三位是001<br>FE80::/10 链路本地单播地址<br>FF00::/8 组播地址范围<br>3FFF:FFFF::/32 示例和文档保留地址<br>2001:oDB8::/32 示例和文档保留地址<br>2002::/16 用于IPv6到IPv4的转换系统</p>
-<h4 id="IPv6地址分配"><a href="#IPv6地址分配" class="headerlink" title="IPv6地址分配"></a>IPv6地址分配</h4><ol>
-<li>静态</li>
-<li>自动<br>无状态 向路由器发送路由前缀请求，配置IPv6的路由器接口收到，然后发送路由通告，计算机获得网络部分+自己的MAC地址，进行构造IPv6地址<br>有DHCP服务器 路由通告中M=1，则向DHCP服务器请求ip地址；路由通告中O=1，则向DHCP服务器请求其他设置如DNS服务器、搜索后缀等  </li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#ipv6 unicast-routing 启用IPv6</span><br><span class="line">(config)#interface fastEthernet 0/0</span><br><span class="line">(config-if)#ipv6 address 2001:13::1/64</span><br><span class="line"></span><br><span class="line">(config-if)#ipv6 nd managed-config-flag  令路由通告中M=1</span><br><span class="line">(config-if)#ipv6 nd other-config-flag 令路由通告中O=1</span><br></pre></td></tr></table></figure>
-<h4 id="IPv6路由添加"><a href="#IPv6路由添加" class="headerlink" title="IPv6路由添加"></a>IPv6路由添加</h4><h5 id="静态路由"><a href="#静态路由" class="headerlink" title="静态路由"></a>静态路由</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#show ipv6 interface fastEthernet 0/0 </span><br><span class="line">#show ipv6 route 查看IPv6路由表查</span><br><span class="line">(config)#ipv6 route 2001:1::/64 2001:1::1</span><br><span class="line">(config-if)#ipv6 address 2001:1::/64 eui-64 自己根据前缀和自己的MAC地址构造IPv6地址</span><br><span class="line">(config-if)#ipv6 address 2001:1::1/64 </span><br></pre></td></tr></table></figure>
-<h5 id="动态路由"><a href="#动态路由" class="headerlink" title="动态路由"></a>动态路由</h5><ol>
-<li>RIPng协议<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#ipv6 unicast-routing</span><br><span class="line">(config)#ipv6 router rip 1</span><br><span class="line">(config-rtr)#exit</span><br><span class="line">(config)#interface fastEthernet 0/1</span><br><span class="line">(config-if)#ipv6 rip 1 enable</span><br></pre></td></tr></table></figure></li>
-<li>EIGRPv6协议<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#ipv6 unicast-routing</span><br><span class="line">(config)#ipv6 router eigrp 10</span><br><span class="line">(config-rtr)#no shutdown</span><br><span class="line">(config-rtr)#router-id 4.0.0.1</span><br><span class="line">(config-rtr)#exit</span><br><span class="line">(config)#interface fastEthernet 0/1</span><br><span class="line">(config-if)#ipv6 eigrp 10 </span><br></pre></td></tr></table></figure></li>
-<li>OSPFv3协议<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#ipv6 unicast-routing</span><br><span class="line">(config)#ipv6 router ospf 1</span><br><span class="line">(config-rtr)#router-id 4.0.0.1</span><br><span class="line">(config-rtr)#exit</span><br><span class="line">(config)#interface fastEthernet 0/1</span><br><span class="line">(config-if)#ipv6 ospf 1 area 0</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h4 id="IPv4和IPv6共存技术"><a href="#IPv4和IPv6共存技术" class="headerlink" title="IPv4和IPv6共存技术"></a>IPv4和IPv6共存技术</h4><p>双协议栈</p>
-<ol>
-<li>IPv6 to IPv4隧道技术<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#ipv6 unicast-routing</span><br><span class="line">(config)#interface fastEthernet 0/1</span><br><span class="line">(config-if)#ipv6 address 2001:1::1/64 </span><br><span class="line">(config-if)#exit</span><br><span class="line">(config)#interface tunnel 0 隧道虚拟端口</span><br><span class="line">(config-if)#no shutdown</span><br><span class="line">(config-if)#ipv6 address 2001:2::1/64 给隧道虚拟端口配置IPv6</span><br><span class="line">(config-if)#tunnel source 10.0.0.1  隧道源地址</span><br><span class="line">(config-if)#tunnel destination 10.0.1.2 隧道目标地址</span><br><span class="line">(config-if)#tunnel mode ipv6ip 设置隧道加密模式</span><br><span class="line">(config-if)#exit</span><br></pre></td></tr></table></figure></li>
-<li>ISATAP隧道<ol>
-<li>配置ISATAP路由(该路由与IPv4网络接口为192.168.0.2) <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#interface tunnel 0</span><br><span class="line">(config-if)#ipv6 address 2001:1::/64 eui-64</span><br><span class="line">(config-if)#no ipv6 nd suppress-ra</span><br><span class="line">(config-if)#tunnel source 10.0.0.1</span><br><span class="line">(config-if)#tunnel mode ipv6ip isatap</span><br><span class="line">(config-if)#no shutdown</span><br></pre></td></tr></table></figure></li>
-<li>windows下 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&gt;netsh</span><br><span class="line">netsh&gt;interface</span><br><span class="line">netsh interface&gt;ipv6</span><br><span class="line">netsh interface ipv6&gt;isatap</span><br><span class="line">netsh interface ipv6 isatap&gt;set router 192.168.0.2</span><br></pre></td></tr></table></figure></li>
-</ol>
-</li>
-<li><p>静态NAT-PT</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#interface fastEthernet 0/1</span><br><span class="line">(config-if)#ipv6 nat </span><br><span class="line">(config-if)#exit</span><br><span class="line">(config)#interface serial 1/0</span><br><span class="line">(config-if)#ipv6 nat </span><br><span class="line">(config-if)#exit</span><br><span class="line">(config)#ipv6 nat v6v4 source 10.0.0.2 2001:2::2 </span><br><span class="line">(config)#ipv6 nat v6v4 source 2001:2::4 10.0.0.4</span><br><span class="line">(config)#ipv6 prefix 2001:3::/96</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>动态NAT-PT 只能由IPv6网络主动向IPv4网络发起通信</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(config)#interface fastEthernet 0/1</span><br><span class="line">(config-if)#ipv6 nat </span><br><span class="line">(config-if)#exit</span><br><span class="line">(config)#interface serial 1/0</span><br><span class="line">(config-if)#ipv6 nat </span><br><span class="line">(config-if)#exit</span><br><span class="line">(config)#ipv6 access-list v4map </span><br><span class="line">(config-ipv6-acl)#permit 2001:2::/64 any </span><br><span class="line">(config-ipv6-acl)#exit</span><br><span class="line">(config)#ipv6 access-list v6map</span><br><span class="line">(config-ipv6-acl)#permit 2001:2::/64 any </span><br><span class="line">(config-ipv6-acl)#exit</span><br><span class="line">(config)#ipv6 nat</span><br><span class="line">(config)#ipv6 nat v6v4 pool v4pool 10.0.2.100 10.0.2.200 prefix-length 24 </span><br><span class="line">(config)#ipv6 nat v6v4 source list v6list pool v4pool </span><br><span class="line">(config)#ipv6 nat prefix 2001::/96 v4-mapped v4map  2001::/96用v4map里的地址替代</span><br></pre></td></tr></table></figure></li>
-</ol>
-]]></content>
-      <categories>
-        <category>net</category>
-      </categories>
-      <tags>
-        <tag>ccna</tag>
-        <tag>net</tag>
       </tags>
   </entry>
   <entry>
@@ -2305,93 +2365,29 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
       </tags>
   </entry>
   <entry>
-    <title>数据结构 - 树</title>
-    <url>/2018/09/17/theory/algorithm/algorithm-tree/</url>
-    <content><![CDATA[<h4 id="树"><a href="#树" class="headerlink" title="树"></a>树</h4><p>&emsp;&emsp; 一棵树是一些节点的集合。如果这棵树非空，则一棵树由称作根（root）节点的r以及0个或者多个非空的(子)树组成，这些子树中每一棵的根都被来自根r的一条有向的边（edge）所连接。<br>&emsp;&emsp;每一棵子树的根叫做r的儿子，r是每一棵子树的根的父亲。没有儿子的节点称为树叶，具有相同父节点的节点称为兄弟。</p>
+    <title>mariadb使用记录</title>
+    <url>/2018/09/29/using/db/nosql/mariadb-using/</url>
+    <content><![CDATA[<h4 id="MariaDB简介"><a href="#MariaDB简介" class="headerlink" title="MariaDB简介"></a>MariaDB简介</h4><p>&emsp;&emsp;MariaDB数据库管理系统是MySQL的一个分支，主要由开源社区在维护，采用GPL授权许可 MariaDB的目的是完全兼容MySQL，包括API和命令行，使之能轻松成为MySQL的代替品。在存储引擎方面，使用XtraDB（英语：XtraDB）来代替MySQL的InnoDB。</p>
+<h4 id="安装与配置"><a href="#安装与配置" class="headerlink" title="安装与配置"></a>安装与配置</h4><p>&emsp;&emsp;记录Mariadb的安装配置过程  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum -y install mariadb mariadb-server  <span class="comment">#安装mariadb的客户端与服务端</span></span><br><span class="line">systemctl start mariadb <span class="comment"># 启动mariadb</span></span><br><span class="line">mysql_secure_installation <span class="comment"># 进行初始的设置</span></span><br><span class="line"><span class="comment"># <span class="doctag">NOTE:</span> RUNNING ALL PARTS OF THIS SCRIPT IS RECOMMENDED FOR ALL MariaDB</span></span><br><span class="line"><span class="comment">#       SERVERS IN PRODUCTION USE!  PLEASE READ EACH STEP CAREFULLY!</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># In order to log into MariaDB to secure it, we&#x27;ll need the current</span></span><br><span class="line"><span class="comment"># password for the root user.  If you&#x27;ve just installed MariaDB, and</span></span><br><span class="line"><span class="comment"># you haven&#x27;t set the root password yet, the password will be blank,</span></span><br><span class="line"><span class="comment"># so you should just press enter here.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Enter current password for root (enter for none):  #默认无密码登录</span></span><br><span class="line"><span class="comment"># OK, successfully used password, moving on...</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Setting the root password ensures that nobody can log into the MariaDB</span></span><br><span class="line"><span class="comment"># root user without the proper authorisation.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Set root password? [Y/n] y # 是否设置新的root密码</span></span><br><span class="line"><span class="comment"># New password: </span></span><br><span class="line"><span class="comment"># Re-enter new password: </span></span><br><span class="line"><span class="comment"># Password updated successfully!</span></span><br><span class="line"><span class="comment"># Reloading privilege tables..</span></span><br><span class="line"><span class="comment">#  ... Success!</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># By default, a MariaDB installation has an anonymous user, allowing anyone</span></span><br><span class="line"><span class="comment"># to log into MariaDB without having to have a user account created for</span></span><br><span class="line"><span class="comment"># them.  This is intended only for testing, and to make the installation</span></span><br><span class="line"><span class="comment"># go a bit smoother.  You should remove them before moving into a</span></span><br><span class="line"><span class="comment"># production environment.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Remove anonymous users? [Y/n] Y # 是否删除匿名用户</span></span><br><span class="line"><span class="comment">#  ... Success!</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Normally, root should only be allowed to connect from &#x27;localhost&#x27;.  This</span></span><br><span class="line"><span class="comment"># ensures that someone cannot guess at the root password from the network.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Disallow root login remotely? [Y/n] n # 是否禁止root账户远程登录</span></span><br><span class="line"><span class="comment">#  ... skipping.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># By default, MariaDB comes with a database named &#x27;test&#x27; that anyone can</span></span><br><span class="line"><span class="comment"># access.  This is also intended only for testing, and should be removed</span></span><br><span class="line"><span class="comment"># before moving into a production environment.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Remove test database and access to it? [Y/n] n # 是否删除test数据库</span></span><br><span class="line"><span class="comment">#  ... skipping.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Reloading the privilege tables will ensure that all changes made so far</span></span><br><span class="line"><span class="comment"># will take effect immediately.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Reload privilege tables now? [Y/n] y # 是否重新加载权限表</span></span><br><span class="line"><span class="comment">#  ... Success!</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Cleaning up...</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># All done!  If you&#x27;ve completed all of the above steps, your MariaDB</span></span><br><span class="line"><span class="comment"># installation should now be secure.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Thanks for using MariaDB!</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="远程登录设置"><a href="#远程登录设置" class="headerlink" title="远程登录设置"></a>远程登录设置</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mysql -uroot -p  <span class="comment">#登录mysql</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GRANT ALL ON database_name.table_name TO databaseuser@&#x27;ip_address&#x27; IDENTIFIED BY &#x27;password&#x27;;</span><br><span class="line">flush privileges; #重新加载权限表</span><br></pre></td></tr></table></figure>
+<ul>
+<li>database_name 你要访问的数据库名称（*代表所有）</li>
+<li>table_name 你要访问的表名（*代表所有）</li>
+<li>databaseuser 新的数据库用户  </li>
+<li>password 设置新的密码（mysql将会对你的设置进行加密再到user表中）  </li>
+<li>ip_address 可访问的ip地址（使用%可以让所有的IP都可以访问）  </li>
+</ul>
 ]]></content>
       <categories>
-        <category>algorithm</category>
+        <category>datebase</category>
       </categories>
       <tags>
-        <tag>algorithm</tag>
-        <tag>data structure</tag>
-        <tag>tree</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>分赌本问题</title>
-    <url>/2018/09/27/theory/algorithm/points_bookies/</url>
-    <content><![CDATA[<h4 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h4><p>&emsp;&emsp;假设A、B两个人赌博，假设每一局中每人获胜的概率是相同的，刚开始下的赌注均是100法郎，并且约定双方谁先获胜3局，谁就拿走所有的赌本，但是中途由于一些原因，不得不终止比赛，此时A胜2局，B胜1局，问此时赌本该怎么分配才均匀？<br>&emsp;&emsp;<font color ="red">注意：假设在赛点不会出现平局。</font></p>
-<h4 id="思路解析"><a href="#思路解析" class="headerlink" title="思路解析"></a>思路解析</h4><ol>
-<li>假设继续赌下去，至多两局结束</li>
-<li>若接下来的第四局A胜（1/2），则A获得所有赌注</li>
-<li>若接下来的第四局B胜（1/2），则进行第五局，第五局中，A胜（1/2*1/2=1/4）才能获得所有赌注</li>
-</ol>
-<h4 id="python模拟"><a href="#python模拟" class="headerlink" title="python模拟"></a>python模拟</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="string">&quot;&quot;&quot; @author zhangbohan.dell@gmail.com</span></span><br><span class="line"><span class="string">    @function: 分赌本问题</span></span><br><span class="line"><span class="string">    @create 2018/9/27 11:00&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">:param n 赢钱所需要的局数</span></span><br><span class="line"><span class="string">:param n1 第一个人已经赢得局数</span></span><br><span class="line"><span class="string">:param n2 第二个人已经赢得局数</span></span><br><span class="line"><span class="string">本程序中取n =3,n1 = 2,n2 = 1</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Bookies</span>(<span class="params">n, n1, n2</span>):</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span> * n - n1 - n2 - <span class="number">1</span>):</span><br><span class="line">        D = random.randint(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">        <span class="keyword">if</span> D == <span class="number">1</span>:</span><br><span class="line">            n1 += <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            n2 += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> n1 == n:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> n2 == n:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">2</span></span><br><span class="line"></span><br><span class="line">n = <span class="number">10000</span></span><br><span class="line">win = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">    <span class="keyword">if</span> Bookies(<span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>) == <span class="number">1</span>:</span><br><span class="line">        win += <span class="number">1</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;A获得赢钱的可能为&#123;&#125;&quot;</span>.<span class="built_in">format</span>(<span class="built_in">float</span>(win / n)))</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>probability theory</category>
-      </categories>
-      <tags>
-        <tag>algorithm</tag>
-        <tag>probability theory</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>蒙提霍尔三门问题</title>
-    <url>/2018/09/27/theory/algorithm/three-door/</url>
-    <content><![CDATA[<p>&emsp;&emsp;蒙提霍尔三门问题亦称蒙提霍尔悖论</p>
-<h4 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h4><p>&emsp;&emsp;参赛者会看见三扇关闭了的门，其中一扇的后面有一辆汽车，选中后面有车的那扇门可赢得该汽车，另外两扇门后面则各藏有一只山羊。当参赛者选定了一扇门，但未去开启它的时候，节目主持人开启剩下两扇门的其中一扇，露出其中一只山羊。主持人其后会问参赛者要不要换另一扇仍然关上的门。<br>&emsp;&emsp;<font color="red">问题是</font>：换另一扇门会否增加参赛者赢得汽车的机率？</p>
-<h4 id="思路解析"><a href="#思路解析" class="headerlink" title="思路解析"></a>思路解析</h4><ol>
-<li>三扇门，只有一扇门后有有汽车，其余的为山羊</li>
-<li>汽车事前等可能放置到三扇门中的其中一个</li>
-<li>参赛者等可能选择其中一扇，挑选前不知道门后有什么</li>
-<li>主持人清楚的知道门后有什么</li>
-<li>如果参赛者挑选了一扇有山羊的门，则主持人必须打开另一扇有山羊的门</li>
-<li>如果参赛者挑选了有汽车的门，主持人等可能在另外两扇有山羊的门选择一扇打开</li>
-<li>参赛者会被问保持原先选择还是转而选择另一扇门</li>
-</ol>
-<h4 id="Python模拟以上过程"><a href="#Python模拟以上过程" class="headerlink" title="Python模拟以上过程"></a>Python模拟以上过程</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="string">&quot;&quot;&quot; @author zhangbohan.dell@gmail.com</span></span><br><span class="line"><span class="string">    @function: 蒙提霍尔三门问题</span></span><br><span class="line"><span class="string">    @create 2018/9/27 10:09&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">MontyHall</span>(<span class="params">Dselect, Dchange</span>):</span><br><span class="line">    Dcar = random.randint(<span class="number">1</span>, <span class="number">3</span>)  <span class="comment"># 随机等可能放置汽车</span></span><br><span class="line">    <span class="keyword">if</span> Dcar == Dselect <span class="keyword">and</span> Dchange == <span class="number">0</span>:  <span class="comment"># 一开始选中并且没有改变选择</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">elif</span> Dcar != Dselect <span class="keyword">and</span> Dchange == <span class="number">0</span>:  <span class="comment"># 一开始没选中也没有改变选择</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">elif</span> Dcar == Dselect <span class="keyword">and</span> Dchange == <span class="number">1</span>:  <span class="comment"># 一开始选中并且改变选择</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">else</span>:  <span class="comment"># 一开始没选中并且改变选择</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">n = <span class="number">10000</span></span><br><span class="line">win = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">    select = random.randint(<span class="number">1</span>, <span class="number">3</span>)</span><br><span class="line">    win += MontyHall(select, random.randint(<span class="number">0</span>, <span class="number">1</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;不确认是够改变选择&#123;&#125;&quot;</span>.<span class="built_in">format</span>(<span class="built_in">float</span>(win / n)))</span><br><span class="line"></span><br><span class="line">win = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">    select = random.randint(<span class="number">1</span>, <span class="number">3</span>)</span><br><span class="line">    win += MontyHall(select, <span class="number">0</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;确认不改变选择&#123;&#125;&quot;</span>.<span class="built_in">format</span>(<span class="built_in">float</span>(win / n)))</span><br><span class="line"></span><br><span class="line">win = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">    select = random.randint(<span class="number">1</span>, <span class="number">3</span>)</span><br><span class="line">    win += MontyHall(select, <span class="number">1</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;确认改变选择&#123;&#125;&quot;</span>.<span class="built_in">format</span>(<span class="built_in">float</span>(win / n)))</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>probability theory</category>
-      </categories>
-      <tags>
-        <tag>algorithm</tag>
-        <tag>probability theory</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>myabtis进阶</title>
-    <url>/2018/11/17/using/java/framework/springboot-myabtis/</url>
-    <content><![CDATA[<ol>
-<li><p>逆向工程  </p>
-<ol>
-<li>在数据库中建好表  </li>
-<li>配置好xml，通过逆向工程生成dao接口、实体类、xml映射文件  </li>
-<li><p>当需要添加数据操作的时候，先在xml中写好CRUD语句，然后在DAO接口层写接口，最后到映射文件  </p>
-<p>&emsp;&emsp;随着数据库表的增加、修改，我们需要做的修改随之增加，增加了不少的工作量。</p>
-</li>
-</ol>
-</li>
-<li><p>无xml的myabtis之路</p>
-<ol>
-<li>设计需要的实体类</li>
-<li>根据实体层在数据库中建表，逆向工程在数据库中生成</li>
-<li><p>当需要进行增删改查的时候，只需要在Mapper映射文件中，用对应的注解@Select、@Delete等进行相应的操作即可</p>
-<p>&emsp;&emsp;依然没有自动生成的代码</p>
-</li>
-</ol>
-</li>
-<li></li>
-</ol>
-]]></content>
-      <categories>
-        <category>java</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>orm</tag>
-        <tag>myabtis</tag>
-        <tag>springboot</tag>
+        <tag>linux</tag>
+        <tag>datebase</tag>
+        <tag>mysql</tag>
+        <tag>mariadb</tag>
       </tags>
   </entry>
   <entry>
@@ -2456,6 +2452,41 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
       </tags>
   </entry>
   <entry>
+    <title>myabtis进阶</title>
+    <url>/2018/11/17/using/java/framework/springboot-myabtis/</url>
+    <content><![CDATA[<ol>
+<li><p>逆向工程  </p>
+<ol>
+<li>在数据库中建好表  </li>
+<li>配置好xml，通过逆向工程生成dao接口、实体类、xml映射文件  </li>
+<li><p>当需要添加数据操作的时候，先在xml中写好CRUD语句，然后在DAO接口层写接口，最后到映射文件  </p>
+<p>&emsp;&emsp;随着数据库表的增加、修改，我们需要做的修改随之增加，增加了不少的工作量。</p>
+</li>
+</ol>
+</li>
+<li><p>无xml的myabtis之路</p>
+<ol>
+<li>设计需要的实体类</li>
+<li>根据实体层在数据库中建表，逆向工程在数据库中生成</li>
+<li><p>当需要进行增删改查的时候，只需要在Mapper映射文件中，用对应的注解@Select、@Delete等进行相应的操作即可</p>
+<p>&emsp;&emsp;依然没有自动生成的代码</p>
+</li>
+</ol>
+</li>
+<li></li>
+</ol>
+]]></content>
+      <categories>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>springboot</tag>
+        <tag>orm</tag>
+        <tag>myabtis</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Spring Cloud(一) 简介</title>
     <url>/2018/10/11/using/java/framework/springcloud-1/</url>
     <content><![CDATA[<h4 id="Spring-Cloud简介"><a href="#Spring-Cloud简介" class="headerlink" title="Spring Cloud简介"></a>Spring Cloud简介</h4><ol>
@@ -2498,6 +2529,28 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
 <li>Spring Cloud Starters Spring Cloud的基础组件，基于Spring Boot风格项目的基础依赖模块</li>
 <li>Spring Cloud CLI 用于Groovy中快速创建Spring Boot项目的Spring Boot CLI插件</li>
 <li>…</li>
+</ol>
+]]></content>
+      <categories>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>Spring Cloud</tag>
+        <tag>Microservice</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Spring Cloud(四) Hystrix</title>
+    <url>/2018/10/13/using/java/framework/springcloud-4/</url>
+    <content><![CDATA[<h2 id="服务容错保护：-Spring-Cloud-Hystrix"><a href="#服务容错保护：-Spring-Cloud-Hystrix" class="headerlink" title="服务容错保护： Spring Cloud Hystrix"></a>服务容错保护： Spring Cloud Hystrix</h2><p>&emsp;&emsp;在微服务架构中，我们将系统拆分为很多服务单元，因为各单元的应用间通过服务注册与订阅的方式相互依赖，并且各单元运行在不同的进程中，因此有可能因为网络原因或者自己问题出现调用服务故障或者延迟。随着服务数量的增加，故障亦随之累加，最后导致自身服务的瘫痪。为了解决这种问题，出现了断路器等一系列的保护机制。而Spring Cloud Hystrix就实现了断路器、线程隔离等一系列系统保护功能，为系统的延迟和故障提供更加强大的容错能力。</p>
+<h3 id="实现容错保护"><a href="#实现容错保护" class="headerlink" title="实现容错保护"></a>实现容错保护</h3><ol>
+<li><p>引入POM依赖</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--Hystrix依赖--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-hystrix<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改java类</p>
+ <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//启动类 RibbonconsumerApplication.java</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableDiscoveryClient</span>   <span class="comment">//开启服务发现功能</span></span><br><span class="line"><span class="meta">@EnableCircuitBreaker</span>  <span class="comment">//开启断路器功能</span></span><br><span class="line"><span class="comment">//@SpringCloudApplication //该注释包含了以上三个注释（一个SpringCloud标准应用包含服务发现以及断路器）</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RibbonconsumerApplication</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        SpringApplication.run(RibbonconsumerApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Service层 service/impl/HelloServiceImpl.java</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HelloServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">HelloService</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span></span><br><span class="line">    RestTemplate restTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">HelloServiceImpl</span><span class="params">(RestTemplate restTemplate)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.restTemplate = restTemplate;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="meta">@HystrixCommand(fallbackMethod = &quot;helloFallback&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">helloService</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> restTemplate.getForEntity(<span class="string">&quot;http://hello-service/hello&quot;</span>, String.class).getBody();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">helloFallback</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;error&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Controller controller/ConsumerController.java</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConsumerController</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span></span><br><span class="line">    RestTemplate restTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span></span><br><span class="line">    HelloService helloService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">ConsumerController</span><span class="params">(RestTemplate restTemplate, HelloService helloService)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.restTemplate = restTemplate;</span><br><span class="line">        <span class="built_in">this</span>.helloService = helloService;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(value = &quot;/ribbon-consumer&quot;, method = RequestMethod.GET)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">helloConsumer</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> restTemplate.getForEntity(<span class="string">&quot;http://hello-service/hello&quot;</span>, String.class).getBody();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(value = &quot;/ribbon-consumer-hello-service&quot;, method = RequestMethod.GET)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">helloConsumerByHelloService</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> helloService.helloService();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(value = &quot;/hello&quot;, method = RequestMethod.GET)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">hello</span><span class="params">()</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Hello World&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
 </ol>
 ]]></content>
       <categories>
@@ -2612,28 +2665,6 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
 <li>delete(String url, Object… uriVariables)</li>
 <li>delete(String url, Map<String, ?> uriVariables)</li>
 <li>delete(URI url)</li>
-</ol>
-]]></content>
-      <categories>
-        <category>java</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>Spring Cloud</tag>
-        <tag>Microservice</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Spring Cloud(四) Hystrix</title>
-    <url>/2018/10/13/using/java/framework/springcloud-4/</url>
-    <content><![CDATA[<h2 id="服务容错保护：-Spring-Cloud-Hystrix"><a href="#服务容错保护：-Spring-Cloud-Hystrix" class="headerlink" title="服务容错保护： Spring Cloud Hystrix"></a>服务容错保护： Spring Cloud Hystrix</h2><p>&emsp;&emsp;在微服务架构中，我们将系统拆分为很多服务单元，因为各单元的应用间通过服务注册与订阅的方式相互依赖，并且各单元运行在不同的进程中，因此有可能因为网络原因或者自己问题出现调用服务故障或者延迟。随着服务数量的增加，故障亦随之累加，最后导致自身服务的瘫痪。为了解决这种问题，出现了断路器等一系列的保护机制。而Spring Cloud Hystrix就实现了断路器、线程隔离等一系列系统保护功能，为系统的延迟和故障提供更加强大的容错能力。</p>
-<h3 id="实现容错保护"><a href="#实现容错保护" class="headerlink" title="实现容错保护"></a>实现容错保护</h3><ol>
-<li><p>引入POM依赖</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--Hystrix依赖--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-hystrix<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>修改java类</p>
- <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//启动类 RibbonconsumerApplication.java</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableDiscoveryClient</span>   <span class="comment">//开启服务发现功能</span></span><br><span class="line"><span class="meta">@EnableCircuitBreaker</span>  <span class="comment">//开启断路器功能</span></span><br><span class="line"><span class="comment">//@SpringCloudApplication //该注释包含了以上三个注释（一个SpringCloud标准应用包含服务发现以及断路器）</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RibbonconsumerApplication</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        SpringApplication.run(RibbonconsumerApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Service层 service/impl/HelloServiceImpl.java</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HelloServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">HelloService</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span></span><br><span class="line">    RestTemplate restTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">HelloServiceImpl</span><span class="params">(RestTemplate restTemplate)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.restTemplate = restTemplate;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="meta">@HystrixCommand(fallbackMethod = &quot;helloFallback&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">helloService</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> restTemplate.getForEntity(<span class="string">&quot;http://hello-service/hello&quot;</span>, String.class).getBody();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">helloFallback</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;error&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Controller controller/ConsumerController.java</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConsumerController</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span></span><br><span class="line">    RestTemplate restTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span></span><br><span class="line">    HelloService helloService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">ConsumerController</span><span class="params">(RestTemplate restTemplate, HelloService helloService)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.restTemplate = restTemplate;</span><br><span class="line">        <span class="built_in">this</span>.helloService = helloService;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(value = &quot;/ribbon-consumer&quot;, method = RequestMethod.GET)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">helloConsumer</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> restTemplate.getForEntity(<span class="string">&quot;http://hello-service/hello&quot;</span>, String.class).getBody();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(value = &quot;/ribbon-consumer-hello-service&quot;, method = RequestMethod.GET)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">helloConsumerByHelloService</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> helloService.helloService();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(value = &quot;/hello&quot;, method = RequestMethod.GET)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">hello</span><span class="params">()</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Hello World&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
 </ol>
 ]]></content>
       <categories>
@@ -2802,32 +2833,6 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
       </tags>
   </entry>
   <entry>
-    <title>mariadb使用记录</title>
-    <url>/2018/09/29/using/db/nosql/mariadb-using/</url>
-    <content><![CDATA[<h4 id="MariaDB简介"><a href="#MariaDB简介" class="headerlink" title="MariaDB简介"></a>MariaDB简介</h4><p>&emsp;&emsp;MariaDB数据库管理系统是MySQL的一个分支，主要由开源社区在维护，采用GPL授权许可 MariaDB的目的是完全兼容MySQL，包括API和命令行，使之能轻松成为MySQL的代替品。在存储引擎方面，使用XtraDB（英语：XtraDB）来代替MySQL的InnoDB。</p>
-<h4 id="安装与配置"><a href="#安装与配置" class="headerlink" title="安装与配置"></a>安装与配置</h4><p>&emsp;&emsp;记录Mariadb的安装配置过程  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum -y install mariadb mariadb-server  <span class="comment">#安装mariadb的客户端与服务端</span></span><br><span class="line">systemctl start mariadb <span class="comment"># 启动mariadb</span></span><br><span class="line">mysql_secure_installation <span class="comment"># 进行初始的设置</span></span><br><span class="line"><span class="comment"># <span class="doctag">NOTE:</span> RUNNING ALL PARTS OF THIS SCRIPT IS RECOMMENDED FOR ALL MariaDB</span></span><br><span class="line"><span class="comment">#       SERVERS IN PRODUCTION USE!  PLEASE READ EACH STEP CAREFULLY!</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># In order to log into MariaDB to secure it, we&#x27;ll need the current</span></span><br><span class="line"><span class="comment"># password for the root user.  If you&#x27;ve just installed MariaDB, and</span></span><br><span class="line"><span class="comment"># you haven&#x27;t set the root password yet, the password will be blank,</span></span><br><span class="line"><span class="comment"># so you should just press enter here.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Enter current password for root (enter for none):  #默认无密码登录</span></span><br><span class="line"><span class="comment"># OK, successfully used password, moving on...</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Setting the root password ensures that nobody can log into the MariaDB</span></span><br><span class="line"><span class="comment"># root user without the proper authorisation.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Set root password? [Y/n] y # 是否设置新的root密码</span></span><br><span class="line"><span class="comment"># New password: </span></span><br><span class="line"><span class="comment"># Re-enter new password: </span></span><br><span class="line"><span class="comment"># Password updated successfully!</span></span><br><span class="line"><span class="comment"># Reloading privilege tables..</span></span><br><span class="line"><span class="comment">#  ... Success!</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># By default, a MariaDB installation has an anonymous user, allowing anyone</span></span><br><span class="line"><span class="comment"># to log into MariaDB without having to have a user account created for</span></span><br><span class="line"><span class="comment"># them.  This is intended only for testing, and to make the installation</span></span><br><span class="line"><span class="comment"># go a bit smoother.  You should remove them before moving into a</span></span><br><span class="line"><span class="comment"># production environment.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Remove anonymous users? [Y/n] Y # 是否删除匿名用户</span></span><br><span class="line"><span class="comment">#  ... Success!</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Normally, root should only be allowed to connect from &#x27;localhost&#x27;.  This</span></span><br><span class="line"><span class="comment"># ensures that someone cannot guess at the root password from the network.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Disallow root login remotely? [Y/n] n # 是否禁止root账户远程登录</span></span><br><span class="line"><span class="comment">#  ... skipping.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># By default, MariaDB comes with a database named &#x27;test&#x27; that anyone can</span></span><br><span class="line"><span class="comment"># access.  This is also intended only for testing, and should be removed</span></span><br><span class="line"><span class="comment"># before moving into a production environment.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Remove test database and access to it? [Y/n] n # 是否删除test数据库</span></span><br><span class="line"><span class="comment">#  ... skipping.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Reloading the privilege tables will ensure that all changes made so far</span></span><br><span class="line"><span class="comment"># will take effect immediately.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Reload privilege tables now? [Y/n] y # 是否重新加载权限表</span></span><br><span class="line"><span class="comment">#  ... Success!</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Cleaning up...</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># All done!  If you&#x27;ve completed all of the above steps, your MariaDB</span></span><br><span class="line"><span class="comment"># installation should now be secure.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Thanks for using MariaDB!</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h4 id="远程登录设置"><a href="#远程登录设置" class="headerlink" title="远程登录设置"></a>远程登录设置</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mysql -uroot -p  <span class="comment">#登录mysql</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GRANT ALL ON database_name.table_name TO databaseuser@&#x27;ip_address&#x27; IDENTIFIED BY &#x27;password&#x27;;</span><br><span class="line">flush privileges; #重新加载权限表</span><br></pre></td></tr></table></figure>
-<ul>
-<li>database_name 你要访问的数据库名称（*代表所有）</li>
-<li>table_name 你要访问的表名（*代表所有）</li>
-<li>databaseuser 新的数据库用户  </li>
-<li>password 设置新的密码（mysql将会对你的设置进行加密再到user表中）  </li>
-<li>ip_address 可访问的ip地址（使用%可以让所有的IP都可以访问）  </li>
-</ul>
-]]></content>
-      <categories>
-        <category>datebase</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
-        <tag>datebase</tag>
-        <tag>mysql</tag>
-        <tag>mariadb</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>python多线程</title>
     <url>/2018/09/19/using/python/basic/python-thread/</url>
     <content><![CDATA[<h3 id="Python中的多线程"><a href="#Python中的多线程" class="headerlink" title="Python中的多线程"></a><center>Python中的多线程</center></h3><h4 id="GIL全局解释器锁"><a href="#GIL全局解释器锁" class="headerlink" title="GIL全局解释器锁"></a>GIL全局解释器锁</h4><p>&emsp;&emsp;线程的执行权限。Python的进程中只有一个GIL，一个线程需要执行任务，就必须要获取GIL</p>
@@ -2846,6 +2851,30 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
       <tags>
         <tag>python</tag>
         <tag>Thread</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PyQT学习记录（二）</title>
+    <url>/2018/09/11/using/python/framework/pyqt-2/</url>
+    <content><![CDATA[<h4 id="PyQt5-程序基础解析"><a href="#PyQt5-程序基础解析" class="headerlink" title="PyQt5 程序基础解析"></a>PyQt5 程序基础解析</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> time </span><br><span class="line"><span class="keyword">from</span> PyQt5.QtCore <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> PyQt5.QtGui <span class="keyword">import</span> * </span><br></pre></td></tr></table></figure>
+<ol>
+<li>导入sys模块，为了访问在sys.argv列cd cd 表中的那些命令行参数  </li>
+<li>导入time模块，使用time.sleep()  <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">app = QApplication(sys.argv)</span><br></pre></td></tr></table></figure>
+&emsp;&emsp;每个PyQt GUI程序都必须有一个QApplication对象。这个对象会提供访问全局信息的能力，包括程序的目录、屏幕大小、程序运行在哪个屏幕上（对于多线程系统来说）。这个对象还还会提供后续会说到的事件循环。<br>&emsp;&emsp;PyQt可以是是被一些自己的参数的，如 - geometry 和 - style 等，这些参数在QApplication的初始化文档中。</li>
+</ol>
+<p>&emsp;&emsp;调用app.exec_()会开始执行QApplication对象的事件循环，第一个事件就是绘制事件，调用QApplication.quit()方法会干净的结束该GUI程序，关闭所有已经打开的窗口，释放所占用的资源，然后退出程序。<br>&emsp;&emsp;事件循环用伪代码展示就是这个样子：<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">while True:</span><br><span class="line">    event = getNextEvent()</span><br><span class="line">    if event:</span><br><span class="line">        if event == Terminates:</span><br><span class="line">            break</span><br><span class="line">        processEvent(Event)</span><br></pre></td></tr></table></figure><br>&emsp;&emsp;当用户与应用程序交互的时候，或是发生特定事情时，会在PyQt内部产生一个事件并将其添加到事件列表中去。</p>
+<h4 id="PyQt5布局"><a href="#PyQt5布局" class="headerlink" title="PyQt5布局"></a>PyQt5布局</h4><h5 id="1-绝对定位"><a href="#1-绝对定位" class="headerlink" title="1. 绝对定位"></a>1. 绝对定位</h5><p>&emsp;&emsp;程序指定每个控件的位置和大小(以像素为单位)。<br>绝对定位有以下限制:<br>&emsp;- 如果我们调整窗口，控件的大小和位置不会改变<br>&emsp;- 在各种平台上应用程序看起来会不一样<br>&emsp;- 如果改变字体，我们的应用程序的布局就会改变<br>&emsp;- 如果我们决定改变我们的布局,我们必须完全重做我们的布局  </p>
+<h5 id="2-盒布局-Boxlayout"><a href="#2-盒布局-Boxlayout" class="headerlink" title="2. 盒布局 Boxlayout"></a>2. 盒布局 Boxlayout</h5><p>&emsp;&emsp;我们使用QHBoxLayout和QVBoxLayout，来分别创建横向布局和纵向布局<br>&emsp;&emsp;如果我们需要把两个按钮放在程序的右下角，创建这样的布局，我们只需要一个水平布局加一个垂直布局的盒子就可以了。再用弹性布局增加一点间隙。  </p>
+<h5 id="3-格栅布局"><a href="#3-格栅布局" class="headerlink" title="3. 格栅布局"></a>3. 格栅布局</h5><p>&emsp;&emsp;最常用的还是栅格布局了。这种布局是把窗口分为行和列。创建和使用栅格布局，需要使用QGridLayout模块。  </p>
+<h4 id="做了一个小型的demo"><a href="#做了一个小型的demo" class="headerlink" title="做了一个小型的demo"></a>做了一个小型的demo</h4><p>关于pyqt的更多知识，有空余时间的时候会继续补充。<br>项目地址： <a href="https://github.com/ice1995/ncmdump">ncmdump</a><br>项目介绍： 原作者写出了ncm转换为MP3的基础版本，用这不是很方便，就用正在学习的pyrt做了一个初版的demo图形化界面，后续有时间继续优化  </p>
+]]></content>
+      <categories>
+        <category>PyQT</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>PyQT</tag>
+        <tag>GUI</tag>
       </tags>
   </entry>
   <entry>
@@ -2877,32 +2906,8 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
       </categories>
       <tags>
         <tag>python</tag>
+        <tag>GUI</tag>
         <tag>PyQt</tag>
-        <tag>GUI</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>PyQT学习记录（二）</title>
-    <url>/2018/09/11/using/python/framework/pyqt-2/</url>
-    <content><![CDATA[<h4 id="PyQt5-程序基础解析"><a href="#PyQt5-程序基础解析" class="headerlink" title="PyQt5 程序基础解析"></a>PyQt5 程序基础解析</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> time </span><br><span class="line"><span class="keyword">from</span> PyQt5.QtCore <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> PyQt5.QtGui <span class="keyword">import</span> * </span><br></pre></td></tr></table></figure>
-<ol>
-<li>导入sys模块，为了访问在sys.argv列cd cd 表中的那些命令行参数  </li>
-<li>导入time模块，使用time.sleep()  <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">app = QApplication(sys.argv)</span><br></pre></td></tr></table></figure>
-&emsp;&emsp;每个PyQt GUI程序都必须有一个QApplication对象。这个对象会提供访问全局信息的能力，包括程序的目录、屏幕大小、程序运行在哪个屏幕上（对于多线程系统来说）。这个对象还还会提供后续会说到的事件循环。<br>&emsp;&emsp;PyQt可以是是被一些自己的参数的，如 - geometry 和 - style 等，这些参数在QApplication的初始化文档中。</li>
-</ol>
-<p>&emsp;&emsp;调用app.exec_()会开始执行QApplication对象的事件循环，第一个事件就是绘制事件，调用QApplication.quit()方法会干净的结束该GUI程序，关闭所有已经打开的窗口，释放所占用的资源，然后退出程序。<br>&emsp;&emsp;事件循环用伪代码展示就是这个样子：<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">while True:</span><br><span class="line">    event = getNextEvent()</span><br><span class="line">    if event:</span><br><span class="line">        if event == Terminates:</span><br><span class="line">            break</span><br><span class="line">        processEvent(Event)</span><br></pre></td></tr></table></figure><br>&emsp;&emsp;当用户与应用程序交互的时候，或是发生特定事情时，会在PyQt内部产生一个事件并将其添加到事件列表中去。</p>
-<h4 id="PyQt5布局"><a href="#PyQt5布局" class="headerlink" title="PyQt5布局"></a>PyQt5布局</h4><h5 id="1-绝对定位"><a href="#1-绝对定位" class="headerlink" title="1. 绝对定位"></a>1. 绝对定位</h5><p>&emsp;&emsp;程序指定每个控件的位置和大小(以像素为单位)。<br>绝对定位有以下限制:<br>&emsp;- 如果我们调整窗口，控件的大小和位置不会改变<br>&emsp;- 在各种平台上应用程序看起来会不一样<br>&emsp;- 如果改变字体，我们的应用程序的布局就会改变<br>&emsp;- 如果我们决定改变我们的布局,我们必须完全重做我们的布局  </p>
-<h5 id="2-盒布局-Boxlayout"><a href="#2-盒布局-Boxlayout" class="headerlink" title="2. 盒布局 Boxlayout"></a>2. 盒布局 Boxlayout</h5><p>&emsp;&emsp;我们使用QHBoxLayout和QVBoxLayout，来分别创建横向布局和纵向布局<br>&emsp;&emsp;如果我们需要把两个按钮放在程序的右下角，创建这样的布局，我们只需要一个水平布局加一个垂直布局的盒子就可以了。再用弹性布局增加一点间隙。  </p>
-<h5 id="3-格栅布局"><a href="#3-格栅布局" class="headerlink" title="3. 格栅布局"></a>3. 格栅布局</h5><p>&emsp;&emsp;最常用的还是栅格布局了。这种布局是把窗口分为行和列。创建和使用栅格布局，需要使用QGridLayout模块。  </p>
-<h4 id="做了一个小型的demo"><a href="#做了一个小型的demo" class="headerlink" title="做了一个小型的demo"></a>做了一个小型的demo</h4><p>关于pyqt的更多知识，有空余时间的时候会继续补充。<br>项目地址： <a href="https://github.com/ice1995/ncmdump">ncmdump</a><br>项目介绍： 原作者写出了ncm转换为MP3的基础版本，用这不是很方便，就用正在学习的pyrt做了一个初版的demo图形化界面，后续有时间继续优化  </p>
-]]></content>
-      <categories>
-        <category>PyQT</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>GUI</tag>
-        <tag>PyQT</tag>
       </tags>
   </entry>
   <entry>
@@ -3005,6 +3010,36 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
       </tags>
   </entry>
   <entry>
+    <title>sklearn学习（一）----广义线性模型</title>
+    <url>/2018/10/19/theory/algorithm/machinelearning/sklearn/sklearn-1/</url>
+    <content><![CDATA[<h3 id="学习环境"><a href="#学习环境" class="headerlink" title="学习环境"></a>学习环境</h3><p>Windows 10 + pycharm + anaconda3</p>
+<h3 id="广义线性模型"><a href="#广义线性模型" class="headerlink" title="广义线性模型"></a>广义线性模型</h3><p>&emsp;&emsp;目标值y是变量x的线性组合，$\hat{y}$是预测值</p>
+<script type="math/tex; mode=display">\hat{y}(\omega,x)=\omega_0+\omega_1x_1+...+\omega_px_p</script><p>&emsp;&emsp;定义向量 $\omega=(\omega<em>1,\omega_2,…,\omega_p)$作为conf</em>,定义 $\omega<em>0$作为intercept</em></p>
+<h3 id="普通最小二乘法"><a href="#普通最小二乘法" class="headerlink" title="普通最小二乘法"></a>普通最小二乘法</h3><p>&emsp;&emsp;（LinearRegression ）拟合一个带有系数 w = (w_1, …, w_p) 的线性模型，使得数据集实际观测数据和预测数据（估计值）之间的残差平方和最小。  </p>
+<script type="math/tex; mode=display">\min_{\omega}{||X_\omega-y||_2}^2\qquad也就是求
+\sum_{i=1}^{\omega}(X_i-y)^2的最小值</script><h4 id="算法复杂度："><a href="#算法复杂度：" class="headerlink" title="算法复杂度："></a>算法复杂度：</h4><p>该方法使用 X 的奇异值分解来计算最小二乘解。如果 X 是一个 size 为 (n, p) 的矩阵，设 n \geq p ，则该方法的复杂度为 O(n p^2).</p>
+<h3 id="岭回归"><a href="#岭回归" class="headerlink" title="岭回归"></a>岭回归</h3><p>&emsp;&emsp;岭（Ridge）回归，又称脊回归、吉洪诺夫正则化（Tikhonov regularization），是对不适定问题（ill-posed problem)进行回归分析时最经常使用的一种正则化方法。实际上是一种最小二乘法的改良，放弃了最小二乘法的无偏性，以损失部分信息、降低精度为代价获得更为符合实际和可靠的回归系数的回归方法，对于病态数据的拟合要强于最小二乘法。岭回归通过对系数的大小施加惩罚来解决 普通最小二乘法 的一些问题。 岭系数最小化的是带罚项的残差平方和。  </p>
+<script type="math/tex; mode=display">\min_\omega{||X_\omega-y||_2}^2+\alpha{||\omega||_2}^2</script><p>其中， $\alpha \geq 0$ 是控制系数收缩量的复杂性参数： $\alpha$ 的值越大，收缩量越大，这样系数对共线性的鲁棒性也更强。  </p>
+<h4 id="算法复杂度：-1"><a href="#算法复杂度：-1" class="headerlink" title="算法复杂度："></a>算法复杂度：</h4><p>该方法使用 X 的奇异值分解来计算最小二乘解。如果 X 是一个 size 为 (n, p) 的矩阵，设 n \geq p ，则该方法的复杂度为 O(n p^2).</p>
+<h4 id="设置正则化参数：广义交叉验证"><a href="#设置正则化参数：广义交叉验证" class="headerlink" title="设置正则化参数：广义交叉验证"></a>设置正则化参数：广义交叉验证</h4><p>&emsp;&emsp;RidgeCV 通过内置的 Alpha 参数的交叉验证来实现岭回归。 该对象与 GridSearchCV 的使用方法相同，只是它默认为 Generalized Cross-Validation(广义交叉验证 GCV)，这是一种有效的留一验证方法（LOO-CV）:</p>
+<h3 id="Lasso"><a href="#Lasso" class="headerlink" title="Lasso"></a>Lasso</h3><p>&emsp;&emsp;估计稀疏系数的线性模型。倾向于使用具有较少参数值的情况，有效地减少给定解决方案所依赖变量的数量。 因此，Lasso 及其变体是压缩感知领域的基础。 在一定条件下，它可以恢复一组非零权重的精确集.</p>
+<p>最小化的目标函数是：</p>
+<script type="math/tex; mode=display">\min_\omega\frac{1}{2n_{samples}}{||X_\omega-y||_2}^2+\alpha||\omega||_1</script><p>&emsp;&emsp;其中，$\alpha$ 是一个常数， $||w||_1$ 是参数向量的 $\ell_1-norm$ 范数。</p>
+<h3 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h3><ol>
+<li><a href="http://sklearn.apachecn.org/cn/0.19.0/modules/linear_model.html#ridge-regression">http://sklearn.apachecn.org/cn/0.19.0/modules/linear_model.html#ridge-regression</a></li>
+</ol>
+]]></content>
+      <categories>
+        <category>sklearn</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>Machine Learning</tag>
+        <tag>Algorithm</tag>
+        <tag>sklearn</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>机器学习（一）---初识</title>
     <url>/2018/10/15/theory/algorithm/machinelearning/machinelearning-1/</url>
     <content><![CDATA[<h3 id="什么是机器学习？"><a href="#什么是机器学习？" class="headerlink" title="什么是机器学习？"></a>什么是机器学习？</h3><ol>
@@ -3028,8 +3063,8 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
       <tags>
         <tag>python</tag>
         <tag>Machine Learning</tag>
-        <tag>AI</tag>
         <tag>Algorithm</tag>
+        <tag>AI</tag>
       </tags>
   </entry>
   <entry>
@@ -3097,38 +3132,8 @@ hadoop3节点进程状态：<figure class="highlight bash"><table><tr><td class=
       <tags>
         <tag>python</tag>
         <tag>Machine Learning</tag>
+        <tag>Algorithm</tag>
         <tag>AI</tag>
-        <tag>Algorithm</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>sklearn学习（一）----广义线性模型</title>
-    <url>/2018/10/19/theory/algorithm/machinelearning/sklearn/sklearn-1/</url>
-    <content><![CDATA[<h3 id="学习环境"><a href="#学习环境" class="headerlink" title="学习环境"></a>学习环境</h3><p>Windows 10 + pycharm + anaconda3</p>
-<h3 id="广义线性模型"><a href="#广义线性模型" class="headerlink" title="广义线性模型"></a>广义线性模型</h3><p>&emsp;&emsp;目标值y是变量x的线性组合，$\hat{y}$是预测值</p>
-<script type="math/tex; mode=display">\hat{y}(\omega,x)=\omega_0+\omega_1x_1+...+\omega_px_p</script><p>&emsp;&emsp;定义向量 $\omega=(\omega<em>1,\omega_2,…,\omega_p)$作为conf</em>,定义 $\omega<em>0$作为intercept</em></p>
-<h3 id="普通最小二乘法"><a href="#普通最小二乘法" class="headerlink" title="普通最小二乘法"></a>普通最小二乘法</h3><p>&emsp;&emsp;（LinearRegression ）拟合一个带有系数 w = (w_1, …, w_p) 的线性模型，使得数据集实际观测数据和预测数据（估计值）之间的残差平方和最小。  </p>
-<script type="math/tex; mode=display">\min_{\omega}{||X_\omega-y||_2}^2\qquad也就是求
-\sum_{i=1}^{\omega}(X_i-y)^2的最小值</script><h4 id="算法复杂度："><a href="#算法复杂度：" class="headerlink" title="算法复杂度："></a>算法复杂度：</h4><p>该方法使用 X 的奇异值分解来计算最小二乘解。如果 X 是一个 size 为 (n, p) 的矩阵，设 n \geq p ，则该方法的复杂度为 O(n p^2).</p>
-<h3 id="岭回归"><a href="#岭回归" class="headerlink" title="岭回归"></a>岭回归</h3><p>&emsp;&emsp;岭（Ridge）回归，又称脊回归、吉洪诺夫正则化（Tikhonov regularization），是对不适定问题（ill-posed problem)进行回归分析时最经常使用的一种正则化方法。实际上是一种最小二乘法的改良，放弃了最小二乘法的无偏性，以损失部分信息、降低精度为代价获得更为符合实际和可靠的回归系数的回归方法，对于病态数据的拟合要强于最小二乘法。岭回归通过对系数的大小施加惩罚来解决 普通最小二乘法 的一些问题。 岭系数最小化的是带罚项的残差平方和。  </p>
-<script type="math/tex; mode=display">\min_\omega{||X_\omega-y||_2}^2+\alpha{||\omega||_2}^2</script><p>其中， $\alpha \geq 0$ 是控制系数收缩量的复杂性参数： $\alpha$ 的值越大，收缩量越大，这样系数对共线性的鲁棒性也更强。  </p>
-<h4 id="算法复杂度：-1"><a href="#算法复杂度：-1" class="headerlink" title="算法复杂度："></a>算法复杂度：</h4><p>该方法使用 X 的奇异值分解来计算最小二乘解。如果 X 是一个 size 为 (n, p) 的矩阵，设 n \geq p ，则该方法的复杂度为 O(n p^2).</p>
-<h4 id="设置正则化参数：广义交叉验证"><a href="#设置正则化参数：广义交叉验证" class="headerlink" title="设置正则化参数：广义交叉验证"></a>设置正则化参数：广义交叉验证</h4><p>&emsp;&emsp;RidgeCV 通过内置的 Alpha 参数的交叉验证来实现岭回归。 该对象与 GridSearchCV 的使用方法相同，只是它默认为 Generalized Cross-Validation(广义交叉验证 GCV)，这是一种有效的留一验证方法（LOO-CV）:</p>
-<h3 id="Lasso"><a href="#Lasso" class="headerlink" title="Lasso"></a>Lasso</h3><p>&emsp;&emsp;估计稀疏系数的线性模型。倾向于使用具有较少参数值的情况，有效地减少给定解决方案所依赖变量的数量。 因此，Lasso 及其变体是压缩感知领域的基础。 在一定条件下，它可以恢复一组非零权重的精确集.</p>
-<p>最小化的目标函数是：</p>
-<script type="math/tex; mode=display">\min_\omega\frac{1}{2n_{samples}}{||X_\omega-y||_2}^2+\alpha||\omega||_1</script><p>&emsp;&emsp;其中，$\alpha$ 是一个常数， $||w||_1$ 是参数向量的 $\ell_1-norm$ 范数。</p>
-<h3 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h3><ol>
-<li><a href="http://sklearn.apachecn.org/cn/0.19.0/modules/linear_model.html#ridge-regression">http://sklearn.apachecn.org/cn/0.19.0/modules/linear_model.html#ridge-regression</a></li>
-</ol>
-]]></content>
-      <categories>
-        <category>sklearn</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>Machine Learning</tag>
-        <tag>Algorithm</tag>
-        <tag>sklearn</tag>
       </tags>
   </entry>
 </search>
